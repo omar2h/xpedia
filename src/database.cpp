@@ -1,0 +1,205 @@
+#include "database.h"
+#include "error.h"
+#include <fstream>
+#include <vector>
+#include <iostream>
+#include <stdio.h>
+
+std::unique_ptr<Database> Database::databaseInstance = nullptr;
+
+std::unique_ptr<Database> Database::get_database()
+{
+    if (databaseInstance == nullptr)
+        databaseInstance = std::unique_ptr<Database>{};
+    return std::move(databaseInstance);
+}
+
+json Database::get_objects_from_file(const std::string &path) const
+{
+    std::fstream file_handler(path.c_str());
+    if (file_handler.fail())
+    {
+        throw 3;
+    }
+
+    json arr;
+    /* check if file is not empty */
+    file_handler.seekg(0, std::ios::end);
+    if (file_handler.tellg() != 0)
+    {
+        /* return the cursor to the beginning of the file */
+        file_handler.seekg(0, std::ios::beg);
+        arr = json::parse(file_handler);
+    }
+    else
+        throw 4;
+    file_handler.close();
+
+    return arr;
+}
+
+void Database::write_json_to_file(const std::string &path, json obj, bool append = true) const
+{
+    auto status = std::ios::in | std::ios::out | std::ios::app;
+
+    if (!append)
+        status = std::ios::in | std::ios::out | std::ios::trunc; // overwrite
+
+    std::fstream file_handler(path.c_str(), status);
+
+    if (file_handler.fail())
+    {
+        throw 3;
+    }
+
+    json arr;
+    /* check if file is not empty */
+    file_handler.seekg(0, std::ios::end);
+    if (file_handler.tellg() != 0)
+    {
+        /* return the cursor to the beginning of the file */
+        file_handler.seekg(0, std::ios::beg);
+        arr = json::parse(file_handler);
+    }
+    arr.push_back(obj);
+    file_handler.close();
+    remove(USERS_JSON);
+    std::fstream f(path.c_str(), status);
+    f << arr;
+    f.close();
+}
+
+std::vector<User> Database::get_users(const std::string &path) const
+{
+    json arr = get_objects_from_file(path);
+    return UsersManager::get_users_from_objects(arr);
+}
+
+std::vector<std::string> Database::read_json_attribute_from_file(const std::string &path, const std::string &att) const
+{
+    std::fstream file_handler(path.c_str());
+    if (file_handler.fail())
+    {
+        throw 3;
+    }
+
+    json arr;
+    /* check if file is not empty */
+    file_handler.seekg(0, std::ios::end);
+    if (file_handler.tellg() != 0)
+    {
+        /* return the cursor to the beginning of the file */
+        file_handler.seekg(0, std::ios::beg);
+        arr = json::parse(file_handler);
+    }
+    file_handler.close();
+
+    std::vector<std::string> data{};
+    for (const auto &u : arr)
+    {
+        data.push_back(u.value(att, "not found"));
+    }
+    return data;
+}
+
+void Database::save_user(User &user) const
+{
+    try
+    {
+        UsersManager::validate_user_sign_in(user);
+    }
+    catch (int e)
+    {
+        throw e;
+    }
+    std::string newId = UsersManager::generate_user_id();
+    user.setId(newId);
+    json obj = usersManager.convert_user_to_json(user);
+    write_json_to_file(USERS_JSON, obj);
+}
+
+// std::vector<User> get_users_from_file(const std::string &path)
+// {
+//     std::fstream file_handler(path.c_str());
+//     if (file_handler.fail())
+//     {
+//         throw 3;
+//     }
+
+//     json arr;
+//     /* check if file is not empty */
+//     file_handler.seekg(0, std::ios::end);
+//     if (file_handler.tellg() != 0)
+//     {
+//         /* return the cursor to the beginning of the file */
+//         file_handler.seekg(0, std::ios::beg);
+//         arr = json::parse(file_handler);
+//     }
+//     else
+//         throw 4;
+//     file_handler.close();
+
+//     std::vector<User> data{};
+//     for (const auto &u : arr)
+//     {
+//         std::string firstName = u.value("firstName", "not found");
+//         std::string lastName = u.value("lastName", "not found");
+//         std::string email = u.value("email", "not found");
+//         std::string phone = u.value("phone", "not found");
+//         std::string password = u.value("password", "not found");
+//         std::string id = u.value("id", "not found");
+//         User tmp{id, firstName, lastName, email, phone, password};
+//         data.push_back(tmp);
+//     }
+//     return data;
+// }
+
+// std::unordered_set<std::string> Database::get_users_ids()
+// {
+//     return usersIds;
+// }
+
+// std::vector<std::string> Database::read_file(const std::string& path)
+// {
+//     std::fstream file_handler(path.c_str());
+//     if (file_handler.fail())
+//     {
+//         throw 5;
+//     }
+
+//     std::string line;
+//     /* check if file is empty */
+//     if (file_handler.peek() == std::ifstream::traits_type::eof())
+//     {
+//         file_handler.close();
+//         return;
+//     }
+
+//     while (getline(file_handler, line))
+//     {
+//         if (line.size() == 0)
+//             continue;
+//         lines.push_back(line);
+//     }
+
+//     file_handler.close();
+// }
+
+// void Database::write_file_lines(const std::string &path, const std::vector<std::string> &lines, bool append = true) const
+// {
+//     auto status = std::ios::in | std::ios::out | std::ios::app;
+
+//     if (!append)
+//         status = std::ios::in | std::ios::out | std::ios::trunc; // overwrite
+
+//     std::fstream file_handler(path.c_str(), status);
+
+//     if (file_handler.fail())
+//     {
+//         throw 5;
+//     }
+//     for (const auto &line : lines)
+//         file_handler << line << "\n";
+
+//     file_handler.close();
+// }
