@@ -30,8 +30,7 @@
 
         if (choice == 1)
         {
-            // view profile
-            ;
+            FrontEnd::display_user_profile(user);
         }
         else if (choice == 2)
         {

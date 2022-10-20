@@ -43,3 +43,12 @@ int FrontEnd::display_main_menu()
     }
     return choice;
 }
+
+void FrontEnd::display_user_profile(const User &user)
+{
+    std::cout << "\n";
+    std::cout << "Name: " << user.getFirstName() << " " << user.getLastName() << "\n";
+    std::cout << "Email: " << user.getEmail() << "\n";
+    std::cout << "Phone: " << user.getPhone() << "\n";
+    std::cout << "\n";
+}
