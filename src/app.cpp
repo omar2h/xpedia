@@ -3,6 +3,7 @@
 #include "user.h"
 #include "signupHandler.h"
 #include "loginHandler.h"
+#include "backEnd.h"
 #include <iostream>
 
 [[noreturn]] void App::run() const
@@ -34,8 +35,8 @@
         }
         else if (choice == 2)
         {
-            // create Itinerary
-            ;
+            int choice = FrontEnd::display_create_itinerary_menu();
+            BackEnd::create_itinerary(choice);
         }
         else if (choice == 3)
         {
