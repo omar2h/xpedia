@@ -4,24 +4,20 @@
 #include "flightRequest.h"
 #include "flightReservation.h"
 #include "flight.h"
+#include "itineraryManager.h"
 #include <vector>
 
-class FlightsManager
+class FlightsManager : public ItineraryManager
 {
-    FlightRequest request{};
 
 public:
-    virtual void setFlightRequest(const FlightRequest &request_)
-    {
-        request = request_;
-    }
-    virtual std::vector<Flight> search_flights() const = 0;
+    std::vector<ItineraryItem *> search_reservations() const override = 0;
 
-    virtual bool reserve_flight(const FlightReservation &reservation) const = 0;
+    bool reserve(Reservation *) const override = 0;
 
-    virtual std::string getName() const = 0;
+    std::string getName() const override = 0;
 
-    FlightRequest getRequest() const { return request; }
+    ItineraryManager *Clone() override = 0;
 
     virtual ~FlightsManager()
     {

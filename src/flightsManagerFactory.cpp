@@ -2,9 +2,9 @@
 #include "airCanadaFlightsManager.h"
 #include "turkishFlightsManager.h"
 
-std::vector<FlightsManager *> FlightsManagerFactory::getManagers()
+std::vector<ItineraryManager *> FlightsManagerFactory::getManagers()
 {
-    std::vector<FlightsManager *> managers{};
+    std::vector<ItineraryManager *> managers{};
     managers.push_back(new AirCanadaFlightsManager);
     managers.push_back(new TurkishFlightsManager);
     return managers;

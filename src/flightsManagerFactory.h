@@ -6,6 +6,6 @@
 class FlightsManagerFactory
 {
 public:
-    static std::vector<FlightsManager *> getManagers();
+    static std::vector<ItineraryManager *> getManagers();
 };
 #endif // __FLIGHTSMANAGERFACTORY_H__

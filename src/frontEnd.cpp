@@ -97,8 +97,17 @@ void FrontEnd::read_flight_request_data(FlightRequest &request)
     request.setChildren(children);
 }
 
-int FrontEnd::read_flight_choice(const std::vector<Flight> &flights)
+int FrontEnd::read_reservation_choice(const std::vector<ItineraryItem *> &items)
 {
+    int count = (int)items.size();
+    int choice{};
+    for (int i = 0; i < count; i++)
+    {
+        std::cout << i + 1 << ": " << items[i]->toString() << "\n";
+    }
+    std::cout << "Enter choice: ";
+    std::cin >> choice;
+    return choice - 1;
 }
 
 void FrontEnd::read_request_data(ReservationRequest *req, RequestType type)

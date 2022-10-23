@@ -1,9 +1,8 @@
 #ifndef __FLIGHT_H__
 #define __FLIGHT_H__
+#include "itineraryItem.h"
 
-#include <string>
-
-class Flight
+class Flight : public ItineraryItem
 {
     std::string airline{};
     std::string date{};
@@ -19,7 +18,8 @@ public:
     double getTotalCost() const { return totalCost; }
     void setTotalCost(double totalCost_) { totalCost = totalCost_; }
 
-    std::string toString() const;
+    std::string toString() const override;
+    ItineraryItem *Clone() override { return new Flight(*this); }
 };
 
 #endif // __FLIGHT_H__

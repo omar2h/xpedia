@@ -4,13 +4,20 @@
 
 class TurkishFlightsManager : public FlightsManager
 {
+public:
     std::string getName() const override
     {
         return "Turkish Airlines";
     }
 
-    std::vector<Flight> search_flights() const override;
+    std::vector<ItineraryItem *> search_reservations() const override;
 
-    bool reserve_flight(const FlightReservation &reservation) const;
+    bool reserve(Reservation *reservation) const override;
+
+    ItineraryManager *Clone() override { return new TurkishFlightsManager(*this); };
+
+    ~TurkishFlightsManager() override
+    {
+    }
 };
 #endif // __TURKISHFLIGHTSMANAGER_H__

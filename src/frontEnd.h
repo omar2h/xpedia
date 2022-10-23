@@ -18,7 +18,7 @@ public:
     static void display_user_profile(const User &);
     static int display_create_itinerary_menu();
     static void read_flight_request_data(FlightRequest &);
-    static int read_flight_choice(const std::vector<Flight> &);
+    static int read_reservation_choice(const std::vector<ItineraryItem *> &);
     static void read_request_data(ReservationRequest *, RequestType);
 
     virtual ~FrontEnd()

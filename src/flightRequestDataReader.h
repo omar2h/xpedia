@@ -12,8 +12,6 @@ public:
     ReservationRequest *read() override;
     ~FlightRequestDataReader() override
     {
-        delete request;
-        request = nullptr;
     }
 };
 #endif // __FLIGHTREQUESTDATAREADER_H__

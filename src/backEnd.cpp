@@ -4,8 +4,9 @@
 #include "frontEnd.h"
 #include "flightsManagerFactory.h"
 #include "reservationRequestFactory.h"
-
-std::vector<FlightsManager *> BackEnd::flightsManagers = FlightsManagerFactory::getManagers();
+#include <iostream>
+#include <typeinfo>
+class ItineraryItem;
 
 void BackEnd::save_user_in_db(User &user)
 {
@@ -46,19 +47,36 @@ User BackEnd::user_login(const std::string &email, const std::string &password)
 //     return flights;
 // }
 
-void BackEnd::add_flight()
+std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequest *request, RequestType requestType)
 {
-    ReservationRequest *request = ReservationRequestFactory::getRequest(RequestType::flight);
-    FrontEnd::read_request_data(request, RequestType::flight);
-    // std::vector<Flight> flights = get_available_flights(request);
-    // int choice = FrontEnd::read_flight_choice(flights);
+    std::vector<ItineraryItem *> items;
+    std::vector<ItineraryManager *> managers;
+    if (requestType == RequestType::flight)
+    {
+        managers = FlightsManagerFactory::getManagers();
+        for (auto manager : managers)
+        {
+            manager->setRequest(request);
+            std::vector<ItineraryItem *> airlineFlights = manager->search_reservations();
+            items.insert(items.end(), airlineFlights.begin(), airlineFlights.end());
+        }
+    }
+    return items;
+}
+
+void BackEnd::add_flight(RequestType requestType)
+{
+    ReservationRequest *request = ReservationRequestFactory::getRequest(requestType);
+    FrontEnd::read_request_data(request, requestType);
+    std::vector<ItineraryItem *> items = get_available_reservations(request, requestType);
+    int choice = FrontEnd::read_reservation_choice(items);
 }
 
 void BackEnd::create_itinerary(int choice)
 {
     if (choice == 1)
     {
-        add_flight();
+        add_flight(RequestType::flight);
     }
     else if (choice == 2)
     {

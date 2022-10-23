@@ -10,9 +10,11 @@ public:
         return "AirCanada Airlines";
     }
 
-    std::vector<Flight> search_flights() const override;
+    std::vector<ItineraryItem *> search_reservations() const override;
 
-    bool reserve_flight(const FlightReservation &reservation) const;
+    bool reserve(Reservation *reservation) const override;
+
+    ItineraryManager *Clone() override { return new AirCanadaFlightsManager(*this); };
 
     ~AirCanadaFlightsManager() override
     {
