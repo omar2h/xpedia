@@ -7,7 +7,7 @@ class AirCanadaFlightsManager : public FlightsManager
 public:
     std::string getName() const override
     {
-        return "AirCanada Airlines";
+        return "AirCanada";
     }
 
     std::vector<ItineraryItem *> search_reservations() const override;

@@ -1,4 +1,5 @@
 #include "reservationRequestFactory.h"
+#include "flightRequest.h"
 
 ReservationRequest *ReservationRequestFactory::getRequest(RequestType type)
 {

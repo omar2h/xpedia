@@ -1,33 +1,33 @@
-#ifndef __ITINERARYRESERVATION_H__
-#define __ITINERARYRESERVATION_H__
+// #ifndef __ITINERARYRESERVATION_H__
+// #define __ITINERARYRESERVATION_H__
 
-#include "reservation.h"
-#include <vector>
-#include <sstream>
+// #include "reservation.h"
+// #include <vector>
+// #include <sstream>
 
-class ItineraryReservation : public Reservation
-{
-protected:
-    std::vector<Reservation *> reservations; // As has pointers, we need copy constructor
+// class ItineraryReservation : public Reservation
+// {
+// protected:
+//     std::vector<Reservation *> reservations; // As has pointers, we need copy constructor
 
-public:
-    ItineraryReservation() = default;
+// public:
+//     ItineraryReservation() = default;
 
-    // copy constructor
-    ItineraryReservation(const ItineraryReservation &);
+//     // copy constructor
+//     ItineraryReservation(const ItineraryReservation &);
 
-    void add_reservation(const Reservation &);
-    double total_cost() const override;
+//     void add_reservation(const Reservation &);
+//     double total_cost() const override;
 
-    ~ItineraryReservation() override;
+//     ~ItineraryReservation() override;
 
-    const std::vector<Reservation *> &getReservations() const;
+//     const std::vector<Reservation *> &getReservations() const;
 
-    void clear();
+//     void clear();
 
-    std::string toString() const override;
+//     std::string toString() const override;
 
-    Reservation *Clone() const override;
-};
+//     Reservation *Clone() const override;
+// };
 
-#endif // __ITINERARYRESERVATION_H__
+// #endif // __ITINERARYRESERVATION_H__

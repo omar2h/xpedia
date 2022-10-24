@@ -1,5 +1,5 @@
 #include "frontEnd.h"
-#include "menuPrinter.h"
+#include "printer.h"
 #include "inputHandler.h"
 #include "error.h"
 #include "requestDataReader.h"
@@ -11,7 +11,7 @@ RequestDataReader *FrontEnd::reader{};
 int FrontEnd::show_start_menu()
 {
     std::vector<std::string> startMenu{"Login", "SignUp", "Exit"};
-    MenuPrinter::print(startMenu);
+    Printer::print_menu(startMenu);
     int choice{};
     try
     {
@@ -33,11 +33,12 @@ void FrontEnd::display_welcome_message(const std::string &firstName, const std::
 int FrontEnd::display_main_menu()
 {
     std::vector<std::string> startMenu{"View Profile", "Create Itinerary", "List My Itineraries", "Logout"};
-    MenuPrinter::print(startMenu);
+    Printer::print_menu(startMenu);
+    int menuCount{(int)startMenu.size()};
     int choice{};
     try
     {
-        choice = InputHandler::get_choice(1, 4);
+        choice = InputHandler::get_choice(1, menuCount);
     }
     catch (int e)
     {
@@ -59,16 +60,17 @@ void FrontEnd::display_user_profile(const User &user)
 int FrontEnd::display_create_itinerary_menu()
 {
     std::vector<std::string> menu{"Add Flight", "Add Hotel", "Check Out", "Cancel"};
-    MenuPrinter::print(menu);
+    Printer::print_menu(menu);
+    int menuCount{(int)menu.size()};
     int choice{};
     try
     {
-        choice = InputHandler::get_choice(1, 4);
+        choice = InputHandler::get_choice(1, menuCount);
     }
     catch (int e)
     {
         Error::display_error(e);
-        show_start_menu();
+        display_create_itinerary_menu();
     }
     return choice;
 }
@@ -99,18 +101,23 @@ void FrontEnd::read_flight_request_data(FlightRequest &request)
 
 int FrontEnd::read_reservation_choice(const std::vector<ItineraryItem *> &items)
 {
-    int count = (int)items.size();
+    Printer::print_available_itinerary_items(items);
+    int itemsCount{(int)items.size()};
+
     int choice{};
-    for (int i = 0; i < count; i++)
+    try
     {
-        std::cout << i + 1 << ": " << items[i]->toString() << "\n";
+        choice = InputHandler::get_choice(1, itemsCount);
     }
-    std::cout << "Enter choice: ";
-    std::cin >> choice;
-    return choice - 1;
+    catch (int e)
+    {
+        Error::display_error(e);
+        read_reservation_choice(items);
+    }
+    return choice;
 }
 
-void FrontEnd::read_request_data(ReservationRequest *req, RequestType type)
+void FrontEnd::read_request_data(ReservationRequest *&req, RequestType type)
 {
     if (type == RequestType::flight)
     {

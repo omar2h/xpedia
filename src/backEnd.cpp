@@ -4,6 +4,7 @@
 #include "frontEnd.h"
 #include "flightsManagerFactory.h"
 #include "reservationRequestFactory.h"
+#include "reservationFactory.h"
 #include <iostream>
 #include <typeinfo>
 class ItineraryItem;
@@ -64,32 +65,45 @@ std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequ
     return items;
 }
 
-void BackEnd::add_flight(RequestType requestType)
+void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
 {
     ReservationRequest *request = ReservationRequestFactory::getRequest(requestType);
     FrontEnd::read_request_data(request, requestType);
     std::vector<ItineraryItem *> items = get_available_reservations(request, requestType);
     int choice = FrontEnd::read_reservation_choice(items);
+    if (choice == -1)
+        return;
+    Reservation *reservation = ReservationFactory::getRequest(requestType);
+    reservation->setItem(items[choice - 1]);
+    reservation->setRequest(request);
+    currItinerary.add_item(reservation);
 }
 
-void BackEnd::create_itinerary(int choice)
+void BackEnd::create_itinerary()
 {
-    if (choice == 1)
+    Itinerary currItinerary{};
+
+    while (true)
     {
-        add_flight(RequestType::flight);
-    }
-    else if (choice == 2)
-    {
-        // add hotel
-        ;
-    }
-    else if (choice == 3)
-    {
-        // Checkout
-    }
-    else if (choice == 4)
-    {
-        // cancel
-        return;
+        int choice{};
+        choice = FrontEnd::display_create_itinerary_menu();
+        if (choice == 1)
+        {
+            add_flight(RequestType::flight, currItinerary);
+        }
+        else if (choice == 2)
+        {
+            // add hotel
+            ;
+        }
+        else if (choice == 3)
+        {
+            std::cout << currItinerary.toString() << "\n";
+        }
+        else if (choice == 4)
+        {
+            currItinerary.Clear();
+            return;
+        }
     }
 }

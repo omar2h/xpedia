@@ -7,7 +7,7 @@ class TurkishFlightsManager : public FlightsManager
 public:
     std::string getName() const override
     {
-        return "Turkish Airlines";
+        return "Turkish";
     }
 
     std::vector<ItineraryItem *> search_reservations() const override;

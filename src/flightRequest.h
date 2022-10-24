@@ -31,5 +31,7 @@ public:
 
     std::string getDate() const { return date; }
     void setDate(const std::string &date_) { date = date_; }
+
+    std::string toString() const override;
 };
 #endif // __FLIGHTREQUEST_H__
