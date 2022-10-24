@@ -25,3 +25,13 @@ std::string Itinerary::toString()
     }
     return str;
 }
+
+double Itinerary::total_cost() const
+{
+    double cost{};
+    for (auto &res : reservations)
+    {
+        cost += res->total_cost();
+    }
+    return cost;
+}

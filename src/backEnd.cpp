@@ -5,6 +5,7 @@
 #include "flightsManagerFactory.h"
 #include "reservationRequestFactory.h"
 #include "reservationFactory.h"
+#include "customer.h"
 #include <iostream>
 #include <typeinfo>
 class ItineraryItem;
@@ -65,6 +66,15 @@ std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequ
     return items;
 }
 
+void BackEnd::payItinerary(const Itinerary &currItinerary, User &user)
+{
+    if (!currItinerary.getReservations().size())
+        throw 5; // no reservations
+    Customer customer = Database::get_database()->getCustomer(user);
+    for (const auto &x : customer.getCards())
+        std::cout << x.toString();
+}
+
 void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
 {
     ReservationRequest *request = ReservationRequestFactory::getRequest(requestType);
@@ -79,7 +89,7 @@ void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
     currItinerary.add_item(reservation);
 }
 
-void BackEnd::create_itinerary()
+void BackEnd::create_itinerary(User &user)
 {
     Itinerary currItinerary{};
 
@@ -99,6 +109,7 @@ void BackEnd::create_itinerary()
         else if (choice == 3)
         {
             std::cout << currItinerary.toString() << "\n";
+            payItinerary(currItinerary, user);
         }
         else if (choice == 4)
         {

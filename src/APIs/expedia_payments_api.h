@@ -8,10 +8,8 @@
 #ifndef EXPEDIA_PAYMENTS_API_H_
 #define EXPEDIA_PAYMENTS_API_H_
 
-using namespace std;
-
 #include "include/json.hpp"
-// using namespace json;
+using namespace std;
 
 class PayPalCreditCard
 {
@@ -26,10 +24,10 @@ public:
 class PayPalOnlinePaymentAPI
 {
 public:
-	void SetCardInfo(const PayPalCreditCard *const card)
+	void SetCardInfo(const PayPalCreditCard *const card) const
 	{
 	}
-	bool MakePayment(double money)
+	bool MakePayment(double money) const
 	{
 		return true;
 	}

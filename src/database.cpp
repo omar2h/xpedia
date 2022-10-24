@@ -38,6 +38,34 @@ json Database::get_objects_from_file(const std::string &path) const
     return arr;
 }
 
+json Database::get_object_with_id(const std::string &path, const std::string &id) const
+{
+    std::fstream file_handler(path.c_str());
+    if (file_handler.fail())
+    {
+        throw 3;
+    }
+
+    json arr;
+    /* check if file is not empty */
+    file_handler.seekg(0, std::ios::end);
+    if (file_handler.tellg() != 0)
+    {
+        /* return the cursor to the beginning of the file */
+        file_handler.seekg(0, std::ios::beg);
+        arr = json::parse(file_handler);
+    }
+    else
+        throw 4;
+    file_handler.close();
+
+    for (const auto &u : arr)
+    {
+        if (u.value("id", "not found") == id)
+            return u;
+    }
+}
+
 void Database::write_json_to_file(const std::string &path, json obj, bool append = true) const
 {
     auto status = std::ios::in | std::ios::out | std::ios::app;
@@ -73,6 +101,11 @@ std::vector<User> Database::get_users(const std::string &path) const
 {
     json arr = get_objects_from_file(path);
     return UsersManager::get_users_from_objects(arr);
+}
+
+Customer Database::getCustomer(const User &user)
+{
+    return customersManager.getCustomer(user);
 }
 
 std::vector<std::string> Database::read_json_attribute_from_file(const std::string &path, const std::string &att) const

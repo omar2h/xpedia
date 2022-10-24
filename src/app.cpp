@@ -35,7 +35,7 @@
         }
         else if (choice == 2)
         {
-            BackEnd::create_itinerary();
+            BackEnd::create_itinerary(user);
         }
         else if (choice == 3)
         {
