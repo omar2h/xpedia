@@ -23,6 +23,7 @@ public:
     static void read_request_data(ReservationRequest *&, RequestType);
     static int display_payment_options(const std::vector<PaymentCard> &);
     static PaymentCard read_card();
+    static int display_payment_services();
     virtual ~FrontEnd()
     {
         delete reader;

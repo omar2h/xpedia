@@ -77,8 +77,12 @@ int FrontEnd::display_create_itinerary_menu()
 
 int FrontEnd::display_payment_options(const std::vector<PaymentCard> &cards)
 {
-    Printer::print_options(cards);
+    std::vector<std::string> options;
+    for (const auto &card : cards)
+        options.push_back(card.toString());
+    Printer::print_options(options);
     int cardsCount{(int)cards.size()};
+    std::cout << "Enter choice(0 to add card, -1 to cancel): ";
     int choice{};
     try
     {
@@ -118,9 +122,14 @@ void FrontEnd::read_flight_request_data(FlightRequest &request)
 
 int FrontEnd::read_reservation_choice(const std::vector<ItineraryItem *> &items)
 {
-    Printer::print_available_itinerary_items(items);
+    std::vector<std::string> options{};
+    for (const auto &item : items)
+    {
+        options.push_back(item->toString());
+    }
+    Printer::print_options(options);
     int itemsCount{(int)items.size()};
-
+    std::cout << "Enter choice(-1 to cancel): ";
     int choice{};
     try
     {
@@ -159,4 +168,24 @@ PaymentCard FrontEnd::read_card()
     std::cin >> ccv;
 
     return {number, owner, date, ccv};
+}
+
+int FrontEnd::display_payment_services()
+{
+    std::cout << "Payment Services:\n";
+    std::vector<std::string> services{"Paypal", "Stripe", "Square"};
+    int count{(int)services.size()};
+    Printer::print_options(services);
+    std::cout << "Enter choice(-1 to cancel): ";
+    int choice{};
+    try
+    {
+        choice = InputHandler::get_choice(1, count);
+    }
+    catch (int e)
+    {
+        Error::display_error(e);
+        display_payment_services();
+    }
+    return choice;
 }

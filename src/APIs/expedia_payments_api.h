@@ -8,7 +8,6 @@
 #ifndef EXPEDIA_PAYMENTS_API_H_
 #define EXPEDIA_PAYMENTS_API_H_
 
-#include "include/json.hpp"
 using namespace std;
 
 class PayPalCreditCard

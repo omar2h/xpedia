@@ -4,6 +4,7 @@
 #include "flightsManager.h"
 #include "itinerary.h"
 #include "customer.h"
+#include "paymentStrategy.h"
 class BackEnd
 {
 

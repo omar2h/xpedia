@@ -6,6 +6,7 @@
 #include "reservationRequestFactory.h"
 #include "reservationFactory.h"
 #include "customer.h"
+#include "paymentFactory.h"
 #include <iostream>
 #include <typeinfo>
 class ItineraryItem;
@@ -90,6 +91,10 @@ void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
         else
             break;
     }
+    PaymentCard card = customer.getCards()[choice - 1];
+    choice = FrontEnd::display_payment_services();
+    PaymentStrategy *paymentStrategy = PaymentFactory::getPaymentService(static_cast<PaymentService>(choice - 1));
+    paymentStrategy->pay(card, currItinerary.total_cost());
 }
 
 void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
