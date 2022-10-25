@@ -38,6 +38,57 @@ json Database::get_objects_from_file(const std::string &path) const
     return arr;
 }
 
+void Database::delete_object_with_id(const std::string &path, const std::string &id)
+{
+    std::fstream file_handler(path.c_str());
+    if (file_handler.fail())
+    {
+        throw 3;
+    }
+
+    json arr;
+    /* check if file is not empty */
+    file_handler.seekg(0, std::ios::end);
+    if (file_handler.tellg() != 0)
+    {
+        /* return the cursor to the beginning of the file */
+        file_handler.seekg(0, std::ios::beg);
+        arr = json::parse(file_handler);
+    }
+    else
+        throw 4;
+    file_handler.close();
+
+    for (int i = 0; i < arr.size(); i++)
+    {
+        std::cout << arr[i].value("id", "not found") << "\n";
+        if (arr[i].value("id", "not found") == id)
+        {
+            arr.erase(i);
+            break;
+        }
+    }
+    write_json_array_to_file(path, arr, false);
+}
+
+void Database::write_json_array_to_file(const std::string &path, json arr, bool append = false)
+{
+    auto status = std::ios::in | std::ios::out | std::ios::app;
+
+    if (!append)
+        status = std::ios::in | std::ios::out | std::ios::trunc; // overwrite
+
+    std::fstream file_handler(path.c_str(), status);
+
+    if (file_handler.fail())
+    {
+        throw 3;
+    }
+
+    file_handler << arr;
+    file_handler.close();
+}
+
 json Database::get_object_with_id(const std::string &path, const std::string &id) const
 {
     std::fstream file_handler(path.c_str());
@@ -80,7 +131,7 @@ void Database::write_json_to_file(const std::string &path, json obj, bool append
         throw 3;
     }
 
-    json arr;
+    nlohmann::json arr;
     /* check if file is not empty */
     file_handler.seekg(0, std::ios::end);
     if (file_handler.tellg() != 0)
@@ -88,10 +139,12 @@ void Database::write_json_to_file(const std::string &path, json obj, bool append
         /* return the cursor to the beginning of the file */
         file_handler.seekg(0, std::ios::beg);
         arr = json::parse(file_handler);
+        std::cout << arr.size() << "\n";
     }
     arr.push_back(obj);
     file_handler.close();
-    remove(USERS_JSON);
+
+    remove(path.c_str());
     std::fstream f(path.c_str(), status);
     f << arr;
     f.close();
@@ -106,6 +159,11 @@ std::vector<User> Database::get_users(const std::string &path) const
 Customer Database::getCustomer(const User &user)
 {
     return customersManager.getCustomer(user);
+}
+
+void Database::update_customer_info(const Customer &customer)
+{
+    return customersManager.update_customer(customer);
 }
 
 std::vector<std::string> Database::read_json_attribute_from_file(const std::string &path, const std::string &att) const

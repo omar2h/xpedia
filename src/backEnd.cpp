@@ -66,13 +66,30 @@ std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequ
     return items;
 }
 
-void BackEnd::payItinerary(const Itinerary &currItinerary, User &user)
+void BackEnd::add_card(Customer &customer)
+{
+    PaymentCard card = FrontEnd::read_card();
+    customer.addCard(card);
+    Database::get_database()->update_customer_info(customer);
+}
+
+void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
 {
     if (!currItinerary.getReservations().size())
         throw 5; // no reservations
     Customer customer = Database::get_database()->getCustomer(user);
-    for (const auto &x : customer.getCards())
-        std::cout << x.toString();
+    std::cout << "line 81\n";
+    int choice{};
+    while (true)
+    {
+        choice = FrontEnd::display_payment_options(customer.getCards());
+        if (choice == -1)
+            return;
+        if (choice == 0)
+            add_card(customer);
+        else
+            break;
+    }
 }
 
 void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)

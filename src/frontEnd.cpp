@@ -75,6 +75,23 @@ int FrontEnd::display_create_itinerary_menu()
     return choice;
 }
 
+int FrontEnd::display_payment_options(const std::vector<PaymentCard> &cards)
+{
+    Printer::print_options(cards);
+    int cardsCount{(int)cards.size()};
+    int choice{};
+    try
+    {
+        choice = InputHandler::get_choice(0, cardsCount);
+    }
+    catch (int e)
+    {
+        Error::display_error(e);
+        display_payment_options(cards);
+    }
+    return choice;
+}
+
 void FrontEnd::read_flight_request_data(FlightRequest &request)
 {
     std::string from{};
@@ -124,4 +141,22 @@ void FrontEnd::read_request_data(ReservationRequest *&req, RequestType type)
         reader = new FlightRequestDataReader;
         req = reader->read();
     }
+}
+
+PaymentCard FrontEnd::read_card()
+{
+    std::string number;
+    std::string owner;
+    std::string date;
+    std::string ccv;
+    std::cout << "Enter Card Number: ";
+    std::cin >> number;
+    std::cout << "Enter Card Owner: ";
+    std::cin >> owner;
+    std::cout << "Enter Catd Expiry Date: ";
+    std::cin >> date;
+    std::cout << "Enter Card CCV: ";
+    std::cin >> ccv;
+
+    return {number, owner, date, ccv};
 }

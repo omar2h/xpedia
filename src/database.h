@@ -32,5 +32,8 @@ public:
     void write_json_to_file(const std::string &, json, bool) const;
     std::vector<User> get_users(const std::string &) const;
     Customer getCustomer(const User &);
+    void update_customer_info(const Customer &);
+    void write_json_array_to_file(const std::string &, json, bool);
+    void delete_object_with_id(const std::string &path, const std::string &id);
 };
 #endif // __DATABASE_H__

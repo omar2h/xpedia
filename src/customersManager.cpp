@@ -1,10 +1,11 @@
 #include "customersManager.h"
 #include "database.h"
 #include <iostream>
-Customer CustomersManager::getCustomer(const User &user)
+Customer CustomersManager::getCustomer(const User &user) const
 {
     Customer customer{user};
     std::vector<std::string> customersIds = Database::get_database()->read_json_attribute_from_file(CUSTOMERS_JSON, "id");
+    std::cout << "line 8\n";
     auto it = std::find(customersIds.begin(), customersIds.end(), customer.getId());
     if (it != customersIds.end())
     {
@@ -36,4 +37,45 @@ Customer CustomersManager::getCustomer(const User &user)
         Database::get_database()->write_json_to_file(CUSTOMERS_JSON, obj, true);
     }
     return customer;
+}
+
+json CustomersManager::convert_card_to_json(const PaymentCard &card) const
+{
+    json obj;
+    obj["owner"] = card.getOwner();
+    obj["number"] = card.getNumber();
+    obj["expiry_date"] = card.getExpiryDate();
+    obj["ccv"] = card.getCcv();
+    return obj;
+}
+
+json CustomersManager::convert_customer_to_json(const Customer &customer) const
+{
+    UsersManager manager;
+    json obj = manager.convert_user_to_json(customer);
+    obj["cards"] = json::array();
+    std::vector<PaymentCard> cards = customer.getCards();
+    std::vector<std::string> itineraries = customer.getItinerariesIds();
+    obj["itineraries"] = json::array();
+    json cardObj;
+    json itObj;
+    for (const PaymentCard &card : cards)
+    {
+        cardObj = convert_card_to_json(card);
+        obj["cards"].push_back(cardObj);
+    }
+
+    for (const std::string &id : itineraries)
+    {
+        itObj["id"] = id;
+        obj["itineraries"].push_back(itObj);
+    }
+    return obj;
+}
+
+void CustomersManager::update_customer(const Customer &customer) const
+{
+    json obj = convert_customer_to_json(customer);
+    Database::get_database()->delete_object_with_id(CUSTOMERS_JSON, customer.getId());
+    Database::get_database()->write_json_to_file(CUSTOMERS_JSON, obj, true);
 }

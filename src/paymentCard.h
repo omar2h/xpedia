@@ -5,12 +5,14 @@
 
 class PaymentCard
 {
-    std::string owner{};
     std::string number{};
+    std::string owner{};
     std::string expiryDate{};
     std::string ccv{};
 
 public:
+    PaymentCard() = default;
+    PaymentCard(const std::string &number, const std::string &owner, const std::string &date, const std::string &ccv) : number{number}, owner{owner}, expiryDate{date}, ccv{ccv} {}
     std::string toString() const;
 
     std::string getOwner() const { return owner; }

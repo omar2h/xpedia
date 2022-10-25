@@ -4,6 +4,7 @@
 #include "flightRequest.h"
 #include "flight.h"
 #include "requestDataReader.h"
+#include "paymentCard.h"
 #include <string>
 #include <vector>
 
@@ -20,7 +21,8 @@ public:
     static void read_flight_request_data(FlightRequest &);
     static int read_reservation_choice(const std::vector<ItineraryItem *> &);
     static void read_request_data(ReservationRequest *&, RequestType);
-
+    static int display_payment_options(const std::vector<PaymentCard> &);
+    static PaymentCard read_card();
     virtual ~FrontEnd()
     {
         delete reader;

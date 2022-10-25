@@ -18,3 +18,13 @@ void Printer::print_available_itinerary_items(const std::vector<ItineraryItem *>
     }
     std::cout << "Enter choice(-1 to cancel): ";
 }
+
+void Printer::print_options(const std::vector<PaymentCard> &cards)
+{
+    int count{(int)cards.size()};
+    for (int i = 0; i < count; i++)
+    {
+        std::cout << i + 1 << ": " << cards[i].toString() << "\n";
+    }
+    std::cout << "Enter choice(0 to add card, -1 to cancel): ";
+}

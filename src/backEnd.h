@@ -3,6 +3,7 @@
 #include "user.h"
 #include "flightsManager.h"
 #include "itinerary.h"
+#include "customer.h"
 class BackEnd
 {
 
@@ -12,7 +13,8 @@ public:
     static void create_itinerary(User &);
     static void add_flight(RequestType, Itinerary &);
     static std::vector<ItineraryItem *> get_available_reservations(ReservationRequest *, RequestType);
-    static void payItinerary(const Itinerary &, User &);
+    static void payItinerary(const Itinerary &, const User &);
+    static void add_card(Customer &);
     // static std::vector<Flight> get_available_flights(const FlightRequest &request);
 };
 #endif // __BACKEND_H__
