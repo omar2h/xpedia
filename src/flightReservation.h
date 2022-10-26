@@ -3,6 +3,7 @@
 #include "reservation.h"
 #include "flight.h"
 #include "flightRequest.h"
+using json = nlohmann::json;
 
 class FlightReservation : public Reservation
 {
@@ -19,6 +20,8 @@ public:
     void setRequest(ReservationRequest *const) override;
 
     void setItem(ItineraryItem *const) override;
+
+    json toJson() const override;
 
     virtual ~FlightReservation() = default;
 };

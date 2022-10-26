@@ -82,6 +82,7 @@ int FrontEnd::display_payment_options(const std::vector<PaymentCard> &cards)
         options.push_back(card.toString());
     Printer::print_options(options);
     int cardsCount{(int)cards.size()};
+
     std::cout << "Enter choice(0 to add card, -1 to cancel): ";
     int choice{};
     try
@@ -93,6 +94,7 @@ int FrontEnd::display_payment_options(const std::vector<PaymentCard> &cards)
         Error::display_error(e);
         display_payment_options(cards);
     }
+    std::cout << "line 97 choice = " << choice << "\n";
     return choice;
 }
 

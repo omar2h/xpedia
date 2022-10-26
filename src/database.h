@@ -4,6 +4,8 @@
 #include "usersManager.h"
 #include "customersManager.h"
 #include "customer.h"
+#include "itinerary.h"
+#include "itinerariesManager.h"
 #include <string>
 #include <memory>
 #include <unordered_set>
@@ -11,6 +13,7 @@
 
 #define USERS_JSON "users.json"
 #define CUSTOMERS_JSON "customers.json"
+#define ITINERARIES_JSON "itineraries.json"
 class Database
 {
     static std::unique_ptr<Database> databaseInstance;
@@ -20,6 +23,7 @@ class Database
 
     UsersManager usersManager{};
     CustomersManager customersManager{};
+    ItinerariesManager itinerariesManger{};
 
 public:
     static std::unique_ptr<Database> get_database();
@@ -35,5 +39,6 @@ public:
     void update_customer_info(const Customer &);
     void write_json_array_to_file(const std::string &, json, bool);
     void delete_object_with_id(const std::string &path, const std::string &id);
+    void save_itinerary(const std::string &, const Itinerary &);
 };
 #endif // __DATABASE_H__

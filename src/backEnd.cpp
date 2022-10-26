@@ -7,6 +7,7 @@
 #include "reservationFactory.h"
 #include "customer.h"
 #include "paymentFactory.h"
+#include "idGenerator.h"
 #include <iostream>
 #include <typeinfo>
 class ItineraryItem;
@@ -74,27 +75,85 @@ void BackEnd::add_card(Customer &customer)
     Database::get_database()->update_customer_info(customer);
 }
 
+int BackEnd::select_card(Customer &customer)
+{
+    int choice{};
+    while (true)
+    {
+        choice = FrontEnd::display_payment_options(customer.getCards());
+        if (choice == -1)
+            return -1;
+        if (choice == 0)
+            add_card(customer);
+        else
+            break;
+    }
+    return choice;
+}
+
+bool BackEnd::withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary)
+{
+    PaymentStrategy *paymentStrategy = PaymentFactory::getPaymentService(static_cast<PaymentService>(service - 1));
+    return paymentStrategy->pay(card, currItinerary.total_cost());
+}
+
+bool BackEnd::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
+{
+    ItineraryManagerFactory factory;
+    ItineraryManager *manager{};
+
+    std::vector<Reservation *> reservations = currItinerary.getReservations();
+    for (Reservation *res : reservations)
+    {
+        manager = factory.getManager(res->getType());
+        if (!manager->reserve(res))
+            return false;
+    }
+    return true;
+}
+
+int BackEnd::make_reservations(Customer &customer, const Itinerary &currItinerary)
+{
+    int choice = select_card(customer);
+    if (choice == -1)
+        return -1;
+    std::cout << "line 120\n";
+    PaymentCard card = customer.getCards()[choice - 1];
+    choice = FrontEnd::display_payment_services();
+    if (choice == -1)
+        return choice;
+
+    bool isPaid = withdraw_money(card, choice, currItinerary);
+    if (isPaid)
+        std::cout << "Transaction Succeeded\n";
+    else
+    {
+        std::cout << "Transaction Failed\n";
+        return -1;
+    }
+
+    return confirm_reservations(customer, currItinerary);
+}
+
 void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
 {
     if (!currItinerary.getReservations().size())
         throw 5; // no reservations
     Customer customer = Database::get_database()->getCustomer(user);
     std::cout << "line 81\n";
-    int choice{};
-    while (true)
+    int isConfirmed = make_reservations(customer, currItinerary);
+    if (isConfirmed == 1)
     {
-        choice = FrontEnd::display_payment_options(customer.getCards());
-        if (choice == -1)
-            return;
-        if (choice == 0)
-            add_card(customer);
-        else
-            break;
+        std::cout << "Reservation is Confirmed\n";
+        Database::get_database()->save_itinerary(customer.getId(), currItinerary);
+        Database::get_database()->update_customer_info(customer);
+        return;
     }
-    PaymentCard card = customer.getCards()[choice - 1];
-    choice = FrontEnd::display_payment_services();
-    PaymentStrategy *paymentStrategy = PaymentFactory::getPaymentService(static_cast<PaymentService>(choice - 1));
-    paymentStrategy->pay(card, currItinerary.total_cost());
+    else if (isConfirmed == 0)
+    {
+        std::cout << "Reservation Failed, Itinerary Cancelled\n";
+    }
+    return;
 }
 
 void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
@@ -113,7 +172,8 @@ void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
 
 void BackEnd::create_itinerary(User &user)
 {
-    Itinerary currItinerary{};
+    std::unordered_set<std::string> ids{};
+    Itinerary currItinerary{IdGenerator::generate_id(ids)};
 
     while (true)
     {
@@ -132,6 +192,7 @@ void BackEnd::create_itinerary(User &user)
         {
             std::cout << currItinerary.toString() << "\n";
             payItinerary(currItinerary, user);
+            currItinerary.Clear();
         }
         else if (choice == 4)
         {

@@ -25,4 +25,18 @@ void FlightReservation::setRequest(ReservationRequest *const req)
 void FlightReservation::setItem(ItineraryItem *const i)
 {
     item = dynamic_cast<Flight *>(i);
+    setType(i);
+}
+
+json FlightReservation::toJson() const
+{
+    json obj;
+    obj["airline"] = item->getAirline();
+    obj["from"] = request->getFromCity();
+    obj["to"] = request->getToCity();
+    obj["date"] = item->getDate();
+    obj["adults"] = request->getAdults();
+    obj["children"] = request->getChildren();
+    obj["type"] = getType();
+    return obj;
 }

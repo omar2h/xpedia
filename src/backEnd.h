@@ -14,6 +14,10 @@ public:
     static void create_itinerary(User &);
     static void add_flight(RequestType, Itinerary &);
     static std::vector<ItineraryItem *> get_available_reservations(ReservationRequest *, RequestType);
+    static int make_reservations(Customer &customer, const Itinerary &currItinerary);
+    static bool confirm_reservations(Customer &customer, const Itinerary &currItinerary);
+    static bool withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary);
+    static int select_card(Customer &customer);
     static void payItinerary(const Itinerary &, const User &);
     static void add_card(Customer &);
     // static std::vector<Flight> get_available_flights(const FlightRequest &request);

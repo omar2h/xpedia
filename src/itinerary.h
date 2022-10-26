@@ -6,9 +6,12 @@ class Reservation;
 
 class Itinerary
 {
+    std::string id{};
     std::vector<Reservation *> reservations{};
 
 public:
+    Itinerary(std::string id) : id{id} {}
+    std::string getId() const { return id; }
     void add_item(Reservation *);
     void Clear();
     std::string toString();

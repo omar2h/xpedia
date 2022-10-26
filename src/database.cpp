@@ -71,6 +71,11 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
     write_json_array_to_file(path, arr, false);
 }
 
+void Database::save_itinerary(const std::string &customerId, const Itinerary &itinerary)
+{
+    itinerariesManger.save_itinerary(customerId, itinerary);
+}
+
 void Database::write_json_array_to_file(const std::string &path, json arr, bool append = false)
 {
     auto status = std::ios::in | std::ios::out | std::ios::app;
