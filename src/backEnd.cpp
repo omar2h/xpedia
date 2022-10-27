@@ -8,6 +8,7 @@
 #include "customer.h"
 #include "paymentFactory.h"
 #include "idGenerator.h"
+#include "error.h"
 #include <iostream>
 #include <typeinfo>
 class ItineraryItem;
@@ -27,13 +28,21 @@ void BackEnd::save_user_in_db(User &user)
 User BackEnd::user_login(const std::string &email, const std::string &password)
 {
     std::vector<User> users{};
-    users = Database::get_database()->get_users(USERS_JSON);
+    try
+    {
+        users = Database::get_database()->get_users(USERS_JSON);
+    }
+    catch (int e)
+    {
+        throw e;
+    }
 
     for (const auto &usr : users)
     {
         if (usr.getEmail() == email && usr.getPassword() == password)
             return usr;
     }
+    // invalid email/password
     throw 5;
 }
 
@@ -72,7 +81,14 @@ void BackEnd::add_card(Customer &customer)
 {
     PaymentCard card = FrontEnd::read_card();
     customer.addCard(card);
-    Database::get_database()->update_customer_info(customer);
+    try
+    {
+        Database::get_database()->update_customer_info(customer);
+    }
+    catch (int e)
+    {
+        throw e;
+    }
 }
 
 int BackEnd::select_card(Customer &customer)
@@ -81,6 +97,7 @@ int BackEnd::select_card(Customer &customer)
     while (true)
     {
         choice = FrontEnd::display_payment_options(customer.getCards());
+        // cancel
         if (choice == -1)
             return -1;
         if (choice == 0)
@@ -115,6 +132,7 @@ bool BackEnd::confirm_reservations(Customer &customer, const Itinerary &currItin
 int BackEnd::make_reservations(Customer &customer, const Itinerary &currItinerary)
 {
     int choice = select_card(customer);
+    // cancel
     if (choice == -1)
         return -1;
     std::cout << "line 120\n";
@@ -138,7 +156,7 @@ int BackEnd::make_reservations(Customer &customer, const Itinerary &currItinerar
 void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
 {
     if (!currItinerary.getReservations().size())
-        throw 5; // no reservations
+        throw 6; // no reservations
     Customer customer = Database::get_database()->getCustomer(user);
     std::cout << "line 81\n";
     int isConfirmed = make_reservations(customer, currItinerary);
@@ -147,7 +165,14 @@ void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
         std::cout << "Reservation is Confirmed\n";
         Database::get_database()->save_itinerary(customer.getId(), currItinerary);
         customer.addItineraryId(currItinerary.getId());
-        Database::get_database()->update_customer_info(customer);
+        try
+        {
+            Database::get_database()->update_customer_info(customer);
+        }
+        catch (int e)
+        {
+            throw e;
+        }
         return;
     }
     else if (isConfirmed == 0)
@@ -163,6 +188,7 @@ void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
     FrontEnd::read_request_data(request, requestType);
     std::vector<ItineraryItem *> items = get_available_reservations(request, requestType);
     int choice = FrontEnd::read_reservation_choice(items);
+    // cancel
     if (choice == -1)
         return;
     Reservation *reservation = ReservationFactory::getReservation(requestType);
@@ -211,7 +237,16 @@ void BackEnd::create_itinerary(User &user)
         else if (choice == 3)
         {
             std::cout << currItinerary.toString() << "\n";
-            payItinerary(currItinerary, user);
+            try
+            {
+                payItinerary(currItinerary, user);
+            }
+            catch (int e)
+            {
+                Error::display_error(e);
+                currItinerary.Clear();
+                continue;
+            }
             currItinerary.Clear();
             return;
         }

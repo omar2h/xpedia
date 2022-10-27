@@ -84,6 +84,13 @@ bool CustomersManager::check_if_customer_exists(const std::string &uId) const
 void CustomersManager::update_customer(const Customer &customer) const
 {
     json obj = convert_customer_to_json(customer);
-    Database::get_database()->delete_object_with_id(CUSTOMERS_JSON, customer.getId());
+    try
+    {
+        Database::get_database()->delete_object_with_id(CUSTOMERS_JSON, customer.getId());
+    }
+    catch (int e)
+    {
+        throw e;
+    }
     Database::get_database()->write_json_to_file(CUSTOMERS_JSON, obj, true);
 }

@@ -1,5 +1,6 @@
 #include "loginHandler.h"
 #include "backEnd.h"
+#include "error.h"
 #include <iostream>
 
 User LoginHandler::login()
@@ -12,5 +13,13 @@ User LoginHandler::login()
     std::cout << "Enter Password: ";
     std::cin >> password;
 
-    return BackEnd::user_login(email, password);
+    try
+    {
+        return BackEnd::user_login(email, password);
+    }
+    catch (int e)
+    {
+        Error::display_error(e);
+        login();
+    }
 }

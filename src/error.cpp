@@ -15,4 +15,10 @@ void Error::display_error(int errorCode)
     {
         std::cout << "\nCan't open file\n\n";
     }
+    else if (errorCode == 4)
+        std::cout << "\nInvalid email/password(empty)\n\n";
+    else if (errorCode == 5)
+        std::cout << "\nInvalid email/password\n\n";
+    else if (errorCode == 6)
+        std::cout << "\nNo Reservations to Pay\n\n";
 }

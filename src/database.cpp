@@ -19,7 +19,7 @@ json Database::get_objects_from_file(const std::string &path) const
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
     {
-        throw 3;
+        throw 3; // failed to open file
     }
 
     json arr;
@@ -32,7 +32,7 @@ json Database::get_objects_from_file(const std::string &path) const
         arr = json::parse(file_handler);
     }
     else
-        throw 4;
+        throw 4; // empty file
     file_handler.close();
 
     return arr;
@@ -43,7 +43,7 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
     {
-        throw 3;
+        throw 3; // failed to open file
     }
 
     json arr;
@@ -56,7 +56,7 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
         arr = json::parse(file_handler);
     }
     else
-        throw 4;
+        throw 6; // empty file
     file_handler.close();
 
     for (int i = 0; i < arr.size(); i++)
@@ -201,7 +201,15 @@ void Database::write_json_to_file(const std::string &path, json obj, bool append
 
 std::vector<User> Database::get_users(const std::string &path) const
 {
-    json arr = get_objects_from_file(path);
+    json arr;
+    try
+    {
+        arr = get_objects_from_file(path);
+    }
+    catch (int e)
+    {
+        throw e;
+    }
     return UsersManager::get_users_from_objects(arr);
 }
 
@@ -212,7 +220,14 @@ Customer Database::getCustomer(const User &user)
 
 void Database::update_customer_info(const Customer &customer)
 {
-    return customersManager.update_customer(customer);
+    try
+    {
+        return customersManager.update_customer(customer);
+    }
+    catch (int e)
+    {
+        throw e;
+    }
 }
 
 std::vector<std::string> Database::read_json_attribute_from_file(const std::string &path, const std::string &att) const
