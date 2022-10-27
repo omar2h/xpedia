@@ -17,6 +17,7 @@ std::vector<ItineraryItem *> TurkishFlightsManager::search_reservations() const
     {
         Flight flight;
         flight.setType(ReservationType::turkish);
+        flight.setReqType(RequestType::flight);
         flight.setAirline(getName());
         flight.setDate(flight_.date);
         flight.setTotalCost(flight_.cost);

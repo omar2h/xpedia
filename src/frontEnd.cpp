@@ -4,6 +4,7 @@
 #include "error.h"
 #include "requestDataReader.h"
 #include "flightRequestDataReader.h"
+#include "reservation.h"
 #include <iostream>
 
 RequestDataReader *FrontEnd::reader{};
@@ -170,6 +171,27 @@ PaymentCard FrontEnd::read_card()
     std::cin >> ccv;
 
     return {number, owner, date, ccv};
+}
+
+void FrontEnd::display_itinerary(const Itinerary &itinerary)
+{
+    std::vector<Reservation *> reservations{};
+    reservations = itinerary.getReservations();
+    int count{(int)reservations.size()};
+    std::cout << "Itinerary of " << count << " reservations\n";
+    std::cout << itinerary.toString2() << "\n";
+}
+
+void FrontEnd::display_itineraries(const std::vector<Itinerary> &itineraries)
+{
+    int count{(int)itineraries.size()};
+    std::cout << count << " itineraries\n";
+    for (int i = 0; i < count; i++)
+    {
+        std::cout << i + 1 << "- ";
+        display_itinerary(itineraries[i]);
+        std::cout << "\n\n";
+    }
 }
 
 int FrontEnd::display_payment_services()

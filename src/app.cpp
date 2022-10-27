@@ -39,13 +39,11 @@
         }
         else if (choice == 3)
         {
-            // list itineraries
-            ;
+            BackEnd::list_itineraries(user);
         }
         else if (choice == 4)
         {
-            // logout
-            ;
+            break;
         }
     }
 }

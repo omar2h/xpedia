@@ -9,6 +9,13 @@ class FlightReservation : public Reservation
 {
     FlightRequest *request{};
     Flight *item{};
+    std::string airline{};
+    std::string from{};
+    std::string to{};
+    std::string date{};
+    int adults{};
+    int children{};
+    double cost{};
 
 public:
     Reservation *Clone() const override { return new FlightReservation(*this); }
@@ -17,11 +24,17 @@ public:
 
     std::string toString() const override;
 
+    std::string toString2() const override;
+
     void setRequest(ReservationRequest *const) override;
 
     void setItem(ItineraryItem *const) override;
 
     json toJson() const override;
+
+    Reservation *jsonToReservation(json) override;
+
+    void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double) override;
 
     virtual ~FlightReservation() = default;
 };

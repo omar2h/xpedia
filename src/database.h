@@ -40,5 +40,8 @@ public:
     void write_json_array_to_file(const std::string &, json, bool);
     void delete_object_with_id(const std::string &path, const std::string &id);
     void save_itinerary(const std::string &, const Itinerary &);
+    bool check_user_is_customer(const User &);
+    std::vector<Itinerary> getCustomerItineraries(const std::string &);
+    json get_arr_objects_with_att(const std::string &, const std::string &, const std::string &);
 };
 #endif // __DATABASE_H__

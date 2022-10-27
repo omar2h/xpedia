@@ -20,6 +20,7 @@ public:
     static int select_card(Customer &customer);
     static void payItinerary(const Itinerary &, const User &);
     static void add_card(Customer &);
+    static void list_itineraries(const User &);
     // static std::vector<Flight> get_available_flights(const FlightRequest &request);
 };
 #endif // __BACKEND_H__

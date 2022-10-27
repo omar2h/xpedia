@@ -76,6 +76,48 @@ void Database::save_itinerary(const std::string &customerId, const Itinerary &it
     itinerariesManger.save_itinerary(customerId, itinerary);
 }
 
+bool Database::check_user_is_customer(const User &user)
+{
+    bool exist = customersManager.check_if_customer_exists(user.getId());
+    if (!exist)
+        return false;
+    return true;
+}
+
+std::vector<Itinerary> Database::getCustomerItineraries(const std::string &customerId)
+{
+    return itinerariesManger.getItineraries_with_customerId(customerId);
+}
+
+json Database::get_arr_objects_with_att(const std::string &path, const std::string &jsonAtt, const std::string &att)
+{
+    std::fstream file_handler(path.c_str());
+    if (file_handler.fail())
+    {
+        throw 3;
+    }
+
+    json arr;
+    /* check if file is not empty */
+    file_handler.seekg(0, std::ios::end);
+    if (file_handler.tellg() != 0)
+    {
+        /* return the cursor to the beginning of the file */
+        file_handler.seekg(0, std::ios::beg);
+        arr = json::parse(file_handler);
+    }
+    else
+        throw 4;
+    file_handler.close();
+    json objectsArr;
+    for (const auto &u : arr)
+    {
+        if (u.value(jsonAtt, "not found") == att)
+            objectsArr.push_back(u);
+    }
+    return objectsArr;
+}
+
 void Database::write_json_array_to_file(const std::string &path, json arr, bool append = false)
 {
     auto status = std::ios::in | std::ios::out | std::ios::app;
@@ -120,6 +162,8 @@ json Database::get_object_with_id(const std::string &path, const std::string &id
         if (u.value("id", "not found") == id)
             return u;
     }
+    json obj;
+    return obj;
 }
 
 void Database::write_json_to_file(const std::string &path, json obj, bool append = true) const

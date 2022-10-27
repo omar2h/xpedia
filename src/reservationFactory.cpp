@@ -1,7 +1,7 @@
 #include "reservationFactory.h"
 #include "flightReservation.h"
 
-Reservation *ReservationFactory::getRequest(RequestType type)
+Reservation *ReservationFactory::getReservation(RequestType type)
 {
     if (type == RequestType::flight)
         return new FlightReservation;

@@ -16,6 +16,7 @@ std::vector<ItineraryItem *> AirCanadaFlightsManager::search_reservations() cons
     {
         Flight flight;
         flight.setType(ReservationType::aircanada);
+        flight.setReqType(RequestType::flight);
         flight.setAirline(getName());
         flight.setDate(flight_.date);
         flight.setTotalCost(flight_.price);

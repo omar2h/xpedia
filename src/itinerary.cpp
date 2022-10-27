@@ -16,12 +16,22 @@ void Itinerary::Clear()
     reservations.clear();
 }
 
-std::string Itinerary::toString()
+std::string Itinerary::toString() const
 {
     std::string str{};
     for (const auto &res : reservations)
     {
         str += res->toString();
+    }
+    return str;
+}
+
+std::string Itinerary::toString2() const
+{
+    std::string str{};
+    for (const auto &res : reservations)
+    {
+        str += res->toString2();
     }
     return str;
 }

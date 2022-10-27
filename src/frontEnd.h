@@ -5,6 +5,7 @@
 #include "flight.h"
 #include "requestDataReader.h"
 #include "paymentCard.h"
+#include "itinerary.h"
 #include <string>
 #include <vector>
 
@@ -24,6 +25,8 @@ public:
     static int display_payment_options(const std::vector<PaymentCard> &);
     static PaymentCard read_card();
     static int display_payment_services();
+    static void display_itinerary(const Itinerary &);
+    static void display_itineraries(const std::vector<Itinerary> &);
     virtual ~FrontEnd()
     {
         delete reader;

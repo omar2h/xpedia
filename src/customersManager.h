@@ -14,5 +14,7 @@ public:
     json convert_card_to_json(const PaymentCard &) const;
 
     json convert_customer_to_json(const Customer &) const;
+
+    bool check_if_customer_exists(const std::string &) const;
 };
 #endif // __CUSTOMERSMANAGER_H__

@@ -146,6 +146,7 @@ void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
     {
         std::cout << "Reservation is Confirmed\n";
         Database::get_database()->save_itinerary(customer.getId(), currItinerary);
+        customer.addItineraryId(currItinerary.getId());
         Database::get_database()->update_customer_info(customer);
         return;
     }
@@ -164,19 +165,38 @@ void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
     int choice = FrontEnd::read_reservation_choice(items);
     if (choice == -1)
         return;
-    Reservation *reservation = ReservationFactory::getRequest(requestType);
+    Reservation *reservation = ReservationFactory::getReservation(requestType);
     reservation->setItem(items[choice - 1]);
     reservation->setRequest(request);
     currItinerary.add_item(reservation);
 }
 
+void BackEnd::list_itineraries(const User &user)
+{
+    bool isCustomer = Database::get_database()->check_user_is_customer(user);
+    if (!isCustomer)
+    {
+        std::cout << "User has no Itineraries\n";
+        return;
+    }
+    Customer customer = Database::get_database()->getCustomer(user);
+    if ((int)customer.getItinerariesIds().size() == 0)
+    {
+        std::cout << "User has no Itineraries\n";
+        return;
+    }
+    std::vector<Itinerary> customerItineraries = Database::get_database()->getCustomerItineraries(customer.getId());
+    FrontEnd::display_itineraries(customerItineraries);
+}
+
 void BackEnd::create_itinerary(User &user)
 {
     std::unordered_set<std::string> ids{};
-    Itinerary currItinerary{IdGenerator::generate_id(ids)};
+    Itinerary currItinerary;
 
     while (true)
     {
+        currItinerary.setId(IdGenerator::generate_id(ids));
         int choice{};
         choice = FrontEnd::display_create_itinerary_menu();
         if (choice == 1)
@@ -193,6 +213,7 @@ void BackEnd::create_itinerary(User &user)
             std::cout << currItinerary.toString() << "\n";
             payItinerary(currItinerary, user);
             currItinerary.Clear();
+            return;
         }
         else if (choice == 4)
         {

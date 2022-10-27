@@ -73,6 +73,14 @@ json CustomersManager::convert_customer_to_json(const Customer &customer) const
     return obj;
 }
 
+bool CustomersManager::check_if_customer_exists(const std::string &uId) const
+{
+    json obj = Database::get_database()->get_object_with_id(CUSTOMERS_JSON, uId);
+    if (obj.empty())
+        return false;
+    return true;
+}
+
 void CustomersManager::update_customer(const Customer &customer) const
 {
     json obj = convert_customer_to_json(customer);

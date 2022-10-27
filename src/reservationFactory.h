@@ -6,6 +6,6 @@ enum class RequestType;
 class ReservationFactory
 {
 public:
-    static Reservation *getRequest(RequestType);
+    static Reservation *getReservation(RequestType);
 };
 #endif // __RESERVATIONFACTORY_H__

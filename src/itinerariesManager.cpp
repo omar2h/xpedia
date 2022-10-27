@@ -2,6 +2,7 @@
 #include "reservation.h"
 #include "database.h"
 #include "idGenerator.h"
+#include "reservationFactory.h"
 #include <iostream>
 
 json ItinerariesManager::convert_itinerary_to_json(const Itinerary &itinerary)
@@ -24,5 +25,42 @@ void ItinerariesManager::save_itinerary(const std::string &customerId, const Iti
     obj["reservations"] = objectsReservations;
     obj["customer_id"] = customerId;
     obj["id"] = itinerary.getId();
+    obj["cost"] = itinerary.total_cost();
     Database::get_database()->write_json_to_file(ITINERARIES_JSON, obj, true);
+}
+
+Reservation *ItinerariesManager::convert_json_to_reservation(json obj)
+{
+    int reqType = obj.value("reqType", -1);
+    Reservation *res = ReservationFactory::getReservation(static_cast<RequestType>(reqType));
+    res->jsonToReservation(obj);
+    return res;
+}
+
+Itinerary ItinerariesManager::convert_json_to_itinerary(json obj)
+{
+    Itinerary itinerary;
+    itinerary.setId(obj.value("id", "not found"));
+    itinerary.setCost(obj.value("cost", -1));
+    json arr = json::array();
+    arr = obj["reservations"];
+
+    for (json resObj : arr)
+    {
+        itinerary.add_item(convert_json_to_reservation(resObj));
+    }
+    return itinerary;
+}
+
+std::vector<Itinerary> ItinerariesManager::getItineraries_with_customerId(const std::string &customerId)
+{
+    json arr = Database::get_database()->get_arr_objects_with_att(ITINERARIES_JSON, "customer_id", customerId);
+    std::vector<Itinerary> itineraries;
+    for (json obj : arr)
+    {
+        Itinerary itinerary;
+        itinerary = convert_json_to_itinerary(obj);
+        itineraries.push_back(itinerary);
+    }
+    return itineraries;
 }

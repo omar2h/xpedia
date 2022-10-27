@@ -6,6 +6,7 @@
 #include "include/json.hpp"
 using json = nlohmann::json;
 
+enum class RequestType;
 enum class ReservationType
 {
     aircanada,
@@ -16,6 +17,7 @@ class ReservationRequest;
 class Reservation
 {
     ReservationType type;
+    RequestType reqType;
     // ItineraryItem *item{};
     // ReservationRequest *request{};
 
@@ -26,24 +28,22 @@ public:
 
     virtual std::string toString() const = 0;
 
+    virtual std::string toString2() const = 0;
+
     virtual json toJson() const = 0;
-    // ReservationRequest *getRequest() const { return request->Clone(); }
-    // ItineraryItem *getItem() const { return item->Clone(); }
+
+    virtual Reservation *jsonToReservation(json) = 0;
+
+    virtual void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double) = 0;
 
     virtual void setRequest(ReservationRequest *const) = 0;
     virtual void setItem(ItineraryItem *const) = 0;
     ReservationType getType() const { return type; }
     void setType(ItineraryItem const *);
-    // void setRequest(ReservationRequest *const request_)
-    // {
-    //     request = request_->Clone();
-    // }
-
-    // void setItem(ItineraryItem *const item_)
-    // {
-    //     item = item_->Clone();
-    // }
 
     virtual ~Reservation() = default;
+
+    RequestType getReqType() const { return reqType; }
+    void setReqType(ItineraryItem const *);
 };
 #endif // __RESERVATION_H__
