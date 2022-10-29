@@ -1,10 +1,11 @@
 #include "app.h"
-#include "frontEnd.h"
-#include "user.h"
-#include "signupHandler.h"
-#include "loginHandler.h"
-#include "backEnd.h"
+#include "frontend/frontend.h"
+#include "model/user.h"
+#include "frontend/loginHandler.h"
+#include "frontend/signupHandler.h"
+#include "backend/backEnd.h"
 #include <iostream>
+#include <fstream>
 
 [[noreturn]] void App::run() const
 {
@@ -12,6 +13,7 @@
     // main loop
     while (true)
     {
+
         // start menu loop
         while (true)
         {
