@@ -179,7 +179,7 @@ void FrontEnd::display_itinerary(const Itinerary &itinerary)
     reservations = itinerary.getReservations();
     int count{(int)reservations.size()};
     std::cout << "Itinerary of " << count << " reservations\n";
-    std::cout << itinerary.toString2();
+    std::cout << itinerary.toString2() << "\n";
 }
 
 void FrontEnd::display_itineraries(const std::vector<Itinerary> &itineraries)
@@ -190,7 +190,7 @@ void FrontEnd::display_itineraries(const std::vector<Itinerary> &itineraries)
     {
         std::cout << i + 1 << "- ";
         display_itinerary(itineraries[i]);
-        std::cout << "\n";
+        std::cout << "\n\n";
     }
 }
 

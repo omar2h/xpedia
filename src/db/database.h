@@ -11,9 +11,9 @@
 #include <unordered_set>
 #include <vector>
 
-#define USERS_JSON "src/users.json"
-#define CUSTOMERS_JSON "src/customers.json"
-#define ITINERARIES_JSON "src/itineraries.json"
+#define USERS_JSON "users.json"
+#define CUSTOMERS_JSON "customers.json"
+#define ITINERARIES_JSON "itineraries.json"
 class Database
 {
     static std::unique_ptr<Database> databaseInstance;

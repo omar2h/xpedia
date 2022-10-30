@@ -5,7 +5,6 @@
 #include "frontend/signupHandler.h"
 #include "backend/backEnd.h"
 #include <iostream>
-#include <fstream>
 
 [[noreturn]] void App::run() const
 {
@@ -13,7 +12,6 @@
     // main loop
     while (true)
     {
-
         // start menu loop
         while (true)
         {

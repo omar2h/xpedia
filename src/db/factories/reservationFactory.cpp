@@ -5,5 +5,4 @@ Reservation *ReservationFactory::getReservation(RequestType type)
 {
     if (type == RequestType::flight)
         return new FlightReservation;
-    return {};
 }

@@ -59,7 +59,7 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
         throw 6; // empty file
     file_handler.close();
 
-    for (int i = 0; i < (int)arr.size(); i++)
+    for (int i = 0; i < arr.size(); i++)
     {
         std::cout << arr[i].value("id", "not found") << "\n";
         if (arr[i].value("id", "not found") == id)
@@ -291,7 +291,7 @@ void Database::save_user(User &user) const
     std::string newId = UsersManager::generate_user_id();
     user.setId(newId);
     json obj = usersManager.convert_user_to_json(user);
-    write_json_to_file(USERS_JSON, obj, true);
+    write_json_to_file(USERS_JSON, obj);
 }
 
 // std::vector<User> get_users_from_file(const std::string &path)
