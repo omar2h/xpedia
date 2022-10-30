@@ -9,8 +9,8 @@ using json = nlohmann::json;
 enum class RequestType;
 enum class ReservationType
 {
-    aircanada,
-    turkish,
+    britishAirways,
+    airFrance,
     marriott,
     hilton
 };

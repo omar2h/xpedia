@@ -72,12 +72,6 @@ std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequ
         }
     }
 
-    for (auto manager : managers)
-    {
-        delete manager;
-        manager = nullptr;
-    }
-    managers.clear();
     return items;
 }
 

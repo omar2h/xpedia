@@ -13,46 +13,46 @@
 
 using namespace std;
 
-class AirCanadaCustomerInfo
+class BritishAirwaysCustomerInfo
 {
 };
 
-class AirCanadaFlight
+class BritishAirwaysFlight
 {
 public:
 	double price;
 	string date;
 };
 
-class AirCanadaOnlineAPI
+class BritishAirwaysOnlineAPI
 {
 public:
-	static vector<AirCanadaFlight> GetFlights(string const &from, string const &date, string const &to, int adults, int childern)
+	static vector<BritishAirwaysFlight> GetFlights(string const &from, string const &date, string const &to, int adults, int childern)
 	{
-		vector<AirCanadaFlight> flights;
+		vector<BritishAirwaysFlight> flights;
 
 		flights.push_back({200, "25-01-2022"});
 		flights.push_back({250, "29-01-2022"});
 		return flights;
 	}
-	static bool ReserveFlight(const AirCanadaFlight &flight, const AirCanadaCustomerInfo &info)
+	static bool ReserveFlight(const BritishAirwaysFlight &flight, const BritishAirwaysCustomerInfo &info)
 	{
 		return true;
 	}
 };
 
-class TurkishFlight
+class AirFranceFlight
 {
 public:
 	double cost;
 	string date;
 };
 
-class TurkishCustomerInfo
+class AirFranceCustomerInfo
 {
 };
 
-class TurkishAirlinesOnlineAPI
+class AirFranceOnlineAPI
 {
 public:
 	void SetInfo(string const &date, string const &from, string const &to)
@@ -61,16 +61,16 @@ public:
 	void SetPassengersInfo(int childern, int adults)
 	{
 	}
-	vector<TurkishFlight> GetAvailableFlights() const
+	vector<AirFranceFlight> GetAvailableFlights() const
 	{
-		vector<TurkishFlight> flights;
+		vector<AirFranceFlight> flights;
 
 		flights.push_back({300, "10-01-2022"});
 		flights.push_back({320, "12-01-2022"});
 		return flights;
 	}
 
-	static bool ReserveFlight(const TurkishCustomerInfo &info, const TurkishFlight &flight)
+	static bool ReserveFlight(const AirFranceCustomerInfo &info, const AirFranceFlight &flight)
 	{
 		return false;
 	}

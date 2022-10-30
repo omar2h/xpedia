@@ -1,22 +1,22 @@
-#include "turkishFlightsManager.h"
+#include "airFranceFlightsManager.h"
 #include "../APIs/expedia_flights_api.h"
 
-std::vector<ItineraryItem *> TurkishFlightsManager::search_reservations() const
+std::vector<ItineraryItem *> AirFranceFlightsManager::search_reservations() const
 {
     const FlightRequest *request = dynamic_cast<FlightRequest *>(getRequest());
 
-    TurkishAirlinesOnlineAPI api{};
+    AirFranceOnlineAPI api{};
     api.SetInfo(request->getDate(), request->getFromCity(), request->getToCity());
     api.SetPassengersInfo(request->getChildren(), request->getAdults());
 
-    std::vector<TurkishFlight> turkishFlights = api.GetAvailableFlights();
+    std::vector<AirFranceFlight> airFranceFlights = api.GetAvailableFlights();
 
     std::vector<ItineraryItem *> flights{};
 
-    for (const auto &flight_ : turkishFlights)
+    for (const auto &flight_ : airFranceFlights)
     {
         Flight flight;
-        flight.setType(ReservationType::turkish);
+        flight.setType(ReservationType::airFrance);
         flight.setReqType(RequestType::flight);
         flight.setAirline(getName());
         flight.setDate(flight_.date);
@@ -26,7 +26,7 @@ std::vector<ItineraryItem *> TurkishFlightsManager::search_reservations() const
     return flights;
 }
 
-bool TurkishFlightsManager::reserve(Reservation *reservation) const
+bool AirFranceFlightsManager::reserve(Reservation *reservation) const
 {
-    return TurkishAirlinesOnlineAPI::ReserveFlight(TurkishCustomerInfo(), TurkishFlight());
+    return AirFranceOnlineAPI::ReserveFlight(AirFranceCustomerInfo(), AirFranceFlight());
 }
