@@ -26,5 +26,7 @@ public:
     {
         return SquarePaymentAPI::WithDrawMoney(getJsonQuery(card, amount));
     }
+
+    ~SquarePaymentStrategy() override = default;
 };
 #endif // __SQUAREPAYMENTSTRATEGY_H__

@@ -16,8 +16,6 @@ public:
 
     ItineraryManager *Clone() override { return new AirCanadaFlightsManager(*this); };
 
-    ~AirCanadaFlightsManager() override
-    {
-    }
+    ~AirCanadaFlightsManager() override = default;
 };
 #endif // __AIRCANADAFLIGHTSMANAGER_H__

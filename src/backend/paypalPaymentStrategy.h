@@ -19,5 +19,7 @@ public:
         paypalApi.SetCardInfo(&paypalCard);
         return paypalApi.MakePayment(amount);
     }
+
+    ~PayPalPaymentStrategy() override = default;
 };
 #endif // __PAYPALPAYMENTSTRATEGY_H__

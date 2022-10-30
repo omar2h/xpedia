@@ -20,8 +20,6 @@ class Reservation
 {
     ReservationType type;
     RequestType reqType;
-    // ItineraryItem *item{};
-    // ReservationRequest *request{};
 
 public:
     virtual Reservation *Clone() const = 0;

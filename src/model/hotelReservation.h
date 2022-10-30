@@ -38,6 +38,12 @@ public:
 
     void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) override;
 
-    virtual ~HotelReservation() = default;
+    virtual ~HotelReservation() override
+    {
+        delete item;
+        delete request;
+        item = nullptr;
+        request = nullptr;
+    }
 };
 #endif // __HOTELRESERVATION_H__

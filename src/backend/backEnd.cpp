@@ -46,20 +46,6 @@ User BackEnd::user_login(const std::string &email, const std::string &password)
     throw 5;
 }
 
-// std::vector<Flight> BackEnd::get_available_flights(const FlightRequest &request)
-// {
-//     std::vector<Flight> flights;
-
-//     for (FlightsManager *manager : flightsManagers)
-//     {
-//         manager->setFlightRequest(request);
-//         std::vector<Flight> airlineFlights = manager->search_flights();
-
-//         flights.insert(flights.end(), airlineFlights.begin(), airlineFlights.end());
-//     }
-//     return flights;
-// }
-
 std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequest *request, RequestType requestType)
 {
     std::vector<ItineraryItem *> items;
@@ -85,6 +71,13 @@ std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequ
             items.insert(items.end(), hotelRooms.begin(), hotelRooms.end());
         }
     }
+
+    for (auto manager : managers)
+    {
+        delete manager;
+        manager = nullptr;
+    }
+    managers.clear();
     return items;
 }
 
@@ -122,7 +115,10 @@ int BackEnd::select_card(Customer &customer)
 bool BackEnd::withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary)
 {
     PaymentStrategy *paymentStrategy = PaymentFactory::getPaymentService(static_cast<PaymentService>(service - 1));
-    return paymentStrategy->pay(card, currItinerary.total_cost());
+    bool isPaid = paymentStrategy->pay(card, currItinerary.total_cost());
+    delete paymentStrategy;
+    paymentStrategy = nullptr;
+    return isPaid;
 }
 
 bool BackEnd::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
@@ -135,8 +131,14 @@ bool BackEnd::confirm_reservations(Customer &customer, const Itinerary &currItin
     {
         manager = factory.getManager(res->getType());
         if (!manager->reserve(res))
+        {
+            delete manager;
+            manager = nullptr;
             return false;
+        }
     }
+    delete manager;
+    manager = nullptr;
     return true;
 }
 

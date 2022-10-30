@@ -24,6 +24,10 @@ public:
 
     virtual ItineraryManager *Clone() = 0;
 
-    virtual ~ItineraryManager() = default;
+    virtual ~ItineraryManager()
+    {
+        delete request;
+        request = nullptr;
+    }
 };
 #endif // __ITINERARYMANAGER_H__

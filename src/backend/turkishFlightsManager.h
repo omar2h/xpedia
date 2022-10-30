@@ -16,8 +16,6 @@ public:
 
     ItineraryManager *Clone() override { return new TurkishFlightsManager(*this); };
 
-    ~TurkishFlightsManager() override
-    {
-    }
+    ~TurkishFlightsManager() override = default;
 };
 #endif // __TURKISHFLIGHTSMANAGER_H__

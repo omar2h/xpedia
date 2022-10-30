@@ -18,5 +18,7 @@ public:
         cardInfo.expiry_date = card.getExpiryDate();
         return StripePaymentAPI::WithDrawMoney(userInfo, cardInfo, amount);
     }
+
+    ~StripePaymentStrategy() override = default;
 };
 #endif // __STRIPEPAYMENTSTRATEGY_H__

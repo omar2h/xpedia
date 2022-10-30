@@ -34,5 +34,7 @@ public:
 
     int getRooms() const { return rooms; }
     void setRooms(int rooms_) { rooms = rooms_; }
+
+    ~HotelRequest() override = default;
 };
 #endif // __HOTELREQUEST_H__

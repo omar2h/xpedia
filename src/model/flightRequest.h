@@ -33,5 +33,7 @@ public:
     void setDate(const std::string &date_) { date = date_; }
 
     std::string toString() const override;
+
+    ~FlightRequest() override = default;
 };
 #endif // __FLIGHTREQUEST_H__
