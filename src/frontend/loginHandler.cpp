@@ -19,7 +19,6 @@ User LoginHandler::login()
     }
     catch (int e)
     {
-        Error::display_error(e);
-        login();
+        throw e;
     }
 }

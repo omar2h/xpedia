@@ -1,24 +1,26 @@
-#ifndef __FLIGHTRESERVATION_H__
-#define __FLIGHTRESERVATION_H__
+#ifndef __HOTELRESERVATION_H__
+#define __HOTELRESERVATION_H__
 #include "reservation.h"
-#include "flight.h"
-#include "flightRequest.h"
-using json = nlohmann::json;
 
-class FlightReservation : public Reservation
+class HotelRequest;
+class HotelRoom;
+
+class HotelReservation : public Reservation
 {
-    FlightRequest *request{};
-    Flight *item{};
-    std::string airline{};
-    std::string from{};
-    std::string to{};
-    std::string date{};
+    HotelRequest *request{};
+    HotelRoom *item{};
+    std::string hotelName{};
+    std::string fromDate{};
+    std::string toDate{};
+    std::string city{};
+    std::string roomType{};
     int adults{};
     int children{};
+    int rooms{};
     double cost{};
 
 public:
-    Reservation *Clone() const override { return new FlightReservation(*this); }
+    Reservation *Clone() const override { return new HotelReservation(*this); }
 
     double total_cost() const override;
 
@@ -36,6 +38,6 @@ public:
 
     void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) override;
 
-    virtual ~FlightReservation() = default;
+    virtual ~HotelReservation() = default;
 };
-#endif // __FLIGHTRESERVATION_H__
+#endif // __HOTELRESERVATION_H__

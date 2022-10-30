@@ -34,6 +34,7 @@ Reservation *ItinerariesManager::convert_json_to_reservation(json obj)
     int reqType = obj.value("reqType", -1);
     Reservation *res = ReservationFactory::getReservation(static_cast<RequestType>(reqType));
     res->jsonToReservation(obj);
+    std::cout << "itinerariesmanager line 37" << res->toString2() << "\n";
     return res;
 }
 

@@ -3,6 +3,7 @@
 #include "../model/flightRequest.h"
 #include "../frontend/frontEnd.h"
 #include "../db/factories/flightsManagerFactory.h"
+#include "../db/factories/hotelsManagerFactory.h"
 #include "../db/factories/reservationRequestFactory.h"
 #include "../db/factories/reservationFactory.h"
 #include "../db/factories/paymentFactory.h"
@@ -71,6 +72,17 @@ std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequ
             manager->setRequest(request);
             std::vector<ItineraryItem *> airlineFlights = manager->search_reservations();
             items.insert(items.end(), airlineFlights.begin(), airlineFlights.end());
+        }
+    }
+    else if (requestType == RequestType::hotel)
+    {
+        managers = HotelsManagerFactory::getManagers();
+        std::cout << "backend line 80" << managers.size() << "\n";
+        for (auto manager : managers)
+        {
+            manager->setRequest(request);
+            std::vector<ItineraryItem *> hotelRooms = manager->search_reservations();
+            items.insert(items.end(), hotelRooms.begin(), hotelRooms.end());
         }
     }
     return items;
@@ -159,13 +171,14 @@ void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
     Customer customer;
     try
     {
-        Customer customer = Database::get_database()->getCustomer(user);
+        customer = Database::get_database()->getCustomer(user);
     }
     catch (int e)
     {
         throw e;
     }
-    std::cout << "line 81\n";
+    std::cout << "line 81"
+              << "\n";
     int isConfirmed = make_reservations(customer, currItinerary);
     if (isConfirmed == 1)
     {
@@ -189,7 +202,7 @@ void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
     return;
 }
 
-void BackEnd::add_flight(RequestType requestType, Itinerary &currItinerary)
+void BackEnd::add_new_item(RequestType requestType, Itinerary &currItinerary)
 {
     ReservationRequest *request = ReservationRequestFactory::getRequest(requestType);
     FrontEnd::read_request_data(request, requestType);
@@ -260,12 +273,11 @@ void BackEnd::create_itinerary(User &user)
         choice = FrontEnd::display_create_itinerary_menu();
         if (choice == 1)
         {
-            add_flight(RequestType::flight, currItinerary);
+            add_new_item(RequestType::flight, currItinerary);
         }
         else if (choice == 2)
         {
-            // add hotel
-            ;
+            add_new_item(RequestType::hotel, currItinerary);
         }
         else if (choice == 3)
         {

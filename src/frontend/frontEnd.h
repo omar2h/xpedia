@@ -6,6 +6,8 @@
 #include "requestDataReader.h"
 #include "../model/paymentCard.h"
 #include "../model/itinerary.h"
+#include "loginHandler.h"
+#include "signupHandler.h"
 #include <string>
 #include <vector>
 
@@ -27,6 +29,8 @@ public:
     static int display_payment_services();
     static void display_itinerary(const Itinerary &);
     static void display_itineraries(const std::vector<Itinerary> &);
+    static User login();
+    static void signup();
     virtual ~FrontEnd()
     {
         delete reader;

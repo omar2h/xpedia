@@ -4,6 +4,7 @@
 #include "frontend/loginHandler.h"
 #include "frontend/signupHandler.h"
 #include "backend/backEnd.h"
+#include "error.h"
 #include <iostream>
 
 [[noreturn]] void App::run() const
@@ -15,16 +16,20 @@
         // start menu loop
         while (true)
         {
+            std::cout << "\n\n";
             int choice = FrontEnd::show_start_menu();
 
             if (choice == 1)
             {
-                user = LoginHandler::login();
+
+                user = FrontEnd::login();
                 FrontEnd::display_welcome_message(user.getFirstName(), user.getLastName());
                 break;
             }
             else if (choice == 2)
-                SignupHandler::signup();
+            {
+                FrontEnd::signup();
+            }
             else if (choice == 3)
                 exit(0);
         }

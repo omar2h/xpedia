@@ -33,7 +33,6 @@ void SignupHandler::signup()
     }
     catch (int e)
     {
-        Error::display_error(e);
-        signup();
+        throw e;
     }
 }

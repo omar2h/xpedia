@@ -26,7 +26,7 @@ public:
 class HiltonHotelAPI
 {
 public:
-	static vector<HiltonRoom> SearchRooms(string country, string city, string from_date, string to_date, int adults, int children, int needed_rooms)
+	static vector<HiltonRoom> SearchRooms(string city, string from_date, string to_date, int adults, int children, int needed_rooms)
 	{
 		vector<HiltonRoom> rooms;
 
@@ -35,6 +35,11 @@ public:
 		rooms.push_back({"Deluxe View", 8, 500.0, "29-01-2022", "10-02-2022"});
 
 		return rooms;
+	}
+
+	static bool reserve()
+	{
+		return true;
 	}
 };
 
@@ -51,7 +56,7 @@ public:
 class MarriottHotelAPI
 {
 public:
-	static vector<MarriottFoundRoom> FindRooms(string from_date, string to_date, string country, string city, int needed_rooms, int adults, int children)
+	static vector<MarriottFoundRoom> FindRooms(string from_date, string to_date, string city, int needed_rooms, int adults, int children)
 	{
 		vector<MarriottFoundRoom> rooms;
 
@@ -60,6 +65,10 @@ public:
 		rooms.push_back({"Private View", 5, 600.0, "29-01-2022", "10-02-2022"});
 
 		return rooms;
+	}
+	static bool reserve()
+	{
+		return true;
 	}
 };
 

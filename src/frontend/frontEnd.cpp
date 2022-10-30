@@ -4,6 +4,7 @@
 #include "../error.h"
 #include "requestDataReader.h"
 #include "flightRequestDataReader.h"
+#include "hotelRequestDataReader.h"
 #include "../model/reservation.h"
 #include <iostream>
 
@@ -153,6 +154,11 @@ void FrontEnd::read_request_data(ReservationRequest *&req, RequestType type)
         reader = new FlightRequestDataReader;
         req = reader->read();
     }
+    else if (type == RequestType::hotel)
+    {
+        reader = new HotelRequestDataReader;
+        req = reader->read();
+    }
 }
 
 PaymentCard FrontEnd::read_card()
@@ -177,6 +183,7 @@ void FrontEnd::display_itinerary(const Itinerary &itinerary)
 {
     std::vector<Reservation *> reservations{};
     reservations = itinerary.getReservations();
+    std::cout << "frontend line 186 " << reservations[0]->toString2() << "\n";
     int count{(int)reservations.size()};
     std::cout << "Itinerary of " << count << " reservations\n";
     std::cout << itinerary.toString2() << "\n";
@@ -191,6 +198,37 @@ void FrontEnd::display_itineraries(const std::vector<Itinerary> &itineraries)
         std::cout << i + 1 << "- ";
         display_itinerary(itineraries[i]);
         std::cout << "\n\n";
+    }
+}
+
+User FrontEnd::login()
+{
+    while (true)
+    {
+        try
+        {
+            return LoginHandler::login();
+        }
+        catch (int e)
+        {
+            Error::display_error(e);
+        }
+    }
+}
+
+void FrontEnd::signup()
+{
+    while (true)
+    {
+        try
+        {
+            SignupHandler::signup();
+            return;
+        }
+        catch (int e)
+        {
+            Error::display_error(e);
+        }
     }
 }
 

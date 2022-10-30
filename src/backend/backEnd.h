@@ -12,7 +12,7 @@ public:
     static void save_user_in_db(User &);
     static User user_login(const std::string &, const std::string &);
     static void create_itinerary(User &);
-    static void add_flight(RequestType, Itinerary &);
+    static void add_new_item(RequestType, Itinerary &);
     static std::vector<ItineraryItem *> get_available_reservations(ReservationRequest *, RequestType);
     static int make_reservations(Customer &customer, const Itinerary &currItinerary);
     static bool confirm_reservations(Customer &customer, const Itinerary &currItinerary);

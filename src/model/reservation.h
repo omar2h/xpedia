@@ -10,7 +10,9 @@ enum class RequestType;
 enum class ReservationType
 {
     aircanada,
-    turkish
+    turkish,
+    marriott,
+    hilton
 };
 class ItineraryItem;
 class ReservationRequest;
@@ -34,7 +36,7 @@ public:
 
     virtual Reservation *jsonToReservation(json) = 0;
 
-    virtual void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double) = 0;
+    virtual void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) = 0;
 
     virtual void setRequest(ReservationRequest *const) = 0;
     virtual void setItem(ItineraryItem *const) = 0;
