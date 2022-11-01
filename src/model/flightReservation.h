@@ -36,12 +36,6 @@ public:
 
     void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) override;
 
-    virtual ~FlightReservation() override
-    {
-        delete item;
-        delete request;
-        item = nullptr;
-        request = nullptr;
-    }
+    ~FlightReservation() override;
 };
 #endif // __FLIGHTRESERVATION_H__

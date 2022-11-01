@@ -1,6 +1,7 @@
 #include "itinerary.h"
 #include "itineraryItem.h"
 #include "reservation.h"
+#include <iostream>
 void Itinerary::add_item(Reservation *res)
 {
     reservations.push_back(res);
@@ -8,10 +9,11 @@ void Itinerary::add_item(Reservation *res)
 
 void Itinerary::Clear()
 {
-    for (auto &res : reservations)
+    for (int i = 0; i < (int)reservations.size(); i++)
     {
-        delete res;
-        res = nullptr;
+        std::cout << "itinerary line 16\n";
+        delete reservations[i];
+        reservations[i] = nullptr;
     }
     reservations.clear();
 }

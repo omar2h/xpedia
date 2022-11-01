@@ -1,7 +1,7 @@
 #include "flightReservation.h"
 #include "../db/factories/reservationRequestFactory.h"
 #include <sstream>
-
+#include <iostream>
 double FlightReservation::total_cost() const
 {
     return item->getTotalCost() * request->getAdults() +
@@ -33,7 +33,7 @@ void FlightReservation::setRequest(ReservationRequest *const req)
 
 void FlightReservation::setItem(ItineraryItem *const i)
 {
-    item = dynamic_cast<Flight *>(i);
+    item = dynamic_cast<Flight *>(i->Clone());
     setType(i);
     setReqType(i);
 }
@@ -66,7 +66,7 @@ Reservation *FlightReservation::jsonToReservation(json obj)
     return this->Clone();
 }
 
-void FlightReservation::setAttributes(const std::string &airline_, const std::string &from_, const std::string &to_, const std::string &date_, int adults_, int children_, double cost_)
+void FlightReservation::setAttributes(const std::string &airline_, const std::string &from_, const std::string &to_, const std::string &date_, int adults_, int children_, double cost_, const std::string &x, int y)
 {
     airline = airline_;
     from = from_;
@@ -75,4 +75,8 @@ void FlightReservation::setAttributes(const std::string &airline_, const std::st
     adults = adults_;
     children = children_;
     cost = cost_;
+}
+
+FlightReservation::~FlightReservation()
+{
 }

@@ -184,6 +184,7 @@ void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
         try
         {
             Database::get_database()->update_customer_info(customer);
+            std::cout << "backend line 187\n";
         }
         catch (int e)
         {
@@ -289,6 +290,7 @@ void BackEnd::create_itinerary(User &user)
                 continue;
             }
             currItinerary.Clear();
+            std::cout << "backend line 293\n";
             return;
         }
         else if (choice == 4)

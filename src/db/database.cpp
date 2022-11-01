@@ -59,9 +59,9 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
         throw 6; // empty file
     file_handler.close();
 
-    for (int i = 0; i < arr.size(); i++)
+    for (int i = 0; i < (int)arr.size(); i++)
     {
-        std::cout << arr[i].value("id", "not found") << "\n";
+        std::cout << "database line 64 " << arr[i].value("id", "not found") << "\n";
         if (arr[i].value("id", "not found") == id)
         {
             arr.erase(i);

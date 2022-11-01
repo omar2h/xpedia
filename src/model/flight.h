@@ -1,7 +1,7 @@
 #ifndef __FLIGHT_H__
 #define __FLIGHT_H__
 #include "itineraryItem.h"
-
+#include <iostream>
 class Flight : public ItineraryItem
 {
     std::string airline{};
@@ -20,6 +20,11 @@ public:
 
     std::string toString() const override;
     ItineraryItem *Clone() override { return new Flight(*this); }
+
+    ~Flight() override
+    {
+        std::cout << "flight destructor\n";
+    }
 };
 
 #endif // __FLIGHT_H__

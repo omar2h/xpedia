@@ -87,3 +87,6 @@ void HotelReservation::setAttributes(const std::string &hotel, const std::string
     roomType = roomType_;
     rooms = rooms_;
 }
+HotelReservation::~HotelReservation()
+{
+}
