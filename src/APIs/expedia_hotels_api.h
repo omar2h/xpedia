@@ -30,9 +30,9 @@ public:
 	{
 		vector<HiltonRoom> rooms;
 
-		rooms.push_back({"Interior View", 6, 200.0, "29-01-2022", "10-02-2022"});
-		rooms.push_back({"City View", 3, 300.0, "29-01-2022", "10-02-2022"});
-		rooms.push_back({"Deluxe View", 8, 500.0, "29-01-2022", "10-02-2022"});
+		rooms.push_back({"Interior View", 6, 200.0, "01-05-2023", "10-05-2023"});
+		rooms.push_back({"City View", 3, 300.0, "01-05-2023", "10-05-2023"});
+		rooms.push_back({"Deluxe View", 8, 500.0, "01-05-2023", "10-05-2023"});
 
 		return rooms;
 	}
@@ -60,9 +60,9 @@ public:
 	{
 		vector<MarriottFoundRoom> rooms;
 
-		rooms.push_back({"City View", 8, 320.0, "29-01-2022", "10-02-2022"});
-		rooms.push_back({"Interior View", 8, 220.0, "29-01-2022", "10-02-2022"});
-		rooms.push_back({"Private View", 5, 600.0, "29-01-2022", "10-02-2022"});
+		rooms.push_back({"City View", 8, 320.0, "01-05-2023", "10-05-2023"});
+		rooms.push_back({"Interior View", 8, 220.0, "01-05-2023", "10-05-2023"});
+		rooms.push_back({"Private View", 5, 600.0, "01-05-2023", "10-05-2023"});
 
 		return rooms;
 	}

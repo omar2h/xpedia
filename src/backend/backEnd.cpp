@@ -63,7 +63,6 @@ std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequ
     else if (requestType == RequestType::hotel)
     {
         managers = HotelsManagerFactory::getManagers();
-        std::cout << "backend line 80" << managers.size() << "\n";
         for (auto manager : managers)
         {
             manager->setRequest(request);

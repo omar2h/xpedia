@@ -31,8 +31,8 @@ public:
 	{
 		vector<BritishAirwaysFlight> flights;
 
-		flights.push_back({200, "25-01-2022"});
-		flights.push_back({250, "29-01-2022"});
+		flights.push_back({200, "01-05-2023"});
+		flights.push_back({250, "01-05-2023"});
 		return flights;
 	}
 	static bool ReserveFlight(const BritishAirwaysFlight &flight, const BritishAirwaysCustomerInfo &info)
@@ -65,8 +65,8 @@ public:
 	{
 		vector<AirFranceFlight> flights;
 
-		flights.push_back({300, "10-01-2022"});
-		flights.push_back({320, "12-01-2022"});
+		flights.push_back({300, "01-05-2023"});
+		flights.push_back({320, "01-05-2023"});
 		return flights;
 	}
 

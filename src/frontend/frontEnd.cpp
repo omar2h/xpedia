@@ -183,7 +183,6 @@ void FrontEnd::display_itinerary(const Itinerary &itinerary)
 {
     std::vector<Reservation *> reservations{};
     reservations = itinerary.getReservations();
-    std::cout << "frontend line 186 " << reservations[0]->toString2() << "\n";
     int count{(int)reservations.size()};
     std::cout << "Itinerary of " << count << " reservations\n";
     std::cout << itinerary.toString2() << "\n";
@@ -197,7 +196,7 @@ void FrontEnd::display_itineraries(const std::vector<Itinerary> &itineraries)
     {
         std::cout << i + 1 << "- ";
         display_itinerary(itineraries[i]);
-        std::cout << "\n\n";
+        std::cout << "\n";
     }
 }
 
