@@ -15,9 +15,11 @@ In this project the customer creates a travel itinerary. An Itinerary consists o
 8. The system should cancel the whole itinerary if any of its items is cancelled.
 
 ## Use case diagram
+![image](https://user-images.githubusercontent.com/29601694/199153401-2816d6a7-a25f-4c1f-8648-ff9efef054f6.png)
 
 ## Class diagram
+![image](https://user-images.githubusercontent.com/29601694/199153614-8a558b95-15a1-46be-a074-7cc9d796c1a3.png)
 
 ## Activity diagram
-
-Create an itinerary
+Create an itinerary<br/>
+![activity diagram2 vpd](https://user-images.githubusercontent.com/29601694/199153664-b9c18785-4e68-4041-b0bb-59fb9b823735.jpg)
