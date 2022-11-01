@@ -23,4 +23,5 @@ In this project the customer creates a travel itinerary. An Itinerary consists o
 ## Activity diagram
 Create an itinerary<br/>
 ![activity diagram2 vpd](https://user-images.githubusercontent.com/29601694/199153664-b9c18785-4e68-4041-b0bb-59fb9b823735.jpg)
+</br>
 diagrams created using visual-paradigm.com
