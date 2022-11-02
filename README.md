@@ -1,4 +1,5 @@
 # Xpedia
+![image](https://user-images.githubusercontent.com/29601694/199601434-1430d707-9bad-41f5-8832-8f26ab20c0c4.png)
 
 Xpedia is an Expedia.com clone project. Expedia is an online travel agency. The website can be used to book airline tickets, hotel reservations, car rentals, cruise ships.
 In this project the customer creates a travel itinerary. An Itinerary consists of flight tickets and/or hotel reservations. When the customer requests an itinerary item after adding the search criteria of dates, city, etc, the system calls the APIs for available reservations and the customer selects the reservations he/she finds suitable. Afterwards pays for the reservations for it to be confirmed.
