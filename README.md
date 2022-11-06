@@ -3,6 +3,8 @@
 
 Xpedia is an Expedia.com clone project. The website can be used to book airline tickets, hotel reservations, car rentals, cruise ships.
 In this project the customer creates a travel itinerary. An Itinerary consists of flight tickets and/or hotel reservations. When the customer requests an itinerary item after adding the search criteria of dates, city, etc, the system calls the APIs for available reservations and the customer selects the reservations he/she finds suitable. Afterwards pays for the reservations for it to be confirmed. This is a C++ console application built using concepts of OOP like inheritance, Polymorphism and adheres to the solid principles and utilizes the suitable design patterns like factoy pattern, startegy pattern, singelton pattern and using Json files as database.
+## Video
+https://youtu.be/hI_Nuv2409Q
 
 ## Requirements
 
