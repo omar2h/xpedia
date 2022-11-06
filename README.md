@@ -1,8 +1,8 @@
 # Xpedia
 ![image](https://user-images.githubusercontent.com/29601694/199601434-1430d707-9bad-41f5-8832-8f26ab20c0c4.png)
 
-Xpedia is an Expedia.com clone project. Expedia is an online travel agency. The website can be used to book airline tickets, hotel reservations, car rentals, cruise ships.
-In this project the customer creates a travel itinerary. An Itinerary consists of flight tickets and/or hotel reservations. When the customer requests an itinerary item after adding the search criteria of dates, city, etc, the system calls the APIs for available reservations and the customer selects the reservations he/she finds suitable. Afterwards pays for the reservations for it to be confirmed.
+Xpedia is an Expedia.com clone project. The website can be used to book airline tickets, hotel reservations, car rentals, cruise ships.
+In this project the customer creates a travel itinerary. An Itinerary consists of flight tickets and/or hotel reservations. When the customer requests an itinerary item after adding the search criteria of dates, city, etc, the system calls the APIs for available reservations and the customer selects the reservations he/she finds suitable. Afterwards pays for the reservations for it to be confirmed. This is a C++ console application built using concepts of OOP like inheritance, Polymorphism and adheres to the solid principles and utilizes the suitable design patterns like factoy pattern, startegy pattern, singelton pattern and using Json files as database.
 
 ## Requirements
 
@@ -26,3 +26,9 @@ Create an itinerary<br/>
 ![activity diagram2 vpd](https://user-images.githubusercontent.com/29601694/199153664-b9c18785-4e68-4041-b0bb-59fb9b823735.jpg)
 </br>
 diagrams created using visual-paradigm.com
+
+## Selected Design Patterns
+### Factory Pattern</br>
+![factory2](https://user-images.githubusercontent.com/29601694/200191301-c35dae14-a677-49a9-8220-6d03c22dd07a.jpg)
+### Strategy Pattern</br>
+![strategy2](https://user-images.githubusercontent.com/29601694/200191438-32c5edc5-0d05-4a5c-b925-af94a3d2d140.jpg)
