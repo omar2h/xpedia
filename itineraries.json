@@ -1,0 +1,1 @@
+[{"cost":600.0,"customer_id":"357","id":"813","reservations":[{"adults":2,"airline":"BritishAirways","children":1,"cost":500.0,"date":"01-05-2023","from":"cairo","reqType":0,"to":"london","type":0},{"adults":2,"children":1,"city":"London","cost":100.0,"from":"01-05-2023","hotel":"Marriott","reqType":1,"room_type":"Private View","rooms":1,"to":"10-05-2023","type":2}]}]
