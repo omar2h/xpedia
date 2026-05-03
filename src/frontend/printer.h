@@ -2,7 +2,7 @@
 #define __PRINTER_H__
 #include <vector>
 #include <string>
-#include "../model/paymentCard.h"
+#include "../model/payment_card.h"
 class ItineraryItem;
 class Printer
 {

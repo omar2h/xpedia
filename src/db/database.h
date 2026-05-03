@@ -1,11 +1,11 @@
 #ifndef __DATABASE_H__
 #define __DATABASE_H__
 
-#include "usersManager.h"
-#include "customersManager.h"
+#include "users_manager.h"
+#include "customers_manager.h"
 #include "../model/customer.h"
 #include "../model/itinerary.h"
-#include "itinerariesManager.h"
+#include "itineraries_manager.h"
 #include <string>
 #include <memory>
 #include <unordered_set>

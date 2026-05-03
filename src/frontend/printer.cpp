@@ -1,6 +1,6 @@
 #include "printer.h"
-#include "menuPrinter.h"
-#include "../model/itineraryItem.h"
+#include "menu_printer.h"
+#include "../model/itinerary_item.h"
 
 #include <iostream>
 void Printer::print_menu(const std::vector<std::string> &strings)

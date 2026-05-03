@@ -1,9 +1,9 @@
 #include "app.h"
 #include "frontend/frontend.h"
 #include "model/user.h"
-#include "frontend/loginHandler.h"
-#include "frontend/signupHandler.h"
-#include "backend/backEnd.h"
+#include "frontend/login_handler.h"
+#include "frontend/signup_handler.h"
+#include "backend/backend.h"
 #include "error.h"
 #include <iostream>
 

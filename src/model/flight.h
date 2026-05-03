@@ -1,6 +1,6 @@
 #ifndef __FLIGHT_H__
 #define __FLIGHT_H__
-#include "itineraryItem.h"
+#include "itinerary_item.h"
 #include <iostream>
 class Flight : public ItineraryItem
 {

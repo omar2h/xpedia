@@ -1,5 +1,5 @@
 #include "reservation.h"
-#include "itineraryItem.h"
+#include "itinerary_item.h"
 
 void Reservation::setType(ItineraryItem const *item)
 {

@@ -1,0 +1,18 @@
+#ifndef __HILTONHOTELSMANAGER_H__
+#define __HILTONHOTELSMANAGER_H__
+#include "hotels_manager.h"
+
+class HiltonHotelsManager : public HotelsManager
+{
+public:
+    std::vector<ItineraryItem *> search_reservations() const override;
+
+    bool reserve(Reservation *) const override;
+
+    std::string getName() const override;
+
+    ItineraryManager *Clone() override;
+
+    ~HiltonHotelsManager() override = default;
+};
+#endif // __HILTONHOTELSMANAGER_H__

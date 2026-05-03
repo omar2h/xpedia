@@ -1,7 +1,7 @@
 #ifndef __CUSTOMER_H__
 #define __CUSTOMER_H__
 #include "user.h"
-#include "paymentCard.h"
+#include "payment_card.h"
 #include <vector>
 class Customer : public User
 {
