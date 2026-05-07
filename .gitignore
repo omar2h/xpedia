@@ -1,0 +1,61 @@
+# =========================
+# Build artifacts
+# =========================
+*.o
+*.obj
+*.d
+*.exe
+*.out
+*.a
+*.so
+*.dll
+
+# Build directories
+obj/
+build/
+bin/
+
+# =========================
+# CMake / compilation db
+# =========================
+compile_commands.json
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# =========================
+# Logs / temp
+# =========================
+*.log
+*.tmp
+*.cache
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# CLion / JetBrains
+# =========================
+.idea/
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+
+# =========================
+# Optional: runtime/generated data
+# Uncomment if these are generated
+# =========================
+# customers.json
+# itineraries.json
+# users.json
