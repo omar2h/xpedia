@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../model/user.hpp"
+
 class LoginHandler
 {
 public:

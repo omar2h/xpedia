@@ -19,6 +19,7 @@ target_include_directories(backend
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${PROJECT_SOURCE_DIR}/apis
+        ${PROJECT_SOURCE_DIR}/frontend
 )
 
 target_link_libraries(backend

@@ -1,5 +1,6 @@
 #include "app.hpp"
 #include "frontend/frontend.hpp"
+#include "frontend/console_frontend.hpp"
 #include "model/user.hpp"
 #include "frontend/login_handler.hpp"
 #include "frontend/signup_handler.hpp"
@@ -9,11 +10,10 @@
 
 [[noreturn]] void App::run() const
 {
+    ConsoleFrontend frontend;
     User user;
-    // main loop
     while (true)
     {
-        // start menu loop
         while (true)
         {
             std::cout << "\n\n";
@@ -21,7 +21,6 @@
 
             if (choice == 1)
             {
-
                 user = Frontend::login();
                 Frontend::display_welcome_message(user.getFirstName(), user.getLastName());
                 break;
@@ -34,7 +33,6 @@
                 exit(0);
         }
 
-        // main menu loop
         while (true)
         {
             int choice = Frontend::display_main_menu();
@@ -45,11 +43,11 @@
             }
             else if (choice == 2)
             {
-                Backend::create_itinerary(user);
+                Backend::create_itinerary(user, frontend);
             }
             else if (choice == 3)
             {
-                Backend::list_itineraries(user);
+                Backend::list_itineraries(user, frontend);
             }
             else if (choice == 4)
             {

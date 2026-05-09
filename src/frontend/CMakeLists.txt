@@ -2,6 +2,7 @@ add_library(frontend)
 
 target_sources(frontend
     PRIVATE
+        console_frontend.cpp
         flight_request_data_reader.cpp
         frontend.cpp
         hotel_request_data_reader.cpp
