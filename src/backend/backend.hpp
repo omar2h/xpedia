@@ -5,7 +5,7 @@
 #include "../model/itinerary.hpp"
 #include "../model/customer.hpp"
 #include "payments/payment_strategy.hpp"
-class BackEnd
+class Backend
 {
 
 public:

@@ -15,10 +15,10 @@ User LoginHandler::login()
 
     try
     {
-        return BackEnd::user_login(email, password);
+        return Backend::user_login(email, password);
     }
     catch (int e)
     {
         throw e;
     }
-}
+}

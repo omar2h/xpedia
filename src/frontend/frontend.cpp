@@ -8,9 +8,9 @@
 #include "../model/reservation.hpp"
 #include <iostream>
 
-RequestDataReader *FrontEnd::reader{};
+RequestDataReader *Frontend::reader{};
 
-int FrontEnd::show_start_menu()
+int Frontend::show_start_menu()
 {
     std::vector<std::string> startMenu{"Login", "SignUp", "Exit"};
     Printer::print_menu(startMenu);
@@ -27,12 +27,12 @@ int FrontEnd::show_start_menu()
     return choice;
 }
 
-void FrontEnd::display_welcome_message(const std::string &firstName, const std::string &lastName)
+void Frontend::display_welcome_message(const std::string &firstName, const std::string &lastName)
 {
     std::cout << "Welcome " << firstName << " " << lastName << "\n\n";
 }
 
-int FrontEnd::display_main_menu()
+int Frontend::display_main_menu()
 {
     std::vector<std::string> startMenu{"View Profile", "Create Itinerary", "List My Itineraries", "Logout"};
     Printer::print_menu(startMenu);
@@ -50,7 +50,7 @@ int FrontEnd::display_main_menu()
     return choice;
 }
 
-void FrontEnd::display_user_profile(const User &user)
+void Frontend::display_user_profile(const User &user)
 {
     std::cout << "\n";
     std::cout << "Name: " << user.getFirstName() << " " << user.getLastName() << "\n";
@@ -59,7 +59,7 @@ void FrontEnd::display_user_profile(const User &user)
     std::cout << "\n";
 }
 
-int FrontEnd::display_create_itinerary_menu()
+int Frontend::display_create_itinerary_menu()
 {
     std::vector<std::string> menu{"Add Flight", "Add Hotel", "Check Out", "Cancel"};
     Printer::print_menu(menu);
@@ -77,7 +77,7 @@ int FrontEnd::display_create_itinerary_menu()
     return choice;
 }
 
-int FrontEnd::display_payment_options(const std::vector<PaymentCard> &cards)
+int Frontend::display_payment_options(const std::vector<PaymentCard> &cards)
 {
     std::vector<std::string> options;
     for (const auto &card : cards)
@@ -100,7 +100,7 @@ int FrontEnd::display_payment_options(const std::vector<PaymentCard> &cards)
     return choice;
 }
 
-void FrontEnd::read_flight_request_data(FlightRequest &request)
+void Frontend::read_flight_request_data(FlightRequest &request)
 {
     std::string from{};
     std::string to{};
@@ -124,7 +124,7 @@ void FrontEnd::read_flight_request_data(FlightRequest &request)
     request.setChildren(children);
 }
 
-int FrontEnd::read_reservation_choice(const std::vector<ItineraryItem *> &items)
+int Frontend::read_reservation_choice(const std::vector<ItineraryItem *> &items)
 {
     std::vector<std::string> options{};
     for (const auto &item : items)
@@ -147,7 +147,7 @@ int FrontEnd::read_reservation_choice(const std::vector<ItineraryItem *> &items)
     return choice;
 }
 
-void FrontEnd::read_request_data(ReservationRequest *&req, RequestType type)
+void Frontend::read_request_data(ReservationRequest *&req, RequestType type)
 {
     if (type == RequestType::flight)
     {
@@ -161,7 +161,7 @@ void FrontEnd::read_request_data(ReservationRequest *&req, RequestType type)
     }
 }
 
-PaymentCard FrontEnd::read_card()
+PaymentCard Frontend::read_card()
 {
     std::string number;
     std::string owner;
@@ -179,7 +179,7 @@ PaymentCard FrontEnd::read_card()
     return {number, owner, date, ccv};
 }
 
-void FrontEnd::display_itinerary(const Itinerary &itinerary)
+void Frontend::display_itinerary(const Itinerary &itinerary)
 {
     std::vector<Reservation *> reservations{};
     reservations = itinerary.getReservations();
@@ -188,7 +188,7 @@ void FrontEnd::display_itinerary(const Itinerary &itinerary)
     std::cout << itinerary.toString2() << "\n";
 }
 
-void FrontEnd::display_itineraries(const std::vector<Itinerary> &itineraries)
+void Frontend::display_itineraries(const std::vector<Itinerary> &itineraries)
 {
     int count{(int)itineraries.size()};
     std::cout << count << " itineraries\n";
@@ -200,7 +200,7 @@ void FrontEnd::display_itineraries(const std::vector<Itinerary> &itineraries)
     }
 }
 
-User FrontEnd::login()
+User Frontend::login()
 {
     while (true)
     {
@@ -215,7 +215,7 @@ User FrontEnd::login()
     }
 }
 
-void FrontEnd::signup()
+void Frontend::signup()
 {
     while (true)
     {
@@ -231,7 +231,7 @@ void FrontEnd::signup()
     }
 }
 
-int FrontEnd::display_payment_services()
+int Frontend::display_payment_services()
 {
     std::cout << "Payment Services:\n";
     std::vector<std::string> services{"Paypal", "Stripe", "Square"};

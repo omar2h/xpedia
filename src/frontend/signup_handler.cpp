@@ -28,11 +28,11 @@ void SignupHandler::signup()
     User usr(firstName, lastName, email, phone, password);
     try
     {
-        BackEnd::save_user_in_db(usr);
+        Backend::save_user_in_db(usr);
         return;
     }
     catch (int e)
     {
         throw e;
     }
-}
+}

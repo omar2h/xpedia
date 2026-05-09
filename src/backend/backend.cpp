@@ -13,7 +13,7 @@
 #include <typeinfo>
 class ItineraryItem;
 
-void BackEnd::save_user_in_db(User &user)
+void Backend::save_user_in_db(User &user)
 {
     try
     {
@@ -25,7 +25,7 @@ void BackEnd::save_user_in_db(User &user)
     }
 }
 
-User BackEnd::user_login(const std::string &email, const std::string &password)
+User Backend::user_login(const std::string &email, const std::string &password)
 {
     std::vector<User> users{};
     try
@@ -46,7 +46,7 @@ User BackEnd::user_login(const std::string &email, const std::string &password)
     throw 5;
 }
 
-std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequest *request, RequestType requestType)
+std::vector<ItineraryItem *> Backend::get_available_reservations(ReservationRequest *request, RequestType requestType)
 {
     std::vector<ItineraryItem *> items;
     std::vector<ItineraryManager *> managers;
@@ -74,9 +74,9 @@ std::vector<ItineraryItem *> BackEnd::get_available_reservations(ReservationRequ
     return items;
 }
 
-void BackEnd::add_card(Customer &customer)
+void Backend::add_card(Customer &customer)
 {
-    PaymentCard card = FrontEnd::read_card();
+    PaymentCard card = Frontend::read_card();
     customer.addCard(card);
     try
     {
@@ -88,12 +88,12 @@ void BackEnd::add_card(Customer &customer)
     }
 }
 
-int BackEnd::select_card(Customer &customer)
+int Backend::select_card(Customer &customer)
 {
     int choice{};
     while (true)
     {
-        choice = FrontEnd::display_payment_options(customer.getCards());
+        choice = Frontend::display_payment_options(customer.getCards());
         // cancel
         if (choice == -1)
             return -1;
@@ -105,7 +105,7 @@ int BackEnd::select_card(Customer &customer)
     return choice;
 }
 
-bool BackEnd::withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary)
+bool Backend::withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary)
 {
     PaymentStrategy *paymentStrategy = PaymentFactory::getPaymentService(static_cast<PaymentService>(service - 1));
     bool isPaid = paymentStrategy->pay(card, currItinerary.total_cost());
@@ -114,7 +114,7 @@ bool BackEnd::withdraw_money(const PaymentCard &card, int service, const Itinera
     return isPaid;
 }
 
-bool BackEnd::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
+bool Backend::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
 {
     ItineraryManagerFactory factory;
     ItineraryManager *manager{};
@@ -135,14 +135,14 @@ bool BackEnd::confirm_reservations(Customer &customer, const Itinerary &currItin
     return true;
 }
 
-int BackEnd::make_reservations(Customer &customer, const Itinerary &currItinerary)
+int Backend::make_reservations(Customer &customer, const Itinerary &currItinerary)
 {
     int choice = select_card(customer);
     // cancel
     if (choice == -1)
         return -1;
     PaymentCard card = customer.getCards()[choice - 1];
-    choice = FrontEnd::display_payment_services();
+    choice = Frontend::display_payment_services();
     if (choice == -1)
         return choice;
 
@@ -158,7 +158,7 @@ int BackEnd::make_reservations(Customer &customer, const Itinerary &currItinerar
     return confirm_reservations(customer, currItinerary);
 }
 
-void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
+void Backend::payItinerary(const Itinerary &currItinerary, const User &user)
 {
     if (!currItinerary.getReservations().size())
         throw 6; // no reservations
@@ -196,12 +196,12 @@ void BackEnd::payItinerary(const Itinerary &currItinerary, const User &user)
     return;
 }
 
-void BackEnd::add_new_item(RequestType requestType, Itinerary &currItinerary)
+void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary)
 {
     ReservationRequest *request = ReservationRequestFactory::getRequest(requestType);
-    FrontEnd::read_request_data(request, requestType);
+    Frontend::read_request_data(request, requestType);
     std::vector<ItineraryItem *> items = get_available_reservations(request, requestType);
-    int choice = FrontEnd::read_reservation_choice(items);
+    int choice = Frontend::read_reservation_choice(items);
     // cancel
     if (choice == -1)
         return;
@@ -211,7 +211,7 @@ void BackEnd::add_new_item(RequestType requestType, Itinerary &currItinerary)
     currItinerary.add_item(reservation);
 }
 
-void BackEnd::list_itineraries(const User &user)
+void Backend::list_itineraries(const User &user)
 {
     bool isCustomer;
     try
@@ -246,7 +246,7 @@ void BackEnd::list_itineraries(const User &user)
     try
     {
         std::vector<Itinerary> customerItineraries = Database::get_database()->getCustomerItineraries(customer.getId());
-        FrontEnd::display_itineraries(customerItineraries);
+        Frontend::display_itineraries(customerItineraries);
     }
     catch (int e)
     {
@@ -255,7 +255,7 @@ void BackEnd::list_itineraries(const User &user)
     }
 }
 
-void BackEnd::create_itinerary(User &user)
+void Backend::create_itinerary(User &user)
 {
     std::unordered_set<std::string> ids{};
     Itinerary currItinerary;
@@ -264,7 +264,7 @@ void BackEnd::create_itinerary(User &user)
     {
         currItinerary.setId(IdGenerator::generate_id(ids));
         int choice{};
-        choice = FrontEnd::display_create_itinerary_menu();
+        choice = Frontend::display_create_itinerary_menu();
         if (choice == 1)
         {
             // add flight

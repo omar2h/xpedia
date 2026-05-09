@@ -17,18 +17,18 @@
         while (true)
         {
             std::cout << "\n\n";
-            int choice = FrontEnd::show_start_menu();
+            int choice = Frontend::show_start_menu();
 
             if (choice == 1)
             {
 
-                user = FrontEnd::login();
-                FrontEnd::display_welcome_message(user.getFirstName(), user.getLastName());
+                user = Frontend::login();
+                Frontend::display_welcome_message(user.getFirstName(), user.getLastName());
                 break;
             }
             else if (choice == 2)
             {
-                FrontEnd::signup();
+                Frontend::signup();
             }
             else if (choice == 3)
                 exit(0);
@@ -37,19 +37,19 @@
         // main menu loop
         while (true)
         {
-            int choice = FrontEnd::display_main_menu();
+            int choice = Frontend::display_main_menu();
 
             if (choice == 1)
             {
-                FrontEnd::display_user_profile(user);
+                Frontend::display_user_profile(user);
             }
             else if (choice == 2)
             {
-                BackEnd::create_itinerary(user);
+                Backend::create_itinerary(user);
             }
             else if (choice == 3)
             {
-                BackEnd::list_itineraries(user);
+                Backend::list_itineraries(user);
             }
             else if (choice == 4)
             {

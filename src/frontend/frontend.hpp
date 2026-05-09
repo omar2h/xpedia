@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-class FrontEnd
+class Frontend
 {
     static RequestDataReader *reader;
 
@@ -31,7 +31,7 @@ public:
     static void display_itineraries(const std::vector<Itinerary> &);
     static User login();
     static void signup();
-    virtual ~FrontEnd()
+    virtual ~Frontend()
     {
         delete reader;
         reader = nullptr;
