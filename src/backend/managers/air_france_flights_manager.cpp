@@ -1,5 +1,5 @@
-#include "air_france_flights_manager.h"
-#include "../../apis/expedia_flights_api.h"
+#include "air_france_flights_manager.hpp"
+#include "../../apis/expedia_flights_api.hpp"
 
 std::vector<ItineraryItem *> AirFranceFlightsManager::search_reservations() const
 {

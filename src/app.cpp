@@ -1,10 +1,10 @@
-#include "app.h"
-#include "frontend/frontend.h"
-#include "model/user.h"
-#include "frontend/login_handler.h"
-#include "frontend/signup_handler.h"
-#include "backend/backend.h"
-#include "error.h"
+#include "app.hpp"
+#include "frontend/frontend.hpp"
+#include "model/user.hpp"
+#include "frontend/login_handler.hpp"
+#include "frontend/signup_handler.hpp"
+#include "backend/backend.hpp"
+#include "error.hpp"
 #include <iostream>
 
 [[noreturn]] void App::run() const

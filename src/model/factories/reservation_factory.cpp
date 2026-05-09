@@ -1,6 +1,6 @@
-#include "reservation_factory.h"
-#include "../reservations/flight_reservation.h"
-#include "../reservations/hotel_reservation.h"
+#include "reservation_factory.hpp"
+#include "../reservations/flight_reservation.hpp"
+#include "../reservations/hotel_reservation.hpp"
 
 Reservation *ReservationFactory::getReservation(RequestType type)
 {

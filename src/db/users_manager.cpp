@@ -1,6 +1,6 @@
-#include "users_manager.h"
-#include "id_generator.h"
-#include "database.h"
+#include "users_manager.hpp"
+#include "id_generator.hpp"
+#include "database.hpp"
 #include <iostream>
 std::unordered_set<std::string> UsersManager::usersIds{};
 

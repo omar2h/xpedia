@@ -1,4 +1,4 @@
-#include "hotel_request_data_reader.h"
+#include "hotel_request_data_reader.hpp"
 #include <iostream>
 ReservationRequest *HotelRequestDataReader::read()
 {

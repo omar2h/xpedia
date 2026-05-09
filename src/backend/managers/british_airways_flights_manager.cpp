@@ -1,7 +1,7 @@
-#include "british_airways_flights_manager.h"
-#include "../../apis/expedia_flights_api.h"
-#include "../../model/flight.h"
-#include "../../model/requests/flight_request.h"
+#include "british_airways_flights_manager.hpp"
+#include "../../apis/expedia_flights_api.hpp"
+#include "../../model/flight.hpp"
+#include "../../model/requests/flight_request.hpp"
 #include <iostream>
 
 std::vector<ItineraryItem *> BritishAirwaysFlightsManager::search_reservations() const

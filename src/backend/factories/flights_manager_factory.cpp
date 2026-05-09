@@ -1,7 +1,7 @@
-#include "flights_manager_factory.h"
-#include "../managers/british_airways_flights_manager.h"
-#include "../managers/air_france_flights_manager.h"
-#include "../../model/reservation.h"
+#include "flights_manager_factory.hpp"
+#include "../managers/british_airways_flights_manager.hpp"
+#include "../managers/air_france_flights_manager.hpp"
+#include "../../model/reservation.hpp"
 
 ItineraryManager *FlightsManagerFactory::getManager(ReservationType type)
 {

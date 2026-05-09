@@ -1,5 +1,5 @@
-#include "itinerary_item.h"
-#include "reservation.h"
+#include "itinerary_item.hpp"
+#include "reservation.hpp"
 
 ReservationType ItineraryItem::getType() const { return type; }
 void ItineraryItem::setType(const ReservationType &type_) { type = type_; }

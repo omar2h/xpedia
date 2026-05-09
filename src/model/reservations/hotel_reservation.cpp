@@ -1,7 +1,7 @@
-#include "hotel_reservation.h"
-#include "../requests/hotel_request.h"
-#include "../hotel_room.h"
-#include "../factories/reservation_request_factory.h"
+#include "hotel_reservation.hpp"
+#include "../requests/hotel_request.hpp"
+#include "../hotel_room.hpp"
+#include "../factories/reservation_request_factory.hpp"
 #include <sstream>
 
 double HotelReservation::total_cost() const

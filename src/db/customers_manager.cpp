@@ -1,5 +1,5 @@
-#include "customers_manager.h"
-#include "database.h"
+#include "customers_manager.hpp"
+#include "database.hpp"
 #include <iostream>
 Customer CustomersManager::getCustomer(const User &user) const
 {

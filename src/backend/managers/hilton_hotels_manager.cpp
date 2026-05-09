@@ -1,7 +1,7 @@
-#include "hilton_hotels_manager.h"
-#include "../../apis/expedia_hotels_api.h"
-#include "../../model/factories/reservation_request_factory.h"
-#include "../../model/hotel_room.h"
+#include "hilton_hotels_manager.hpp"
+#include "../../apis/expedia_hotels_api.hpp"
+#include "../../model/factories/reservation_request_factory.hpp"
+#include "../../model/hotel_room.hpp"
 
 std::vector<ItineraryItem *> HiltonHotelsManager::search_reservations() const
 {

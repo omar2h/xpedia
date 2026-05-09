@@ -1,5 +1,5 @@
-#include "flight_reservation.h"
-#include "../factories/reservation_request_factory.h"
+#include "flight_reservation.hpp"
+#include "../factories/reservation_request_factory.hpp"
 #include <sstream>
 #include <iostream>
 double FlightReservation::total_cost() const

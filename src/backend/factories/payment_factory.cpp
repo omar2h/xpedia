@@ -1,7 +1,7 @@
-#include "payment_factory.h"
-#include "../payments/paypal_payment_strategy.h"
-#include "../payments/stripe_payment_strategy.h"
-#include "../payments/square_payment_strategy.h"
+#include "payment_factory.hpp"
+#include "../payments/paypal_payment_strategy.hpp"
+#include "../payments/stripe_payment_strategy.hpp"
+#include "../payments/square_payment_strategy.hpp"
 
 PaymentStrategy *PaymentFactory::getPaymentService(PaymentService service)
 {

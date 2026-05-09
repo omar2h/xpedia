@@ -1,6 +1,6 @@
-#include "itinerary.h"
-#include "itinerary_item.h"
-#include "reservation.h"
+#include "itinerary.hpp"
+#include "itinerary_item.hpp"
+#include "reservation.hpp"
 #include <iostream>
 void Itinerary::add_item(Reservation *res)
 {

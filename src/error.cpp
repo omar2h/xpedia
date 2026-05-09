@@ -1,4 +1,4 @@
-#include "error.h"
+#include "error.hpp"
 #include <iostream>
 
 void Error::display_error(int errorCode)

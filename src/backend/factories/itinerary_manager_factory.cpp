@@ -1,6 +1,6 @@
-#include "itinerary_manager_factory.h"
-#include "flights_manager_factory.h"
-#include "hotels_manager_factory.h"
+#include "itinerary_manager_factory.hpp"
+#include "flights_manager_factory.hpp"
+#include "hotels_manager_factory.hpp"
 
 ItineraryManager *ItineraryManagerFactory::getManager(ReservationType type)
 {

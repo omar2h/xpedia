@@ -1,11 +1,11 @@
-#include "frontend.h"
-#include "printer.h"
-#include "input_handler.h"
-#include "../error.h"
-#include "request_data_reader.h"
-#include "flight_request_data_reader.h"
-#include "hotel_request_data_reader.h"
-#include "../model/reservation.h"
+#include "frontend.hpp"
+#include "printer.hpp"
+#include "input_handler.hpp"
+#include "../error.hpp"
+#include "request_data_reader.hpp"
+#include "flight_request_data_reader.hpp"
+#include "hotel_request_data_reader.hpp"
+#include "../model/reservation.hpp"
 #include <iostream>
 
 RequestDataReader *FrontEnd::reader{};

@@ -1,4 +1,4 @@
-#include "flight_request.h"
+#include "flight_request.hpp"
 #include <sstream>
 
 FlightRequest::FlightRequest(const std::string &from, const std::string &to, const std::string &date, int adults,

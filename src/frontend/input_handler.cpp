@@ -1,4 +1,4 @@
-#include "input_handler.h"
+#include "input_handler.hpp"
 #include <iostream>
 
 int InputHandler::get_choice(int low, int high)

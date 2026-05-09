@@ -1,8 +1,8 @@
-#include "itineraries_manager.h"
-#include "../model/reservation.h"
-#include "../db/database.h"
-#include "../db/id_generator.h"
-#include "../model/factories/reservation_factory.h"
+#include "itineraries_manager.hpp"
+#include "../model/reservation.hpp"
+#include "../db/database.hpp"
+#include "../db/id_generator.hpp"
+#include "../model/factories/reservation_factory.hpp"
 #include <iostream>
 
 json ItinerariesManager::convert_itinerary_to_json(const Itinerary &itinerary)

@@ -1,6 +1,6 @@
-#include "hotels_manager_factory.h"
-#include "../managers/marriott_hotels_manager.h"
-#include "../managers/hilton_hotels_manager.h"
+#include "hotels_manager_factory.hpp"
+#include "../managers/marriott_hotels_manager.hpp"
+#include "../managers/hilton_hotels_manager.hpp"
 ItineraryManager *HotelsManagerFactory::getManager(ReservationType type)
 {
     if (type == ReservationType::marriott)

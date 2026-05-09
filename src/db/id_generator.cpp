@@ -1,5 +1,5 @@
-#include "id_generator.h"
-#include "database.h"
+#include "id_generator.hpp"
+#include "database.hpp"
 #include <random>
 #include <string>
 

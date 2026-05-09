@@ -1,4 +1,4 @@
-#include "menu_printer.h"
+#include "menu_printer.hpp"
 #include <iostream>
 #include <cassert>
 

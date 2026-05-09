@@ -1,4 +1,4 @@
-#include "hotel_room.h"
+#include "hotel_room.hpp"
 #include <sstream>
 std::string HotelRoom::toString() const
 {

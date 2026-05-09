@@ -1,4 +1,4 @@
-#include "hotel_request.h"
+#include "hotel_request.hpp"
 #include <sstream>
 HotelRequest::HotelRequest(const std::string &from, const std::string &to, const std::string &city, int adults, int children) : fromDate(from), toDate(to), city(city), adults(adults), children(children)
 {

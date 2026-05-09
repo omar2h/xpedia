@@ -1,7 +1,7 @@
-#include "signup_handler.h"
-#include "../model/user.h"
-#include "../backend/backend.h"
-#include "../error.h"
+#include "signup_handler.hpp"
+#include "../model/user.hpp"
+#include "../backend/backend.hpp"
+#include "../error.hpp"
 #include <string>
 #include <iostream>
 
