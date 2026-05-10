@@ -30,10 +30,6 @@ public:
 
     virtual std::string toString2() const = 0;
 
-    virtual json toJson() const = 0;
-
-    virtual std::unique_ptr<Reservation> jsonToReservation(json) = 0;
-
     virtual void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) = 0;
 
     virtual void setRequest(std::unique_ptr<ReservationRequest>) = 0;

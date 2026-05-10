@@ -104,39 +104,6 @@ void HotelReservation::setItem(ItineraryItem *const i)
     setReqType(i);
 }
 
-json HotelReservation::toJson() const
-{
-    json obj;
-    obj["hotel"] = item->getHotelName();
-    obj["from"] = request->getFromDate();
-    obj["to"] = request->getToDate();
-    obj["city"] = request->getCity();
-    obj["adults"] = request->getAdults();
-    obj["children"] = request->getChildren();
-    obj["room_type"] = item->getRoomType();
-    obj["rooms"] = request->getRooms();
-    obj["type"] = getType();
-    obj["reqType"] = getReqType();
-    obj["cost"] = total_cost();
-    return obj;
-}
-
-std::unique_ptr<Reservation> HotelReservation::jsonToReservation(json obj)
-{
-    std::string hotel = obj.value("hotel", "not found");
-    std::string from = obj.value("from", "not found");
-    std::string to = obj.value("to", "not found");
-    std::string city = obj.value("city", "not found");
-    std::string roomType = obj.value("room_type", "not found");
-    int rooms = obj.value("rooms", -1);
-    int adults = obj.value("adults", -1);
-    int children = obj.value("children", -1);
-    double cost = obj.value("cost", -1);
-
-    setAttributes(hotel, from, to, city, adults, children, cost, roomType, rooms);
-    return std::unique_ptr<Reservation>(this->clone());
-}
-
 void HotelReservation::setAttributes(const std::string &hotel, const std::string &from_, const std::string &to_, const std::string &city_, int adults_, int children_, double cost_, const std::string &roomType_, int rooms_)
 {
     hotelName = hotel;

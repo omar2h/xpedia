@@ -2,7 +2,7 @@
 #include "../model/reservation.hpp"
 #include "../db/database.hpp"
 #include "../db/id_generator.hpp"
-#include "../model/factories/reservation_factory.hpp"
+#include "../model/serializers/reservation_serializer.hpp"
 #include <iostream>
 
 json ItinerariesManager::convert_itinerary_to_json(const Itinerary &itinerary)
@@ -11,8 +11,7 @@ json ItinerariesManager::convert_itinerary_to_json(const Itinerary &itinerary)
     const auto &reservations = itinerary.getReservations();
     for (const auto &res : reservations)
     {
-        std::cout << res->toJson() << "res json\n";
-        objects.push_back(res->toJson());
+        objects.push_back(ReservationSerializer::to_json(*res));
     }
     return objects;
 }
@@ -31,11 +30,7 @@ void ItinerariesManager::save_itinerary(const std::string &customerId, const Iti
 
 std::unique_ptr<Reservation> ItinerariesManager::convert_json_to_reservation(json obj)
 {
-    int reqType = obj.value("reqType", -1);
-    auto res = ReservationFactory::getReservation(static_cast<RequestType>(reqType));
-    res->jsonToReservation(obj);
-    std::cout << "itinerariesmanager line 37" << res->toString2() << "\n";
-    return res;
+    return ReservationSerializer::from_json(obj);
 }
 
 Itinerary ItinerariesManager::convert_json_to_itinerary(json obj)
@@ -46,7 +41,7 @@ Itinerary ItinerariesManager::convert_json_to_itinerary(json obj)
     json arr = json::array();
     arr = obj["reservations"];
 
-    for (json resObj : arr)
+    for (const auto &resObj : arr)
     {
         itinerary.add_item(convert_json_to_reservation(resObj));
     }

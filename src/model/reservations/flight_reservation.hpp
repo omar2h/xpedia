@@ -38,9 +38,35 @@ public:
 
     void setItem(ItineraryItem *const) override;
 
-    json toJson() const override;
-
-    std::unique_ptr<Reservation> jsonToReservation(json) override;
-
     void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) override;
+
+    std::string getAirline() const
+    {
+        return airline;
+    }
+
+    std::string getFrom() const
+    {
+        return from;
+    }
+
+    std::string getTo() const
+    {
+        return to;
+    }
+
+    std::string getDate() const
+    {
+        return date;
+    }
+
+    int getAdults() const
+    {
+        return adults;
+    }
+
+    int getChildren() const
+    {
+        return children;
+    }
 };

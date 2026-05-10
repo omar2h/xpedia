@@ -98,34 +98,6 @@ void FlightReservation::setItem(ItineraryItem *const i)
     setReqType(i);
 }
 
-json FlightReservation::toJson() const
-{
-    json obj;
-    obj["airline"] = item->getAirline();
-    obj["from"] = request->getFromCity();
-    obj["to"] = request->getToCity();
-    obj["date"] = item->getDate();
-    obj["adults"] = request->getAdults();
-    obj["children"] = request->getChildren();
-    obj["type"] = getType();
-    obj["reqType"] = getReqType();
-    obj["cost"] = total_cost();
-    return obj;
-}
-
-std::unique_ptr<Reservation> FlightReservation::jsonToReservation(json obj)
-{
-    std::string airline = obj.value("airline", "not found");
-    std::string from = obj.value("from", "not found");
-    std::string to = obj.value("to", "not found");
-    std::string date = obj.value("date", "not found");
-    int adults = obj.value("adults", -1);
-    int children = obj.value("children", -1);
-    double cost = obj.value("cost", -1);
-    setAttributes(airline, from, to, date, adults, children, cost);
-    return std::unique_ptr<Reservation>(this->clone());
-}
-
 void FlightReservation::setAttributes(const std::string &airline_, const std::string &from_, const std::string &to_, const std::string &date_, int adults_, int children_, double cost_, const std::string &x, int y)
 {
     airline = airline_;
