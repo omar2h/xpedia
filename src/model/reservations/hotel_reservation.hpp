@@ -5,6 +5,8 @@
 #include "../hotel_room.hpp"
 #include <memory>
 
+class HotelReservationData;
+
 class HotelReservation : public Reservation
 {
     std::unique_ptr<HotelRequest> request{};
@@ -22,6 +24,7 @@ class HotelReservation : public Reservation
 public:
     HotelReservation() = default;
     HotelReservation(const HotelReservation &);
+    explicit HotelReservation(const HotelReservationData &data);
     HotelReservation &operator=(const HotelReservation &);
     HotelReservation(HotelReservation &&) noexcept = default;
     HotelReservation &operator=(HotelReservation &&) noexcept = default;

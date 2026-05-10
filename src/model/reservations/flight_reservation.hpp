@@ -6,6 +6,8 @@
 #include <memory>
 using json = nlohmann::json;
 
+class FlightReservationData;
+
 class FlightReservation : public Reservation
 {
     std::unique_ptr<FlightRequest> request{};
@@ -21,6 +23,7 @@ class FlightReservation : public Reservation
 public:
     FlightReservation() = default;
     FlightReservation(const FlightReservation &);
+    explicit FlightReservation(const FlightReservationData &data);
     FlightReservation &operator=(const FlightReservation &);
     FlightReservation(FlightReservation &&) noexcept = default;
     FlightReservation &operator=(FlightReservation &&) noexcept = default;

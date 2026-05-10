@@ -1,5 +1,7 @@
 #include "hotel_reservation.hpp"
 #include "../factories/reservation_request_factory.hpp"
+#include "../dto/hotel_reservation_data.hpp"
+
 #include <sstream>
 
 HotelReservation::HotelReservation(const HotelReservation &other)
@@ -22,6 +24,25 @@ HotelReservation::HotelReservation(const HotelReservation &other)
     {
         request = std::make_unique<HotelRequest>(*other.request);
     }
+}
+
+HotelReservation::HotelReservation(
+    const HotelReservationData &data)
+{
+    hotelName = data.hotelName;
+
+    fromDate = data.fromDate;
+    toDate = data.toDate;
+
+    city = data.city;
+
+    roomType = data.roomType;
+
+    adults = data.adults;
+    children = data.children;
+    rooms = data.rooms;
+
+    cost = data.cost;
 }
 
 HotelReservation &HotelReservation::operator=(

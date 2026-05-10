@@ -1,5 +1,6 @@
 #include "flight_reservation.hpp"
 #include "../factories/reservation_request_factory.hpp"
+#include "../dto/flight_reservation_data.hpp"
 #include <sstream>
 #include <iostream>
 
@@ -21,6 +22,22 @@ FlightReservation::FlightReservation(const FlightReservation &other)
     {
         request = std::make_unique<FlightRequest>(*other.request);
     }
+}
+
+FlightReservation::FlightReservation(
+    const FlightReservationData &data)
+{
+    airline = data.airline;
+
+    from = data.from;
+    to = data.to;
+
+    date = data.date;
+
+    adults = data.adults;
+    children = data.children;
+
+    cost = data.cost;
 }
 
 FlightReservation &FlightReservation::operator=(const FlightReservation &other)

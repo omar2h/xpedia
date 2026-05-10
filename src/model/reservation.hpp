@@ -6,6 +6,8 @@
 #include "../include/json.hpp"
 using json = nlohmann::json;
 
+#include "itinerary_item.hpp"
+
 enum class RequestType;
 enum class ReservationType
 {
@@ -14,7 +16,6 @@ enum class ReservationType
     marriott,
     hilton
 };
-class ItineraryItem;
 class ReservationRequest;
 class Reservation
 {
@@ -35,10 +36,10 @@ public:
     virtual void setRequest(std::unique_ptr<ReservationRequest>) = 0;
     virtual void setItem(ItineraryItem *const) = 0;
     ReservationType getType() const { return type; }
-    void setType(ItineraryItem const *);
+    void setType(ItineraryItem const *item) { type = item->getType(); }
 
     virtual ~Reservation() = default;
 
     RequestType getReqType() const { return reqType; }
-    void setReqType(ItineraryItem const *);
+    void setReqType(ItineraryItem const *item) { reqType = item->getReqType(); }
 };
