@@ -11,7 +11,7 @@ public:
 
     std::string getName() const override;
 
-    ItineraryManager *Clone() override;
+    ItineraryManager *clone() override;
 
     ~HiltonHotelsManager() override = default;
 };

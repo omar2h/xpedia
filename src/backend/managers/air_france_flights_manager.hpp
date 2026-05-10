@@ -14,7 +14,7 @@ public:
 
     bool reserve(Reservation *reservation) const override;
 
-    ItineraryManager *Clone() override { return new AirFranceFlightsManager(*this); };
+    ItineraryManager *clone() override { return new AirFranceFlightsManager(*this); };
 
     ~AirFranceFlightsManager() override = default;
 };

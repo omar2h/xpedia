@@ -15,7 +15,7 @@ public:
     FlightRequest() = default;
     FlightRequest(const std::string &, const std::string &, const std::string &, int, int);
 
-    ReservationRequest *Clone() override;
+    ReservationRequest *clone() override;
 
     int getAdults() const { return adults; }
     void setAdults(int adults_) { adults = adults_; }

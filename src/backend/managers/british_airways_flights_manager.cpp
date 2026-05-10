@@ -20,7 +20,7 @@ std::vector<ItineraryItem *> BritishAirwaysFlightsManager::search_reservations()
         flight.setAirline(getName());
         flight.setDate(flight_.date);
         flight.setTotalCost(flight_.price);
-        flights.push_back(flight.Clone());
+        flights.push_back(flight.clone().release());
     }
     return flights;
 }

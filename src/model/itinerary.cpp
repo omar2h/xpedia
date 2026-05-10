@@ -6,7 +6,7 @@ Itinerary::Itinerary(const Itinerary &other)
     : id(other.id), cost(other.cost)
 {
     for (const auto &res : other.reservations)
-        reservations.push_back(res->Clone());
+        reservations.push_back(res->clone());
 }
 
 Itinerary &Itinerary::operator=(const Itinerary &other)
@@ -17,7 +17,7 @@ Itinerary &Itinerary::operator=(const Itinerary &other)
     cost = other.cost;
     reservations.clear();
     for (const auto &res : other.reservations)
-        reservations.push_back(res->Clone());
+        reservations.push_back(res->clone());
     return *this;
 }
 

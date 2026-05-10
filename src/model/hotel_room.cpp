@@ -7,8 +7,3 @@ std::string HotelRoom::toString() const
         << "Price per night: " << pricePerNight << " From: " << dateFrom << " To: " << dateTo;
     return oss.str();
 }
-
-ItineraryItem *HotelRoom::Clone()
-{
-    return new HotelRoom(*this);
-}

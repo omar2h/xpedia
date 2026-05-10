@@ -4,7 +4,7 @@ HotelRequest::HotelRequest(const std::string &from, const std::string &to, const
 {
 }
 
-ReservationRequest *HotelRequest::Clone()
+ReservationRequest *HotelRequest::clone()
 {
     return new HotelRequest(*this);
 }

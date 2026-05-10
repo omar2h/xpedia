@@ -12,7 +12,7 @@ class ItineraryManager
 public:
     void setRequest(ReservationRequest *const request_)
     {
-        request = request_->Clone();
+        request = request_->clone();
     }
     virtual std::vector<ItineraryItem *> search_reservations() const = 0;
 
@@ -20,9 +20,9 @@ public:
 
     virtual std::string getName() const = 0;
 
-    ReservationRequest *getRequest() const { return request->Clone(); }
+    ReservationRequest *getRequest() const { return request->clone(); }
 
-    virtual ItineraryManager *Clone() = 0;
+    virtual ItineraryManager *clone() = 0;
 
     virtual ~ItineraryManager()
     {

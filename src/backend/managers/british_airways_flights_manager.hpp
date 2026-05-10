@@ -14,7 +14,7 @@ public:
 
     bool reserve(Reservation *reservation) const override;
 
-    ItineraryManager *Clone() override { return new BritishAirwaysFlightsManager(*this); };
+    ItineraryManager *clone() override { return new BritishAirwaysFlightsManager(*this); };
 
     ~BritishAirwaysFlightsManager() override = default;
 };

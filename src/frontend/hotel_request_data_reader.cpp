@@ -26,7 +26,7 @@ ReservationRequest *HotelRequestDataReader::read()
     hotelRequest->setAdults(adults);
     hotelRequest->setChildren(children);
 
-    return hotelRequest->Clone();
+    return hotelRequest->clone();
 }
 
 HotelRequestDataReader::HotelRequestDataReader()

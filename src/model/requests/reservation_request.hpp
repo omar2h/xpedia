@@ -11,7 +11,7 @@ enum class RequestType
 class ReservationRequest
 {
 public:
-    virtual ReservationRequest *Clone() = 0;
+    virtual ReservationRequest *clone() = 0;
     virtual std::string toString() const = 0;
     virtual ~ReservationRequest() = 0;
 };

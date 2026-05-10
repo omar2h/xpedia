@@ -22,7 +22,7 @@ class Reservation
     RequestType reqType;
 
 public:
-    virtual std::unique_ptr<Reservation> Clone() const = 0;
+    virtual std::unique_ptr<Reservation> clone() const = 0;
 
     virtual double total_cost() const = 0;
 

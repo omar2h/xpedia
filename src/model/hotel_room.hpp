@@ -13,7 +13,7 @@ class HotelRoom : public ItineraryItem
 
 public:
     std::string toString() const override;
-    ItineraryItem *Clone() override;
+    std::unique_ptr<ItineraryItem> clone() const { return std::make_unique<HotelRoom>(*this); }
     virtual ~HotelRoom() = default;
 
     std::string getHotelName() const { return hotelName; }

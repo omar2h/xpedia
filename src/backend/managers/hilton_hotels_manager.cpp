@@ -19,7 +19,7 @@ std::vector<ItineraryItem *> HiltonHotelsManager::search_reservations() const
         hRoom.setPricePerNight(room.price_per_night);
         hRoom.setRoomType(room.room_type);
         hRoom.setHotelName(getName());
-        rooms.push_back(hRoom.Clone());
+        rooms.push_back(hRoom.clone().release());
     }
     return rooms;
 }
@@ -34,7 +34,7 @@ std::string HiltonHotelsManager::getName() const
     return "Hilton";
 }
 
-ItineraryManager *HiltonHotelsManager::Clone()
+ItineraryManager *HiltonHotelsManager::clone()
 {
     return new HiltonHotelsManager(*this);
 }

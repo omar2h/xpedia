@@ -2,6 +2,7 @@
 
 #include "itinerary_item.hpp"
 #include <iostream>
+
 class Flight : public ItineraryItem
 {
     std::string airline{};
@@ -19,7 +20,7 @@ public:
     void setTotalCost(double totalCost_) { totalCost = totalCost_; }
 
     std::string toString() const override;
-    ItineraryItem *Clone() override { return new Flight(*this); }
+    std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<Flight>(*this); }
 
     ~Flight() override
     {

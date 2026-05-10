@@ -15,7 +15,7 @@ FlightReservation::FlightReservation(const FlightReservation &other)
 {
     if (other.item)
     {
-        item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->Clone()));
+        item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->clone().release()));
     }
     if (other.request)
     {
@@ -38,7 +38,7 @@ FlightReservation &FlightReservation::operator=(const FlightReservation &other)
 
     if (other.item)
     {
-        item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->Clone()));
+        item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->clone().release()));
     }
     else
     {
@@ -57,7 +57,7 @@ FlightReservation &FlightReservation::operator=(const FlightReservation &other)
     return *this;
 }
 
-std::unique_ptr<Reservation> FlightReservation::Clone() const
+std::unique_ptr<Reservation> FlightReservation::clone() const
 {
     return std::make_unique<FlightReservation>(*this);
 }
@@ -93,7 +93,7 @@ void FlightReservation::setRequest(std::unique_ptr<ReservationRequest> request)
 
 void FlightReservation::setItem(ItineraryItem *const i)
 {
-    item.reset(dynamic_cast<Flight *>(i->Clone()));
+    item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(i->clone().release()));
     setType(i);
     setReqType(i);
 }
@@ -123,7 +123,7 @@ std::unique_ptr<Reservation> FlightReservation::jsonToReservation(json obj)
     int children = obj.value("children", -1);
     double cost = obj.value("cost", -1);
     setAttributes(airline, from, to, date, adults, children, cost);
-    return std::unique_ptr<Reservation>(this->Clone());
+    return std::unique_ptr<Reservation>(this->clone());
 }
 
 void FlightReservation::setAttributes(const std::string &airline_, const std::string &from_, const std::string &to_, const std::string &date_, int adults_, int children_, double cost_, const std::string &x, int y)

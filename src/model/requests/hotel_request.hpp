@@ -14,7 +14,7 @@ class HotelRequest : public ReservationRequest
 public:
     HotelRequest() = default;
     HotelRequest(const std::string &, const std::string &, const std::string &, int, int);
-    ReservationRequest *Clone() override;
+    ReservationRequest *clone() override;
     std::string toString() const override;
 
     std::string getFromDate() const { return fromDate; }

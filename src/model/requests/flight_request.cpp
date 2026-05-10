@@ -6,7 +6,7 @@ FlightRequest::FlightRequest(const std::string &from, const std::string &to, con
 {
 }
 
-ReservationRequest *FlightRequest::Clone()
+ReservationRequest *FlightRequest::clone()
 {
     return new FlightRequest(*this);
 }

@@ -19,7 +19,7 @@ std::vector<ItineraryItem *> MarriottHotelsManager::search_reservations() const
         hRoom.setPricePerNight(room.price_per_night);
         hRoom.setRoomType(room.room_type);
         hRoom.setHotelName(getName());
-        rooms.push_back(hRoom.Clone());
+        rooms.push_back(hRoom.clone().release());
     }
     return rooms;
 }
@@ -34,7 +34,7 @@ std::string MarriottHotelsManager::getName() const
     return "Marriott";
 }
 
-ItineraryManager *MarriottHotelsManager::Clone()
+ItineraryManager *MarriottHotelsManager::clone()
 {
     return new MarriottHotelsManager(*this);
 }

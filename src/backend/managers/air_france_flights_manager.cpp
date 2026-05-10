@@ -21,7 +21,7 @@ std::vector<ItineraryItem *> AirFranceFlightsManager::search_reservations() cons
         flight.setAirline(getName());
         flight.setDate(flight_.date);
         flight.setTotalCost(flight_.cost);
-        flights.push_back(flight.Clone());
+        flights.push_back(flight.clone().release());
     }
     return flights;
 }

@@ -16,7 +16,7 @@ HotelReservation::HotelReservation(const HotelReservation &other)
 {
     if (other.item)
     {
-        item = std::unique_ptr<HotelRoom>(dynamic_cast<HotelRoom *>(other.item->Clone()));
+        item = std::unique_ptr<HotelRoom>(dynamic_cast<HotelRoom *>(other.item->clone().release()));
     }
     if (other.request)
     {
@@ -32,7 +32,7 @@ HotelReservation &HotelReservation::operator=(
 
     if (other.item)
     {
-        item = std::unique_ptr<HotelRoom>(dynamic_cast<HotelRoom *>(other.item->Clone()));
+        item = std::unique_ptr<HotelRoom>(dynamic_cast<HotelRoom *>(other.item->clone().release()));
     }
     else
     {
@@ -61,7 +61,7 @@ HotelReservation &HotelReservation::operator=(
     return *this;
 }
 
-std::unique_ptr<Reservation> HotelReservation::Clone() const
+std::unique_ptr<Reservation> HotelReservation::clone() const
 {
     return std::make_unique<HotelReservation>(*this);
 }
@@ -99,7 +99,7 @@ void HotelReservation::setRequest(std::unique_ptr<ReservationRequest> request)
 
 void HotelReservation::setItem(ItineraryItem *const i)
 {
-    item.reset(dynamic_cast<HotelRoom *>(i->Clone()));
+    item.reset(dynamic_cast<HotelRoom *>(i->clone().release()));
     setType(i);
     setReqType(i);
 }
@@ -134,7 +134,7 @@ std::unique_ptr<Reservation> HotelReservation::jsonToReservation(json obj)
     double cost = obj.value("cost", -1);
 
     setAttributes(hotel, from, to, city, adults, children, cost, roomType, rooms);
-    return std::unique_ptr<Reservation>(this->Clone());
+    return std::unique_ptr<Reservation>(this->clone());
 }
 
 void HotelReservation::setAttributes(const std::string &hotel, const std::string &from_, const std::string &to_, const std::string &city_, int adults_, int children_, double cost_, const std::string &roomType_, int rooms_)

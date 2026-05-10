@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 
 enum class ReservationType;
 enum class RequestType;
@@ -12,7 +13,7 @@ class ItineraryItem
 
 public:
     virtual std::string toString() const = 0;
-    virtual ItineraryItem *Clone() = 0;
+    virtual std::unique_ptr<ItineraryItem> clone() const = 0;
     virtual ~ItineraryItem()
     {
         std::cout << "ItineraryItem destructor\n";
