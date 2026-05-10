@@ -31,6 +31,8 @@ public:
 
     std::unique_ptr<Reservation> clone() const override;
 
+    void accept(ReservationVisitor &) const override;
+
     double total_cost() const override;
 
     std::string toString() const override;

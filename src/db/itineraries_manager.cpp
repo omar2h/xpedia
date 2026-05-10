@@ -7,11 +7,12 @@
 
 json ItinerariesManager::convert_itinerary_to_json(const Itinerary &itinerary)
 {
+    ReservationSerializer serializer;
     json objects = json::array();
     const auto &reservations = itinerary.getReservations();
     for (const auto &res : reservations)
     {
-        objects.push_back(ReservationSerializer::to_json(*res));
+        objects.push_back(serializer.to_json(*res));
     }
     return objects;
 }

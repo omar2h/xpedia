@@ -7,6 +7,7 @@
 using json = nlohmann::json;
 
 #include "itinerary_item.hpp"
+#include "visitors/reservation_visitor.hpp"
 
 enum class RequestType;
 enum class ReservationType
@@ -30,6 +31,8 @@ public:
     virtual std::string toString() const = 0;
 
     virtual std::string toString2() const = 0;
+
+    virtual void accept(ReservationVisitor &) const = 0;
 
     virtual void setRequest(std::unique_ptr<ReservationRequest>) = 0;
     virtual void setItem(ItineraryItem *const) = 0;

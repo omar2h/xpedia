@@ -1,6 +1,7 @@
 #include "flight_reservation.hpp"
 #include "../factories/reservation_request_factory.hpp"
 #include "../dto/flight_reservation_data.hpp"
+#include "../visitors/reservation_visitor.hpp"
 #include <sstream>
 #include <iostream>
 
@@ -77,6 +78,11 @@ FlightReservation &FlightReservation::operator=(const FlightReservation &other)
 std::unique_ptr<Reservation> FlightReservation::clone() const
 {
     return std::make_unique<FlightReservation>(*this);
+}
+
+void FlightReservation::accept(ReservationVisitor &visitor) const
+{
+    visitor.visit(*this);
 }
 
 double FlightReservation::total_cost() const

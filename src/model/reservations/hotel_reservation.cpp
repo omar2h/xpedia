@@ -1,6 +1,7 @@
 #include "hotel_reservation.hpp"
 #include "../factories/reservation_request_factory.hpp"
 #include "../dto/hotel_reservation_data.hpp"
+#include "../visitors/reservation_visitor.hpp"
 
 #include <sstream>
 
@@ -84,6 +85,11 @@ HotelReservation &HotelReservation::operator=(
 std::unique_ptr<Reservation> HotelReservation::clone() const
 {
     return std::make_unique<HotelReservation>(*this);
+}
+
+void HotelReservation::accept(ReservationVisitor &visitor) const
+{
+    visitor.visit(*this);
 }
 
 double HotelReservation::total_cost() const
