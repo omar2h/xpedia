@@ -3,12 +3,12 @@
 #include "../payments/stripe_payment_strategy.hpp"
 #include "../payments/square_payment_strategy.hpp"
 
-PaymentStrategy *PaymentFactory::getPaymentService(PaymentService service)
+std::unique_ptr<PaymentStrategy> PaymentFactory::getPaymentService(PaymentService service)
 {
     if (service == PaymentService::paypal)
-        return new PayPalPaymentStrategy;
+        return std::make_unique<PayPalPaymentStrategy>();
     else if (service == PaymentService::stripe)
-        return new StripePaymentStrategy;
+        return std::make_unique<StripePaymentStrategy>();
     else if (service == PaymentService::square)
-        return new SquarePaymentStrategy;
+        return std::make_unique<SquarePaymentStrategy>();
 }

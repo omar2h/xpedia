@@ -247,18 +247,8 @@ bool Backend::withdraw_money(
     int service,
     const Itinerary &currItinerary)
 {
-    PaymentStrategy *paymentStrategy =
-        PaymentFactory::getPaymentService(
-            static_cast<PaymentService>(service - 1));
-
-    bool isPaid =
-        paymentStrategy->pay(
-            card,
-            currItinerary.total_cost());
-
-    delete paymentStrategy;
-    paymentStrategy = nullptr;
-
+    auto paymentStrategy = PaymentFactory::getPaymentService(static_cast<PaymentService>(service - 1));
+    bool isPaid = paymentStrategy->pay(card, currItinerary.total_cost());
     return isPaid;
 }
 
@@ -270,8 +260,7 @@ bool Backend::confirm_reservations(
 
     std::unique_ptr<ItineraryManager> manager{};
 
-    std::vector<Reservation *> reservations =
-        currItinerary.getReservations();
+    std::vector<Reservation *> reservations = currItinerary.getReservations();
 
     for (Reservation *res : reservations)
     {
