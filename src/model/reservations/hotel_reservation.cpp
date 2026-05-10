@@ -26,8 +26,7 @@ HotelReservation::HotelReservation(const HotelReservation &other)
     }
 }
 
-HotelReservation::HotelReservation(
-    const HotelReservationData &data)
+HotelReservation::HotelReservation(const HotelReservationData &data)
 {
     hotelName = data.hotelName;
 
@@ -123,17 +122,4 @@ void HotelReservation::setItem(ItineraryItem *const i)
     item.reset(dynamic_cast<HotelRoom *>(i->clone().release()));
     setType(i);
     setReqType(i);
-}
-
-void HotelReservation::setAttributes(const std::string &hotel, const std::string &from_, const std::string &to_, const std::string &city_, int adults_, int children_, double cost_, const std::string &roomType_, int rooms_)
-{
-    hotelName = hotel;
-    fromDate = from_;
-    toDate = to_;
-    city = city_;
-    adults = adults_;
-    children = children_;
-    cost = cost_;
-    roomType = roomType_;
-    rooms = rooms_;
 }

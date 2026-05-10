@@ -42,8 +42,6 @@ public:
 
     void setItem(ItineraryItem *const) override;
 
-    void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) override;
-
     std::string getHotelName() const
     {
         return hotelName;

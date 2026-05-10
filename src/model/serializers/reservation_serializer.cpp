@@ -1,8 +1,9 @@
 #include "reservation_serializer.hpp"
-#include "../factories/reservation_factory.hpp"
 #include "../requests/reservation_request.hpp"
 #include "../reservations/flight_reservation.hpp"
 #include "../reservations/hotel_reservation.hpp"
+#include "../dto/flight_reservation_data.hpp"
+#include "../dto/hotel_reservation_data.hpp"
 
 json ReservationSerializer::to_json(const Reservation &reservation)
 {
@@ -45,32 +46,37 @@ std::unique_ptr<Reservation> ReservationSerializer::from_json(const json &obj)
 {
     RequestType reqType = obj["reqType"].get<RequestType>();
 
-    auto reservation = ReservationFactory::getReservation(reqType);
-
     if (reqType == RequestType::flight)
     {
-        reservation->setAttributes(
-            obj["airline"],
-            obj["from"],
-            obj["to"],
-            obj["date"],
-            obj["adults"],
-            obj["children"],
-            obj["cost"]);
-    }
-    else if (reqType == RequestType::hotel)
-    {
-        reservation->setAttributes(
-            obj["hotel"],
-            obj["from"],
-            obj["to"],
-            obj["city"],
-            obj["adults"],
-            obj["children"],
-            obj["cost"],
-            obj["room_type"],
-            obj["rooms"]);
+        FlightReservationData data;
+        data.airline = obj["airline"];
+        data.from = obj["from"];
+        data.to = obj["to"];
+
+        data.date = obj["date"];
+
+        data.adults = obj["adults"];
+        data.children = obj["children"];
+
+        data.cost = obj["cost"];
+        return std::make_unique<FlightReservation>(data);
     }
 
-    return reservation;
+    HotelReservationData data;
+    data.hotelName = obj["hotel"];
+
+    data.fromDate = obj["from"];
+    data.toDate = obj["to"];
+
+    data.city = obj["city"];
+
+    data.roomType = obj["room_type"];
+
+    data.adults = obj["adults"];
+    data.children = obj["children"];
+    data.rooms = obj["rooms"];
+
+    data.cost = obj["cost"];
+
+    return std::make_unique<HotelReservation>(data);
 }

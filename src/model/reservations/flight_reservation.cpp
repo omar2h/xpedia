@@ -114,14 +114,3 @@ void FlightReservation::setItem(ItineraryItem *const i)
     setType(i);
     setReqType(i);
 }
-
-void FlightReservation::setAttributes(const std::string &airline_, const std::string &from_, const std::string &to_, const std::string &date_, int adults_, int children_, double cost_, const std::string &x, int y)
-{
-    airline = airline_;
-    from = from_;
-    to = to_;
-    date = date_;
-    adults = adults_;
-    children = children_;
-    cost = cost_;
-}
