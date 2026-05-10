@@ -11,20 +11,27 @@
 
 int ConsoleFrontend::display_create_itinerary_menu()
 {
-    std::vector<std::string> menu{"Add Flight", "Add Hotel", "Check Out", "Cancel"};
-    Printer::print_menu(menu);
+    std::vector<std::string> menu{
+        "Add Flight",
+        "Add Hotel",
+        "Check Out",
+        "Cancel"};
+
     int menuCount{(int)menu.size()};
-    int choice{};
-    try
+
+    while (true)
     {
-        choice = InputHandler::get_choice(1, menuCount);
+        Printer::print_menu(menu);
+
+        try
+        {
+            return InputHandler::get_choice(1, menuCount);
+        }
+        catch (const std::exception &e)
+        {
+            show_error(e.what());
+        }
     }
-    catch (const std::exception &e)
-    {
-        show_error(e.what());
-        return display_create_itinerary_menu();
-    }
-    return choice;
 }
 
 void ConsoleFrontend::read_request_data(ReservationRequest &request, RequestType type)
@@ -39,49 +46,63 @@ void ConsoleFrontend::read_request_data(ReservationRequest &request, RequestType
     }
 }
 
-int ConsoleFrontend::read_reservation_choice(const std::vector<ItineraryItem *> &items)
+int ConsoleFrontend::read_reservation_choice(
+    const std::vector<ItineraryItem *> &items)
 {
     std::vector<std::string> options{};
+
     for (const auto &item : items)
     {
         options.push_back(item->toString());
     }
-    Printer::print_options(options);
+
     int itemsCount{(int)items.size()};
-    std::cout << "Enter choice(-1 to cancel): ";
-    int choice{};
-    try
+
+    while (true)
     {
-        choice = InputHandler::get_choice(1, itemsCount);
+        Printer::print_options(options);
+
+        std::cout << "Enter choice(-1 to cancel): ";
+
+        try
+        {
+            return InputHandler::get_choice(1, itemsCount);
+        }
+        catch (const std::exception &e)
+        {
+            show_error(e.what());
+        }
     }
-    catch (const std::exception &e)
-    {
-        show_error(e.what());
-        return read_reservation_choice(items);
-    }
-    return choice;
 }
 
-int ConsoleFrontend::display_payment_options(const std::vector<PaymentCard> &cards)
+int ConsoleFrontend::display_payment_options(
+    const std::vector<PaymentCard> &cards)
 {
     std::vector<std::string> options;
+
     for (const auto &card : cards)
+    {
         options.push_back(card.toString());
-    Printer::print_options(options);
+    }
+
     int cardsCount{(int)cards.size()};
 
-    std::cout << "Enter choice(0 to add card, -1 to cancel): ";
-    int choice{};
-    try
+    while (true)
     {
-        choice = InputHandler::get_choice(0, cardsCount);
+        Printer::print_options(options);
+
+        std::cout
+            << "Enter choice(0 to add card, -1 to cancel): ";
+
+        try
+        {
+            return InputHandler::get_choice(0, cardsCount);
+        }
+        catch (const std::exception &e)
+        {
+            show_error(e.what());
+        }
     }
-    catch (const std::exception &e)
-    {
-        show_error(e.what());
-        return display_payment_options(cards);
-    }
-    return choice;
 }
 
 PaymentCard ConsoleFrontend::read_card()
@@ -104,22 +125,30 @@ PaymentCard ConsoleFrontend::read_card()
 
 int ConsoleFrontend::display_payment_services()
 {
-    std::cout << "Payment Services:\n";
-    std::vector<std::string> services{"Paypal", "Stripe", "Square"};
+    std::vector<std::string> services{
+        "Paypal",
+        "Stripe",
+        "Square"};
+
     int count{(int)services.size()};
-    Printer::print_options(services);
-    std::cout << "Enter choice(-1 to cancel): ";
-    int choice{};
-    try
+
+    while (true)
     {
-        choice = InputHandler::get_choice(1, count);
+        std::cout << "Payment Services:\n";
+
+        Printer::print_options(services);
+
+        std::cout << "Enter choice(-1 to cancel): ";
+
+        try
+        {
+            return InputHandler::get_choice(1, count);
+        }
+        catch (const std::exception &e)
+        {
+            show_error(e.what());
+        }
     }
-    catch (const std::exception &e)
-    {
-        show_error(e.what());
-        return display_payment_services();
-    }
-    return choice;
 }
 
 void ConsoleFrontend::display_itineraries(const std::vector<Itinerary> &itineraries)
@@ -201,20 +230,24 @@ void ConsoleFrontend::read_hotel_request_data(HotelRequest &request)
 
 int ConsoleFrontend::show_start_menu()
 {
-    std::vector<std::string> startMenu{"Login", "SignUp", "Exit"};
-    Printer::print_menu(startMenu);
-    int choice{};
-    try
-    {
-        choice = InputHandler::get_choice(1, 3);
-    }
-    catch (const std::exception &e)
-    {
-        show_error(e.what());
-        return show_start_menu();
-    }
+    std::vector<std::string> startMenu{
+        "Login",
+        "SignUp",
+        "Exit"};
 
-    return choice;
+    while (true)
+    {
+        Printer::print_menu(startMenu);
+
+        try
+        {
+            return InputHandler::get_choice(1, 3);
+        }
+        catch (const std::exception &e)
+        {
+            show_error(e.what());
+        }
+    }
 }
 
 void ConsoleFrontend::display_welcome_message(const std::string &firstName, const std::string &lastName)
@@ -224,20 +257,27 @@ void ConsoleFrontend::display_welcome_message(const std::string &firstName, cons
 
 int ConsoleFrontend::display_main_menu()
 {
-    std::vector<std::string> startMenu{"View Profile", "Create Itinerary", "List My Itineraries", "Logout"};
-    Printer::print_menu(startMenu);
+    std::vector<std::string> startMenu{
+        "View Profile",
+        "Create Itinerary",
+        "List My Itineraries",
+        "Logout"};
+
     int menuCount{(int)startMenu.size()};
-    int choice{};
-    try
+
+    while (true)
     {
-        choice = InputHandler::get_choice(1, menuCount);
+        Printer::print_menu(startMenu);
+
+        try
+        {
+            return InputHandler::get_choice(1, menuCount);
+        }
+        catch (const std::exception &e)
+        {
+            show_error(e.what());
+        }
     }
-    catch (const std::exception &e)
-    {
-        show_error(e.what());
-        return display_main_menu();
-    }
-    return choice;
 }
 
 void ConsoleFrontend::display_user_profile(const User &user)
