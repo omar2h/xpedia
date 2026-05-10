@@ -1,18 +1,20 @@
 #include "hotels_manager_factory.hpp"
 #include "../managers/marriott_hotels_manager.hpp"
 #include "../managers/hilton_hotels_manager.hpp"
-ItineraryManager *HotelsManagerFactory::getManager(ReservationType type)
+std::unique_ptr<ItineraryManager> HotelsManagerFactory::getManager(ReservationType type)
 {
     if (type == ReservationType::marriott)
-        return new MarriottHotelsManager;
+        return std::make_unique<MarriottHotelsManager>();
     else if (type == ReservationType::hilton)
-        return new HiltonHotelsManager;
+        return std::make_unique<HiltonHotelsManager>();
+
+    return nullptr;
 }
 
-std::vector<ItineraryManager *> HotelsManagerFactory::getManagers()
+std::vector<std::unique_ptr<ItineraryManager>> HotelsManagerFactory::getManagers()
 {
-    std::vector<ItineraryManager *> managers;
-    managers.push_back(new MarriottHotelsManager);
-    managers.push_back(new HiltonHotelsManager);
+    std::vector<std::unique_ptr<ItineraryManager>> managers;
+    managers.push_back(std::make_unique<MarriottHotelsManager>());
+    managers.push_back(std::make_unique<HiltonHotelsManager>());
     return managers;
 }

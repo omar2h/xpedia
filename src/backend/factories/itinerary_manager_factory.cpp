@@ -2,7 +2,7 @@
 #include "flights_manager_factory.hpp"
 #include "hotels_manager_factory.hpp"
 
-ItineraryManager *ItineraryManagerFactory::getManager(ReservationType type)
+std::unique_ptr<ItineraryManager> ItineraryManagerFactory::getManager(ReservationType type)
 {
     FlightsManagerFactory flightsFactory;
     HotelsManagerFactory hotelsFactory;

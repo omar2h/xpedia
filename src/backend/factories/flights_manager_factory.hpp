@@ -8,6 +8,6 @@ enum class ReservationType;
 class FlightsManagerFactory : public ItineraryManagerFactory
 {
 public:
-    ItineraryManager *getManager(ReservationType);
-    static std::vector<ItineraryManager *> getManagers();
+    std::unique_ptr<ItineraryManager> getManager(ReservationType) override;
+    static std::vector<std::unique_ptr<ItineraryManager>> getManagers();
 };

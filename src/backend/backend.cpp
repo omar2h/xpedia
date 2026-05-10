@@ -180,13 +180,13 @@ std::vector<ItineraryItem *> Backend::get_available_reservations(
     RequestType requestType)
 {
     std::vector<ItineraryItem *> items;
-    std::vector<ItineraryManager *> managers;
+    std::vector<std::unique_ptr<ItineraryManager>> managers;
 
     if (requestType == RequestType::flight)
     {
         managers = FlightsManagerFactory::getManagers();
 
-        for (auto manager : managers)
+        for (auto &manager : managers)
         {
             manager->setRequest(request);
 
@@ -203,7 +203,7 @@ std::vector<ItineraryItem *> Backend::get_available_reservations(
     {
         managers = HotelsManagerFactory::getManagers();
 
-        for (auto manager : managers)
+        for (auto &manager : managers)
         {
             manager->setRequest(request);
 
@@ -268,7 +268,7 @@ bool Backend::confirm_reservations(
 {
     ItineraryManagerFactory factory;
 
-    ItineraryManager *manager{};
+    std::unique_ptr<ItineraryManager> manager{};
 
     std::vector<Reservation *> reservations =
         currItinerary.getReservations();
@@ -279,15 +279,8 @@ bool Backend::confirm_reservations(
 
         if (!manager->reserve(res))
         {
-            delete manager;
-            manager = nullptr;
-
             return false;
         }
     }
-
-    delete manager;
-    manager = nullptr;
-
     return true;
 }

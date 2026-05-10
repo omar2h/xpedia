@@ -1,20 +1,26 @@
 #include "flights_manager_factory.hpp"
+
 #include "../managers/british_airways_flights_manager.hpp"
 #include "../managers/air_france_flights_manager.hpp"
+
 #include "../../model/reservation.hpp"
 
-ItineraryManager *FlightsManagerFactory::getManager(ReservationType type)
+std::unique_ptr<ItineraryManager> FlightsManagerFactory::getManager(ReservationType type)
 {
     if (type == ReservationType::britishAirways)
-        return new BritishAirwaysFlightsManager;
+        return std::make_unique<BritishAirwaysFlightsManager>();
+
     else if (type == ReservationType::airFrance)
-        return new AirFranceFlightsManager;
+        return std::make_unique<AirFranceFlightsManager>();
+
+    return nullptr;
 }
 
-std::vector<ItineraryManager *> FlightsManagerFactory::getManagers()
+std::vector<std::unique_ptr<ItineraryManager>> FlightsManagerFactory::getManagers()
 {
-    std::vector<ItineraryManager *> managers{};
-    managers.push_back(new BritishAirwaysFlightsManager);
-    managers.push_back(new AirFranceFlightsManager);
+    std::vector<std::unique_ptr<ItineraryManager>> managers{};
+    managers.push_back(std::make_unique<BritishAirwaysFlightsManager>());
+    managers.push_back(std::make_unique<AirFranceFlightsManager>());
+
     return managers;
 }
