@@ -98,7 +98,7 @@ void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IF
 
     frontend.read_request_data(*request, requestType);
 
-    std::vector<ItineraryItem *> items = get_available_reservations(request.get(), requestType);
+    std::vector<std::unique_ptr<ItineraryItem>> items = get_available_reservations(request.get(), requestType);
 
     int choice = frontend.read_reservation_choice(items);
 
@@ -107,7 +107,7 @@ void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IF
 
     auto reservation = ReservationFactory::getReservation(requestType);
 
-    reservation->setItem(items[choice - 1]);
+    reservation->setItem(items[choice - 1].get());
     reservation->setRequest(std::move(request));
 
     currItinerary.add_item(std::move(reservation));
@@ -172,9 +172,9 @@ void Backend::create_itinerary(User &user, IFrontend &frontend)
     }
 }
 
-std::vector<ItineraryItem *> Backend::get_available_reservations(ReservationRequest *request, RequestType requestType)
+std::vector<std::unique_ptr<ItineraryItem>> Backend::get_available_reservations(ReservationRequest *request, RequestType requestType)
 {
-    std::vector<ItineraryItem *> items;
+    std::vector<std::unique_ptr<ItineraryItem>> items;
     std::vector<std::unique_ptr<ItineraryManager>> managers;
 
     if (requestType == RequestType::flight)
@@ -185,9 +185,11 @@ std::vector<ItineraryItem *> Backend::get_available_reservations(ReservationRequ
         {
             manager->setRequest(request);
 
-            std::vector<ItineraryItem *> airlineFlights = manager->search_reservations();
+            std::vector<std::unique_ptr<ItineraryItem>> airlineFlights = manager->search_reservations();
 
-            items.insert(items.end(), airlineFlights.begin(), airlineFlights.end());
+            items.insert(items.end(),
+                         std::make_move_iterator(airlineFlights.begin()),
+                         std::make_move_iterator(airlineFlights.end()));
         }
     }
     else if (requestType == RequestType::hotel)
@@ -198,9 +200,12 @@ std::vector<ItineraryItem *> Backend::get_available_reservations(ReservationRequ
         {
             manager->setRequest(request);
 
-            std::vector<ItineraryItem *> hotelRooms = manager->search_reservations();
+            std::vector<std::unique_ptr<ItineraryItem>> hotelRooms = manager->search_reservations();
 
-            items.insert(items.end(), hotelRooms.begin(), hotelRooms.end());
+            items.insert(items.end(),
+                         std::make_move_iterator(hotelRooms.begin()),
+                         std::make_move_iterator(hotelRooms.end()));
+            ;
         }
     }
 

@@ -167,7 +167,7 @@
 //     }
 // }
 
-// int Frontend::read_reservation_choice(const std::vector<ItineraryItem *> &items)
+// int Frontend::read_reservation_choice(const std::vector<std::unique_ptr<ItineraryItem>> &items)
 // {
 //     std::vector<std::string> options{};
 //     for (const auto &item : items)

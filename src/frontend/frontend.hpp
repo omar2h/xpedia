@@ -24,7 +24,7 @@
 //     static int display_create_itinerary_menu();
 //     static void read_flight_request_data(FlightRequest &);
 //     static void read_hotel_request_data(HotelRequest &);
-//     static int read_reservation_choice(const std::vector<ItineraryItem *> &);
+//     static int read_reservation_choice(const std::vector<std::unique_ptr<ItineraryItem>> &);
 //     static void read_request_data(ReservationRequest &, RequestType);
 //     static int display_payment_options(const std::vector<PaymentCard> &);
 //     static PaymentCard read_card();

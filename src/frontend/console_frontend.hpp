@@ -1,7 +1,6 @@
 #pragma once
 
 #include "frontend_interface.hpp"
-#include "../model/itinerary.hpp"
 
 class FlightRequest;
 class HotelRequest;
@@ -10,7 +9,7 @@ class ConsoleFrontend : public IFrontend
 public:
     int display_create_itinerary_menu() override;
     void read_request_data(ReservationRequest &, RequestType) override;
-    int read_reservation_choice(const std::vector<ItineraryItem *> &) override;
+    int read_reservation_choice(const std::vector<std::unique_ptr<ItineraryItem>> &) override;
     int display_payment_options(const std::vector<PaymentCard> &) override;
     PaymentCard read_card() override;
     int display_payment_services() override;

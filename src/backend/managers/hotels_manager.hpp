@@ -7,7 +7,7 @@
 class HotelsManager : public ItineraryManager
 {
 public:
-    std::vector<ItineraryItem *> search_reservations() const override = 0;
+    std::vector<std::unique_ptr<ItineraryItem>> search_reservations() const override = 0;
 
     bool reserve(Reservation *) const override = 0;
 

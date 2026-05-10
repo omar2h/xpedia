@@ -3,10 +3,10 @@
 #include "../../model/factories/reservation_request_factory.hpp"
 #include "../../model/hotel_room.hpp"
 
-std::vector<ItineraryItem *> MarriottHotelsManager::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> MarriottHotelsManager::search_reservations() const
 {
     HotelRequest *req = dynamic_cast<HotelRequest *>(getRequest());
-    std::vector<ItineraryItem *> rooms;
+    std::vector<std::unique_ptr<ItineraryItem>> rooms;
     std::vector<MarriottFoundRoom> marriottRooms = MarriottHotelAPI::FindRooms(req->getFromDate(), req->getToDate(), req->getCity(), req->getRooms(), req->getAdults(), req->getChildren());
     for (const auto &room : marriottRooms)
     {
@@ -19,7 +19,7 @@ std::vector<ItineraryItem *> MarriottHotelsManager::search_reservations() const
         hRoom.setPricePerNight(room.price_per_night);
         hRoom.setRoomType(room.room_type);
         hRoom.setHotelName(getName());
-        rooms.push_back(hRoom.clone().release());
+        rooms.push_back(hRoom.clone());
     }
     return rooms;
 }

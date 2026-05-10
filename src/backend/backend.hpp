@@ -14,7 +14,7 @@ public:
     static User user_login(const std::string &, const std::string &);
     static void create_itinerary(User &, IFrontend &);
     static void add_new_item(RequestType, Itinerary &, IFrontend &);
-    static std::vector<ItineraryItem *> get_available_reservations(ReservationRequest *, RequestType);
+    static std::vector<std::unique_ptr<ItineraryItem>> get_available_reservations(ReservationRequest *, RequestType);
     static int make_reservations(Customer &, const Itinerary &, IFrontend &);
     static bool confirm_reservations(Customer &customer, const Itinerary &currItinerary);
     static bool withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary);

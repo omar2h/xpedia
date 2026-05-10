@@ -1,7 +1,7 @@
 #include "air_france_flights_manager.hpp"
 #include "../../apis/expedia_flights_api.hpp"
 
-std::vector<ItineraryItem *> AirFranceFlightsManager::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightsManager::search_reservations() const
 {
     const FlightRequest *request = dynamic_cast<FlightRequest *>(getRequest());
 
@@ -11,7 +11,7 @@ std::vector<ItineraryItem *> AirFranceFlightsManager::search_reservations() cons
 
     std::vector<AirFranceFlight> airFranceFlights = api.GetAvailableFlights();
 
-    std::vector<ItineraryItem *> flights{};
+    std::vector<std::unique_ptr<ItineraryItem>> flights{};
 
     for (const auto &flight_ : airFranceFlights)
     {
@@ -21,7 +21,7 @@ std::vector<ItineraryItem *> AirFranceFlightsManager::search_reservations() cons
         flight.setAirline(getName());
         flight.setDate(flight_.date);
         flight.setTotalCost(flight_.cost);
-        flights.push_back(flight.clone().release());
+        flights.push_back(flight.clone());
     }
     return flights;
 }

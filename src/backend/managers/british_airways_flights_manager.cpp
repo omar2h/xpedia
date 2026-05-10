@@ -4,12 +4,12 @@
 #include "../../model/requests/flight_request.hpp"
 #include <iostream>
 
-std::vector<ItineraryItem *> BritishAirwaysFlightsManager::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightsManager::search_reservations() const
 {
     FlightRequest const *request = dynamic_cast<FlightRequest *>(getRequest());
 
     vector<BritishAirwaysFlight> flightsBritishAirways = BritishAirwaysOnlineAPI::GetFlights(request->getFromCity(), request->getDate(), request->getToCity(), request->getAdults(), request->getChildren());
-    vector<ItineraryItem *> flights;
+    std::vector<std::unique_ptr<ItineraryItem>> flights;
 
     // convert
     for (auto &flight_ : flightsBritishAirways)
@@ -20,7 +20,7 @@ std::vector<ItineraryItem *> BritishAirwaysFlightsManager::search_reservations()
         flight.setAirline(getName());
         flight.setDate(flight_.date);
         flight.setTotalCost(flight_.price);
-        flights.push_back(flight.clone().release());
+        flights.push_back(flight.clone());
     }
     return flights;
 }

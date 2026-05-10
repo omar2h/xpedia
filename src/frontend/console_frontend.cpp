@@ -46,7 +46,7 @@ void ConsoleFrontend::read_request_data(ReservationRequest &request, RequestType
     }
 }
 
-int ConsoleFrontend::read_reservation_choice(const std::vector<ItineraryItem *> &items)
+int ConsoleFrontend::read_reservation_choice(const std::vector<std::unique_ptr<ItineraryItem>> &items)
 {
     std::vector<std::string> options{};
 
