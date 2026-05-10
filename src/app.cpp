@@ -17,17 +17,17 @@
         while (true)
         {
             std::cout << "\n\n";
-            int choice = Frontend::show_start_menu();
+            int choice = frontend.show_start_menu();
 
             if (choice == 1)
             {
-                user = Frontend::login();
-                Frontend::display_welcome_message(user.getFirstName(), user.getLastName());
+                user = frontend.login();
+                frontend.display_welcome_message(user.getFirstName(), user.getLastName());
                 break;
             }
             else if (choice == 2)
             {
-                Frontend::signup();
+                frontend.signup();
             }
             else if (choice == 3)
                 exit(0);
@@ -35,11 +35,11 @@
 
         while (true)
         {
-            int choice = Frontend::display_main_menu();
+            int choice = frontend.display_main_menu();
 
             if (choice == 1)
             {
-                Frontend::display_user_profile(user);
+                frontend.display_user_profile(user);
             }
             else if (choice == 2)
             {

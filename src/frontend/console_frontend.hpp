@@ -2,6 +2,8 @@
 
 #include "frontend_interface.hpp"
 
+class FlightRequest;
+class HotelRequest;
 class ConsoleFrontend : public IFrontend
 {
 public:
@@ -12,4 +14,15 @@ public:
     PaymentCard read_card() override;
     int display_payment_services() override;
     void display_itineraries(const std::vector<Itinerary> &) override;
+    int show_start_menu() override;
+    void display_welcome_message(const std::string &, const std::string &) override;
+    int display_main_menu() override;
+    void display_user_profile(const User &user) override;
+    User login() override;
+    void signup() override;
+
+private:
+    void read_flight_request_data(FlightRequest &);
+    void read_hotel_request_data(HotelRequest &);
+    void display_itinerary(const Itinerary &);
 };
