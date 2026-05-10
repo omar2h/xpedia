@@ -26,7 +26,7 @@ public:
     FlightReservation &operator=(FlightReservation &&) noexcept = default;
     ~FlightReservation() = default;
 
-    Reservation *Clone() const override;
+    std::unique_ptr<Reservation> Clone() const override;
 
     double total_cost() const override;
 

@@ -6,7 +6,7 @@ Itinerary::Itinerary(const Itinerary &other)
     : id(other.id), cost(other.cost)
 {
     for (const auto &res : other.reservations)
-        reservations.push_back(std::unique_ptr<Reservation>(res->Clone()));
+        reservations.push_back(res->Clone());
 }
 
 Itinerary &Itinerary::operator=(const Itinerary &other)
@@ -17,7 +17,7 @@ Itinerary &Itinerary::operator=(const Itinerary &other)
     cost = other.cost;
     reservations.clear();
     for (const auto &res : other.reservations)
-        reservations.push_back(std::unique_ptr<Reservation>(res->Clone()));
+        reservations.push_back(res->Clone());
     return *this;
 }
 

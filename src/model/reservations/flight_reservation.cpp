@@ -16,7 +16,7 @@ FlightReservation::FlightReservation(
 {
     if (other.item)
     {
-        item.reset(dynamic_cast<Flight *>(other.item->Clone()));
+        item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->Clone()));
     }
     if (other.request)
     {
@@ -41,7 +41,7 @@ FlightReservation::operator=(
 
     if (other.item)
     {
-        item.reset(dynamic_cast<Flight *>(other.item->Clone()));
+        item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->Clone()));
     }
     else
     {
@@ -60,9 +60,9 @@ FlightReservation::operator=(
     return *this;
 }
 
-Reservation *FlightReservation::Clone() const
+std::unique_ptr<Reservation> FlightReservation::Clone() const
 {
-    new FlightReservation(*this);
+    return std::make_unique<FlightReservation>(*this);
 }
 
 double FlightReservation::total_cost() const

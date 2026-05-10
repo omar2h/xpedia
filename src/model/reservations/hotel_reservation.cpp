@@ -1,5 +1,4 @@
 #include "hotel_reservation.hpp"
-#include "../hotel_room.hpp"
 #include "../factories/reservation_request_factory.hpp"
 #include <sstream>
 
@@ -17,7 +16,7 @@ HotelReservation::HotelReservation(const HotelReservation &other)
 {
     if (other.item)
     {
-        item.reset(dynamic_cast<HotelRoom *>(other.item->Clone()));
+        item = std::unique_ptr<HotelRoom>(dynamic_cast<HotelRoom *>(other.item->Clone()));
     }
     if (other.request)
     {
@@ -33,7 +32,7 @@ HotelReservation &HotelReservation::operator=(
 
     if (other.item)
     {
-        item.reset(dynamic_cast<HotelRoom *>(other.item->Clone()));
+        item = std::unique_ptr<HotelRoom>(dynamic_cast<HotelRoom *>(other.item->Clone()));
     }
     else
     {
@@ -62,9 +61,9 @@ HotelReservation &HotelReservation::operator=(
     return *this;
 }
 
-Reservation *HotelReservation::Clone() const
+std::unique_ptr<Reservation> HotelReservation::Clone() const
 {
-    return new HotelReservation(*this);
+    return std::make_unique<HotelReservation>(*this);
 }
 
 double HotelReservation::total_cost() const
