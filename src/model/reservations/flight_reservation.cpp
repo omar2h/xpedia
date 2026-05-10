@@ -2,6 +2,71 @@
 #include "../factories/reservation_request_factory.hpp"
 #include <sstream>
 #include <iostream>
+
+FlightReservation::FlightReservation(
+    const FlightReservation &other)
+    : airline(other.airline),
+      from(other.from),
+      to(other.to),
+      date(other.date),
+      adults(other.adults),
+      children(other.children),
+      cost(other.cost),
+      item(nullptr)
+{
+    if (other.item)
+    {
+        item = dynamic_cast<Flight *>(other.item->Clone());
+    }
+    if (other.request)
+    {
+        request = std::make_unique<FlightRequest>(*other.request);
+    }
+}
+
+FlightReservation &
+FlightReservation::operator=(
+    const FlightReservation &other)
+{
+    if (this == &other)
+        return *this;
+
+    airline = other.airline;
+    from = other.from;
+    to = other.to;
+    date = other.date;
+    adults = other.adults;
+    children = other.children;
+    cost = other.cost;
+
+    delete item;
+
+    if (other.item)
+    {
+        item = dynamic_cast<Flight *>(other.item->Clone());
+    }
+    else
+    {
+        item = nullptr;
+    }
+
+    if (other.request)
+    {
+        request = std::make_unique<FlightRequest>(*other.request);
+    }
+    else
+    {
+        request.reset();
+    }
+
+    return *this;
+}
+
+Reservation *FlightReservation::Clone() const
+{
+    new FlightReservation(*this);
+}
+
 double FlightReservation::total_cost() const
 {
     return item->getTotalCost() * request->getAdults() +
@@ -26,9 +91,9 @@ std::string FlightReservation::toString2() const
     return oss.str();
 }
 
-void FlightReservation::setRequest(ReservationRequest *const req)
+void FlightReservation::setRequest(std::unique_ptr<ReservationRequest> request)
 {
-    request = dynamic_cast<FlightRequest *>(req->Clone());
+    this->request.reset(dynamic_cast<FlightRequest *>(request.release()));
 }
 
 void FlightReservation::setItem(ItineraryItem *const i)
@@ -79,6 +144,5 @@ void FlightReservation::setAttributes(const std::string &airline_, const std::st
 
 FlightReservation::~FlightReservation()
 {
-    delete request;
     delete item;
 }

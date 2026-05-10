@@ -109,7 +109,7 @@ void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IF
     auto reservation = ReservationFactory::getReservation(requestType);
 
     reservation->setItem(items[choice - 1]);
-    reservation->setRequest(request.get());
+    reservation->setRequest(std::move(request));
 
     currItinerary.add_item(std::move(reservation));
 }

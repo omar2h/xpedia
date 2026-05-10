@@ -8,7 +8,7 @@ using json = nlohmann::json;
 
 class FlightReservation : public Reservation
 {
-    FlightRequest *request{};
+    std::unique_ptr<FlightRequest> request{};
     Flight *item{};
     std::string airline{};
     std::string from{};
@@ -19,7 +19,13 @@ class FlightReservation : public Reservation
     double cost{};
 
 public:
-    Reservation *Clone() const override { return new FlightReservation(*this); }
+    FlightReservation() = default;
+    FlightReservation(const FlightReservation &);
+    FlightReservation &operator=(const FlightReservation &);
+    FlightReservation(FlightReservation &&) noexcept = default;
+    FlightReservation &operator=(FlightReservation &&) noexcept = default;
+
+    Reservation *Clone() const override;
 
     double total_cost() const override;
 
@@ -27,7 +33,7 @@ public:
 
     std::string toString2() const override;
 
-    void setRequest(ReservationRequest *const) override;
+    void setRequest(std::unique_ptr<ReservationRequest>) override;
 
     void setItem(ItineraryItem *const) override;
 

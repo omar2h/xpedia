@@ -1,8 +1,73 @@
 #include "hotel_reservation.hpp"
-#include "../requests/hotel_request.hpp"
 #include "../hotel_room.hpp"
 #include "../factories/reservation_request_factory.hpp"
 #include <sstream>
+
+HotelReservation::HotelReservation(const HotelReservation &other)
+    : item(nullptr),
+      hotelName(other.hotelName),
+      fromDate(other.fromDate),
+      toDate(other.toDate),
+      city(other.city),
+      roomType(other.roomType),
+      adults(other.adults),
+      children(other.children),
+      rooms(other.rooms),
+      cost(other.cost)
+{
+    if (other.item)
+    {
+        item = dynamic_cast<HotelRoom *>(other.item->Clone());
+    }
+    if (other.request)
+    {
+        request = std::make_unique<HotelRequest>(*other.request);
+    }
+}
+
+HotelReservation &HotelReservation::operator=(
+    const HotelReservation &other)
+{
+    if (this == &other)
+        return *this;
+
+    delete item;
+
+    if (other.item)
+    {
+        item = dynamic_cast<HotelRoom *>(other.item->Clone());
+    }
+    else
+    {
+        item = nullptr;
+    }
+
+    hotelName = other.hotelName;
+    fromDate = other.fromDate;
+    toDate = other.toDate;
+    city = other.city;
+    roomType = other.roomType;
+    adults = other.adults;
+    children = other.children;
+    rooms = other.rooms;
+    cost = other.cost;
+
+    if (other.request)
+    {
+        request = std::make_unique<HotelRequest>(*other.request);
+    }
+    else
+    {
+        request.reset();
+    }
+
+    return *this;
+}
+
+Reservation *HotelReservation::Clone() const
+{
+    return new HotelReservation(*this);
+}
 
 double HotelReservation::total_cost() const
 {
@@ -30,9 +95,9 @@ std::string HotelReservation::toString2() const
     return oss.str();
 }
 
-void HotelReservation::setRequest(ReservationRequest *const req)
+void HotelReservation::setRequest(std::unique_ptr<ReservationRequest> request)
 {
-    request = dynamic_cast<HotelRequest *>(req->Clone());
+    this->request.reset(dynamic_cast<HotelRequest *>(request.release()));
 }
 
 void HotelReservation::setItem(ItineraryItem *const i)
@@ -89,6 +154,5 @@ void HotelReservation::setAttributes(const std::string &hotel, const std::string
 }
 HotelReservation::~HotelReservation()
 {
-    delete request;
     delete item;
 }

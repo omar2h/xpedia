@@ -1,14 +1,14 @@
 #pragma once
 
 #include "../reservation.hpp"
+#include "../requests/hotel_request.hpp"
 #include <memory>
 
-class HotelRequest;
 class HotelRoom;
 
 class HotelReservation : public Reservation
 {
-    HotelRequest *request{};
+    std::unique_ptr<HotelRequest> request{};
     HotelRoom *item{};
     std::string hotelName{};
     std::string fromDate{};
@@ -21,7 +21,13 @@ class HotelReservation : public Reservation
     double cost{};
 
 public:
-    Reservation *Clone() const override { return new HotelReservation(*this); }
+    HotelReservation() = default;
+    HotelReservation(const HotelReservation &);
+    HotelReservation &operator=(const HotelReservation &);
+    HotelReservation(HotelReservation &&) noexcept = default;
+    HotelReservation &operator=(HotelReservation &&) noexcept = default;
+
+    Reservation *Clone() const override;
 
     double total_cost() const override;
 
@@ -29,7 +35,7 @@ public:
 
     std::string toString2() const override;
 
-    void setRequest(ReservationRequest *const) override;
+    void setRequest(std::unique_ptr<ReservationRequest>) override;
 
     void setItem(ItineraryItem *const) override;
 

@@ -26,7 +26,5 @@ public:
 
     virtual ~ItineraryManager()
     {
-        delete request;
-        request = nullptr;
     }
 };
