@@ -17,7 +17,7 @@ HotelReservation::HotelReservation(const HotelReservation &other)
 {
     if (other.item)
     {
-        item = dynamic_cast<HotelRoom *>(other.item->Clone());
+        item.reset(dynamic_cast<HotelRoom *>(other.item->Clone()));
     }
     if (other.request)
     {
@@ -31,15 +31,13 @@ HotelReservation &HotelReservation::operator=(
     if (this == &other)
         return *this;
 
-    delete item;
-
     if (other.item)
     {
-        item = dynamic_cast<HotelRoom *>(other.item->Clone());
+        item.reset(dynamic_cast<HotelRoom *>(other.item->Clone()));
     }
     else
     {
-        item = nullptr;
+        item.reset();
     }
 
     hotelName = other.hotelName;
@@ -102,7 +100,7 @@ void HotelReservation::setRequest(std::unique_ptr<ReservationRequest> request)
 
 void HotelReservation::setItem(ItineraryItem *const i)
 {
-    item = dynamic_cast<HotelRoom *>(i->Clone());
+    item.reset(dynamic_cast<HotelRoom *>(i->Clone()));
     setType(i);
     setReqType(i);
 }
@@ -151,8 +149,4 @@ void HotelReservation::setAttributes(const std::string &hotel, const std::string
     cost = cost_;
     roomType = roomType_;
     rooms = rooms_;
-}
-HotelReservation::~HotelReservation()
-{
-    delete item;
 }

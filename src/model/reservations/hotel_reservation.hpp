@@ -2,14 +2,13 @@
 
 #include "../reservation.hpp"
 #include "../requests/hotel_request.hpp"
+#include "../hotel_room.hpp"
 #include <memory>
-
-class HotelRoom;
 
 class HotelReservation : public Reservation
 {
     std::unique_ptr<HotelRequest> request{};
-    HotelRoom *item{};
+    std::unique_ptr<HotelRoom> item{};
     std::string hotelName{};
     std::string fromDate{};
     std::string toDate{};
@@ -26,6 +25,7 @@ public:
     HotelReservation &operator=(const HotelReservation &);
     HotelReservation(HotelReservation &&) noexcept = default;
     HotelReservation &operator=(HotelReservation &&) noexcept = default;
+    ~HotelReservation() = default;
 
     Reservation *Clone() const override;
 
@@ -46,6 +46,4 @@ public:
     std::unique_ptr<Reservation> jsonToReservation(json) override;
 
     void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) override;
-
-    ~HotelReservation() override;
 };

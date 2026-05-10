@@ -16,7 +16,7 @@ FlightReservation::FlightReservation(
 {
     if (other.item)
     {
-        item = dynamic_cast<Flight *>(other.item->Clone());
+        item.reset(dynamic_cast<Flight *>(other.item->Clone()));
     }
     if (other.request)
     {
@@ -39,15 +39,13 @@ FlightReservation::operator=(
     children = other.children;
     cost = other.cost;
 
-    delete item;
-
     if (other.item)
     {
-        item = dynamic_cast<Flight *>(other.item->Clone());
+        item.reset(dynamic_cast<Flight *>(other.item->Clone()));
     }
     else
     {
-        item = nullptr;
+        item.reset();
     }
 
     if (other.request)
@@ -98,7 +96,7 @@ void FlightReservation::setRequest(std::unique_ptr<ReservationRequest> request)
 
 void FlightReservation::setItem(ItineraryItem *const i)
 {
-    item = dynamic_cast<Flight *>(i->Clone());
+    item.reset(dynamic_cast<Flight *>(i->Clone()));
     setType(i);
     setReqType(i);
 }
@@ -140,9 +138,4 @@ void FlightReservation::setAttributes(const std::string &airline_, const std::st
     adults = adults_;
     children = children_;
     cost = cost_;
-}
-
-FlightReservation::~FlightReservation()
-{
-    delete item;
 }
