@@ -32,12 +32,12 @@ std::string HotelReservation::toString2() const
 
 void HotelReservation::setRequest(ReservationRequest *const req)
 {
-    request = dynamic_cast<HotelRequest *>(req);
+    request = dynamic_cast<HotelRequest *>(req->Clone());
 }
 
 void HotelReservation::setItem(ItineraryItem *const i)
 {
-    item = dynamic_cast<HotelRoom *>(i);
+    item = dynamic_cast<HotelRoom *>(i->Clone());
     setType(i);
     setReqType(i);
 }
@@ -59,7 +59,7 @@ json HotelReservation::toJson() const
     return obj;
 }
 
-Reservation *HotelReservation::jsonToReservation(json obj)
+std::unique_ptr<Reservation> HotelReservation::jsonToReservation(json obj)
 {
     std::string hotel = obj.value("hotel", "not found");
     std::string from = obj.value("from", "not found");
@@ -72,7 +72,7 @@ Reservation *HotelReservation::jsonToReservation(json obj)
     double cost = obj.value("cost", -1);
 
     setAttributes(hotel, from, to, city, adults, children, cost, roomType, rooms);
-    return this->Clone();
+    return std::unique_ptr<Reservation>(this->Clone());
 }
 
 void HotelReservation::setAttributes(const std::string &hotel, const std::string &from_, const std::string &to_, const std::string &city_, int adults_, int children_, double cost_, const std::string &roomType_, int rooms_)
@@ -89,4 +89,6 @@ void HotelReservation::setAttributes(const std::string &hotel, const std::string
 }
 HotelReservation::~HotelReservation()
 {
+    delete request;
+    delete item;
 }

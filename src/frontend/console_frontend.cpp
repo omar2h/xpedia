@@ -6,7 +6,7 @@ int ConsoleFrontend::display_create_itinerary_menu()
     return Frontend::display_create_itinerary_menu();
 }
 
-void ConsoleFrontend::read_request_data(ReservationRequest *&req, RequestType type)
+void ConsoleFrontend::read_request_data(ReservationRequest &req, RequestType type)
 {
     Frontend::read_request_data(req, type);
 }

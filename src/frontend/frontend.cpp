@@ -22,7 +22,7 @@ int Frontend::show_start_menu()
     catch (int e)
     {
         Error::display_error(e);
-        show_start_menu();
+        return show_start_menu();
     }
     return choice;
 }
@@ -45,7 +45,7 @@ int Frontend::display_main_menu()
     catch (int e)
     {
         Error::display_error(e);
-        show_start_menu();
+        return display_main_menu();
     }
     return choice;
 }
@@ -72,7 +72,7 @@ int Frontend::display_create_itinerary_menu()
     catch (int e)
     {
         Error::display_error(e);
-        display_create_itinerary_menu();
+        return display_create_itinerary_menu();
     }
     return choice;
 }
@@ -94,9 +94,8 @@ int Frontend::display_payment_options(const std::vector<PaymentCard> &cards)
     catch (int e)
     {
         Error::display_error(e);
-        display_payment_options(cards);
+        return display_payment_options(cards);
     }
-    std::cout << "line 97 choice = " << choice << "\n";
     return choice;
 }
 
@@ -112,16 +111,60 @@ void Frontend::read_flight_request_data(FlightRequest &request)
     std::cin >> from;
     std::cout << "Enter To City: ";
     std::cin >> to;
-    std::cout << "Enter date: ";
+    std::cout << "Enter Date: ";
     std::cin >> date;
-    std::cout << "Enter number of adults and children: ";
-    std::cin >> adults >> children;
+    std::cout << "Enter Adults: ";
+    std::cin >> adults;
+    std::cout << "Enter Children: ";
+    std::cin >> children;
 
     request.setFromCity(from);
     request.setToCity(to);
     request.setDate(date);
     request.setAdults(adults);
     request.setChildren(children);
+}
+
+void Frontend::read_hotel_request_data(HotelRequest &request)
+{
+    std::string city{};
+    std::string fromDate{};
+    std::string toDate{};
+    int adults{};
+    int children{};
+    int rooms{};
+
+    std::cout << "Enter City: ";
+    std::cin >> city;
+    std::cout << "Enter From Date: ";
+    std::cin >> fromDate;
+    std::cout << "Enter To Date: ";
+    std::cin >> toDate;
+    std::cout << "Enter Adults: ";
+    std::cin >> adults;
+    std::cout << "Enter Children: ";
+    std::cin >> children;
+    std::cout << "Enter Rooms: ";
+    std::cin >> rooms;
+
+    request.setCity(city);
+    request.setFromDate(fromDate);
+    request.setToDate(toDate);
+    request.setAdults(adults);
+    request.setChildren(children);
+    request.setRooms(rooms);
+}
+
+void Frontend::read_request_data(ReservationRequest &request, RequestType type)
+{
+    if (type == RequestType::flight)
+    {
+        read_flight_request_data(dynamic_cast<FlightRequest &>(request));
+    }
+    else if (type == RequestType::hotel)
+    {
+        read_hotel_request_data(dynamic_cast<HotelRequest &>(request));
+    }
 }
 
 int Frontend::read_reservation_choice(const std::vector<ItineraryItem *> &items)
@@ -142,23 +185,9 @@ int Frontend::read_reservation_choice(const std::vector<ItineraryItem *> &items)
     catch (int e)
     {
         Error::display_error(e);
-        read_reservation_choice(items);
+        return read_reservation_choice(items);
     }
     return choice;
-}
-
-void Frontend::read_request_data(ReservationRequest *&req, RequestType type)
-{
-    if (type == RequestType::flight)
-    {
-        reader = new FlightRequestDataReader;
-        req = reader->read();
-    }
-    else if (type == RequestType::hotel)
-    {
-        reader = new HotelRequestDataReader;
-        req = reader->read();
-    }
 }
 
 PaymentCard Frontend::read_card()
@@ -246,7 +275,7 @@ int Frontend::display_payment_services()
     catch (int e)
     {
         Error::display_error(e);
-        display_payment_services();
+        return display_payment_services();
     }
     return choice;
 }

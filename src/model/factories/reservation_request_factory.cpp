@@ -2,10 +2,11 @@
 #include "../requests/flight_request.hpp"
 #include "../requests/hotel_request.hpp"
 
-ReservationRequest *ReservationRequestFactory::getRequest(RequestType type)
+std::unique_ptr<ReservationRequest> ReservationRequestFactory::getRequest(RequestType type)
 {
     if (type == RequestType::flight)
-        return new FlightRequest;
+        return std::make_unique<FlightRequest>();
     else if (type == RequestType::hotel)
-        return new HotelRequest;
+        return std::make_unique<HotelRequest>();
+    return nullptr;
 }

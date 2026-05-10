@@ -1,21 +1,47 @@
 #include "itinerary.hpp"
 #include "itinerary_item.hpp"
-#include "reservation.hpp"
 #include <iostream>
-void Itinerary::add_item(Reservation *res)
+
+Itinerary::Itinerary(const Itinerary &other)
+    : id(other.id), cost(other.cost)
 {
-    reservations.push_back(res);
+    for (const auto &res : other.reservations)
+        reservations.push_back(std::unique_ptr<Reservation>(res->Clone()));
+}
+
+Itinerary &Itinerary::operator=(const Itinerary &other)
+{
+    if (this == &other)
+        return *this;
+    id = other.id;
+    cost = other.cost;
+    reservations.clear();
+    for (const auto &res : other.reservations)
+        reservations.push_back(std::unique_ptr<Reservation>(res->Clone()));
+    return *this;
+}
+
+void Itinerary::add_item(std::unique_ptr<Reservation> res)
+{
+    reservations.push_back(std::move(res));
 }
 
 void Itinerary::Clear()
 {
-    for (int i = 0; i < (int)reservations.size(); i++)
-    {
-        std::cout << "itinerary line 16\n";
-        delete reservations[i];
-        reservations[i] = nullptr;
-    }
     reservations.clear();
+}
+
+std::vector<Reservation *> Itinerary::getReservations() const
+{
+    std::vector<Reservation *> result{};
+    for (const auto &res : reservations)
+        result.push_back(res.get());
+    return result;
+}
+
+void Itinerary::setReservations(std::vector<std::unique_ptr<Reservation>> reservations_)
+{
+    reservations = std::move(reservations_);
 }
 
 std::string Itinerary::toString() const
@@ -41,7 +67,7 @@ std::string Itinerary::toString2() const
 double Itinerary::total_cost() const
 {
     double cost{};
-    for (auto &res : reservations)
+    for (const auto &res : reservations)
     {
         cost += res->total_cost();
     }

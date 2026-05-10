@@ -2,24 +2,32 @@
 
 #include <vector>
 #include <string>
-class Reservation;
+#include <memory>
+
+#include "reservation.hpp"
 
 class Itinerary
 {
     std::string id{};
     double cost{};
-    std::vector<Reservation *> reservations{};
+    std::vector<std::unique_ptr<Reservation>> reservations{};
 
 public:
+    Itinerary() = default;
+    Itinerary(const Itinerary &);
+    Itinerary &operator=(const Itinerary &);
+    Itinerary(Itinerary &&) noexcept = default;
+    Itinerary &operator=(Itinerary &&) noexcept = default;
+
     std::string getId() const { return id; }
     void setId(std::string id_) { id = id_; }
-    void add_item(Reservation *);
+    void add_item(std::unique_ptr<Reservation>);
     void Clear();
     std::string toString() const;
     std::string toString2() const;
     double total_cost() const;
-    std::vector<Reservation *> getReservations() const { return reservations; }
-    void setReservations(const std::vector<Reservation *> &reservations_) { reservations = reservations_; }
+    std::vector<Reservation *> getReservations() const;
+    void setReservations(std::vector<std::unique_ptr<Reservation>> reservations_);
 
     double getCost() const { return cost; }
     void setCost() { cost = total_cost(); }

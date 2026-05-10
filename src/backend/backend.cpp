@@ -195,16 +195,17 @@ void Backend::payItinerary(const Itinerary &currItinerary, const User &user, IFr
 
 void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IFrontend &frontend)
 {
-    ReservationRequest *request = ReservationRequestFactory::getRequest(requestType);
-    frontend.read_request_data(request, requestType);
-    std::vector<ItineraryItem *> items = get_available_reservations(request, requestType);
+    auto request = ReservationRequestFactory::getRequest(requestType);
+    ReservationRequest *requestPtr = request.get();
+    frontend.read_request_data(*requestPtr, requestType);
+    std::vector<ItineraryItem *> items = get_available_reservations(request.get(), requestType);
     int choice = frontend.read_reservation_choice(items);
     if (choice == -1)
         return;
-    Reservation *reservation = ReservationFactory::getReservation(requestType);
+    auto reservation = ReservationFactory::getReservation(requestType);
     reservation->setItem(items[choice - 1]);
-    reservation->setRequest(request);
-    currItinerary.add_item(reservation);
+    reservation->setRequest(request.get());
+    currItinerary.add_item(std::move(reservation));
 }
 
 void Backend::list_itineraries(const User &user, IFrontend &frontend)

@@ -29,10 +29,10 @@ void ItinerariesManager::save_itinerary(const std::string &customerId, const Iti
     Database::get_database()->write_json_to_file(ITINERARIES_JSON, obj, true);
 }
 
-Reservation *ItinerariesManager::convert_json_to_reservation(json obj)
+std::unique_ptr<Reservation> ItinerariesManager::convert_json_to_reservation(json obj)
 {
     int reqType = obj.value("reqType", -1);
-    Reservation *res = ReservationFactory::getReservation(static_cast<RequestType>(reqType));
+    auto res = ReservationFactory::getReservation(static_cast<RequestType>(reqType));
     res->jsonToReservation(obj);
     std::cout << "itinerariesmanager line 37" << res->toString2() << "\n";
     return res;

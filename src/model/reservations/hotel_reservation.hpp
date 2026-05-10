@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../reservation.hpp"
+#include <memory>
 
 class HotelRequest;
 class HotelRoom;
@@ -34,7 +35,9 @@ public:
 
     json toJson() const override;
 
-    Reservation *jsonToReservation(json) override;
+    static std::unique_ptr<Reservation> fromJson(const json &);
+
+    std::unique_ptr<Reservation> jsonToReservation(json) override;
 
     void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) override;
 

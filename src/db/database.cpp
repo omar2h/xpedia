@@ -5,13 +5,10 @@
 #include <iostream>
 #include <stdio.h>
 
-std::unique_ptr<Database> Database::databaseInstance = nullptr;
-
-std::unique_ptr<Database> Database::get_database()
+Database *Database::get_database()
 {
-    if (databaseInstance == nullptr)
-        databaseInstance = std::unique_ptr<Database>{};
-    return std::move(databaseInstance);
+    static Database databaseInstance{};
+    return &databaseInstance;
 }
 
 json Database::get_objects_from_file(const std::string &path) const

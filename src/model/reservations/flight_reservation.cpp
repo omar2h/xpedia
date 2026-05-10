@@ -28,7 +28,7 @@ std::string FlightReservation::toString2() const
 
 void FlightReservation::setRequest(ReservationRequest *const req)
 {
-    request = dynamic_cast<FlightRequest *>(req);
+    request = dynamic_cast<FlightRequest *>(req->Clone());
 }
 
 void FlightReservation::setItem(ItineraryItem *const i)
@@ -53,7 +53,7 @@ json FlightReservation::toJson() const
     return obj;
 }
 
-Reservation *FlightReservation::jsonToReservation(json obj)
+std::unique_ptr<Reservation> FlightReservation::jsonToReservation(json obj)
 {
     std::string airline = obj.value("airline", "not found");
     std::string from = obj.value("from", "not found");
@@ -63,7 +63,7 @@ Reservation *FlightReservation::jsonToReservation(json obj)
     int children = obj.value("children", -1);
     double cost = obj.value("cost", -1);
     setAttributes(airline, from, to, date, adults, children, cost);
-    return this->Clone();
+    return std::unique_ptr<Reservation>(this->Clone());
 }
 
 void FlightReservation::setAttributes(const std::string &airline_, const std::string &from_, const std::string &to_, const std::string &date_, int adults_, int children_, double cost_, const std::string &x, int y)
@@ -79,4 +79,6 @@ void FlightReservation::setAttributes(const std::string &airline_, const std::st
 
 FlightReservation::~FlightReservation()
 {
+    delete request;
+    delete item;
 }

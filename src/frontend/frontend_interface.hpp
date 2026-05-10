@@ -12,7 +12,7 @@ class IFrontend
 public:
     virtual ~IFrontend() = default;
     virtual int display_create_itinerary_menu() = 0;
-    virtual void read_request_data(ReservationRequest *&, RequestType) = 0;
+    virtual void read_request_data(ReservationRequest &, RequestType) = 0;
     virtual int read_reservation_choice(const std::vector<ItineraryItem *> &) = 0;
     virtual int display_payment_options(const std::vector<PaymentCard> &) = 0;
     virtual PaymentCard read_card() = 0;

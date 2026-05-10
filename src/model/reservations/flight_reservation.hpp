@@ -3,6 +3,7 @@
 #include "../reservation.hpp"
 #include "../flight.hpp"
 #include "../requests/flight_request.hpp"
+#include <memory>
 using json = nlohmann::json;
 
 class FlightReservation : public Reservation
@@ -32,7 +33,7 @@ public:
 
     json toJson() const override;
 
-    Reservation *jsonToReservation(json) override;
+    std::unique_ptr<Reservation> jsonToReservation(json) override;
 
     void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) override;
 

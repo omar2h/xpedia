@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include "../include/json.hpp"
 using json = nlohmann::json;
@@ -31,7 +32,7 @@ public:
 
     virtual json toJson() const = 0;
 
-    virtual Reservation *jsonToReservation(json) = 0;
+    virtual std::unique_ptr<Reservation> jsonToReservation(json) = 0;
 
     virtual void setAttributes(const std::string &, const std::string &, const std::string &, const std::string &, int, int, double, const std::string & = "", int = 0) = 0;
 
@@ -44,4 +45,4 @@ public:
 
     RequestType getReqType() const { return reqType; }
     void setReqType(ItineraryItem const *);
-};
+};

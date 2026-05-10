@@ -1,10 +1,12 @@
 #pragma once
 
+#include <memory>
+
 #include "../reservation.hpp"
 enum class RequestType;
 
 class ReservationFactory
 {
 public:
-    static Reservation *getReservation(RequestType);
+    static std::unique_ptr<Reservation> getReservation(RequestType);
 };

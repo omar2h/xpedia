@@ -6,7 +6,6 @@
 #include "../model/itinerary.hpp"
 #include "itineraries_manager.hpp"
 #include <string>
-#include <memory>
 #include <unordered_set>
 #include <vector>
 
@@ -15,7 +14,6 @@
 #define ITINERARIES_JSON "itineraries.json"
 class Database
 {
-    static std::unique_ptr<Database> databaseInstance;
     Database() = default;
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;
@@ -25,7 +23,7 @@ class Database
     ItinerariesManager itinerariesManger{};
 
 public:
-    static std::unique_ptr<Database> get_database();
+    static Database *get_database();
     std::unordered_set<std::string> get_users_ids();
     void save_user(User &) const;
     std::vector<std::string> read_file(const std::string &);
