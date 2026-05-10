@@ -3,8 +3,7 @@
 #include <sstream>
 #include <iostream>
 
-FlightReservation::FlightReservation(
-    const FlightReservation &other)
+FlightReservation::FlightReservation(const FlightReservation &other)
     : airline(other.airline),
       from(other.from),
       to(other.to),
@@ -24,9 +23,7 @@ FlightReservation::FlightReservation(
     }
 }
 
-FlightReservation &
-FlightReservation::operator=(
-    const FlightReservation &other)
+FlightReservation &FlightReservation::operator=(const FlightReservation &other)
 {
     if (this == &other)
         return *this;

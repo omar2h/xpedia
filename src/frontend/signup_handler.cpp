@@ -26,13 +26,6 @@ void SignupHandler::signup()
     std::cin >> password;
 
     User usr(firstName, lastName, email, phone, password);
-    try
-    {
-        Backend::save_user_in_db(usr);
-        return;
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+
+    Backend::save_user_in_db(usr);
 }

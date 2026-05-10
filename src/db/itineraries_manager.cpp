@@ -56,14 +56,9 @@ Itinerary ItinerariesManager::convert_json_to_itinerary(json obj)
 std::vector<Itinerary> ItinerariesManager::getItineraries_with_customerId(const std::string &customerId)
 {
     json arr;
-    try
-    {
-        arr = Database::get_database()->get_arr_objects_with_att(ITINERARIES_JSON, "customer_id", customerId);
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+
+    arr = Database::get_database()->get_arr_objects_with_att(ITINERARIES_JSON, "customer_id", customerId);
+
     std::vector<Itinerary> itineraries;
     for (json obj : arr)
     {

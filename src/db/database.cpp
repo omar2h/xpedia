@@ -16,7 +16,7 @@ json Database::get_objects_from_file(const std::string &path) const
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
     {
-        throw 3; // failed to open file
+        throw std::runtime_error("Failed to open file"); // failed to open file
     }
 
     json arr;
@@ -29,7 +29,7 @@ json Database::get_objects_from_file(const std::string &path) const
         arr = json::parse(file_handler);
     }
     else
-        throw 4; // empty file
+        throw std::runtime_error("Invalid email/password(empty)"); // empty file
     file_handler.close();
 
     return arr;
@@ -40,7 +40,7 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
     {
-        throw 3; // failed to open file
+        throw std::runtime_error("Failed to open file"); // failed to open file
     }
 
     json arr;
@@ -53,7 +53,7 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
         arr = json::parse(file_handler);
     }
     else
-        throw 6; // empty file
+        throw std::runtime_error("No Reservations to Pay"); // empty file
     file_handler.close();
 
     for (int i = 0; i < (int)arr.size(); i++)
@@ -65,14 +65,7 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
             break;
         }
     }
-    try
-    {
-        write_json_array_to_file(path, arr, false);
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+    write_json_array_to_file(path, arr, false);
 }
 
 void Database::save_itinerary(const std::string &customerId, const Itinerary &itinerary)
@@ -82,17 +75,9 @@ void Database::save_itinerary(const std::string &customerId, const Itinerary &it
 
 bool Database::check_user_is_customer(const User &user)
 {
-    try
-    {
-        bool exist = customersManager.check_if_customer_exists(user.getId());
-        if (!exist)
-            return false;
-        return true;
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+    bool exist = customersManager.check_if_customer_exists(user.getId());
+
+    return exist;
 }
 
 std::vector<Itinerary> Database::getCustomerItineraries(const std::string &customerId)
@@ -105,7 +90,7 @@ json Database::get_arr_objects_with_att(const std::string &path, const std::stri
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
     {
-        throw 3; // failed to open file
+        throw std::runtime_error("Failed to open file"); // failed to open file
     }
 
     json arr;
@@ -118,7 +103,7 @@ json Database::get_arr_objects_with_att(const std::string &path, const std::stri
         arr = json::parse(file_handler);
     }
     else
-        throw 4; // empty file
+        throw std::runtime_error("Invalid email/password(empty)"); // empty file
     file_handler.close();
     json objectsArr;
     for (const auto &u : arr)
@@ -140,7 +125,7 @@ void Database::write_json_array_to_file(const std::string &path, json arr, bool 
 
     if (file_handler.fail())
     {
-        throw 3; // failed to open file
+        throw std::runtime_error("Failed to open file"); // failed to open file
     }
 
     file_handler << arr;
@@ -152,7 +137,7 @@ json Database::get_object_with_id(const std::string &path, const std::string &id
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
     {
-        throw 3; // failed to open file
+        throw std::runtime_error("Failed to open file"); // failed to open file
     }
 
     json arr;
@@ -165,7 +150,7 @@ json Database::get_object_with_id(const std::string &path, const std::string &id
         arr = json::parse(file_handler);
     }
     else
-        throw 4; // empty file
+        throw std::runtime_error("Invalid email/password(empty)"); // empty file
     file_handler.close();
 
     for (const auto &u : arr)
@@ -188,7 +173,7 @@ void Database::write_json_to_file(const std::string &path, json obj, bool append
 
     if (file_handler.fail())
     {
-        throw 3; // failed to open file
+        throw std::runtime_error("Failed to open file"); // failed to open file
     }
 
     nlohmann::json arr;
@@ -213,39 +198,18 @@ void Database::write_json_to_file(const std::string &path, json obj, bool append
 std::vector<User> Database::get_users(const std::string &path) const
 {
     json arr;
-    try
-    {
-        arr = get_objects_from_file(path);
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+    arr = get_objects_from_file(path);
     return UsersManager::get_users_from_objects(arr);
 }
 
 Customer Database::getCustomer(const User &user)
 {
-    try
-    {
-        return customersManager.getCustomer(user);
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+    return customersManager.getCustomer(user);
 }
 
 void Database::update_customer_info(const Customer &customer)
 {
-    try
-    {
-        return customersManager.update_customer(customer);
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+    customersManager.update_customer(customer);
 }
 
 std::vector<std::string> Database::read_json_attribute_from_file(const std::string &path, const std::string &att) const
@@ -253,7 +217,7 @@ std::vector<std::string> Database::read_json_attribute_from_file(const std::stri
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
     {
-        throw 3; // failed to open file
+        throw std::runtime_error("Failed to open file"); // failed to open file
     }
 
     json arr;
@@ -277,14 +241,7 @@ std::vector<std::string> Database::read_json_attribute_from_file(const std::stri
 
 void Database::save_user(User &user) const
 {
-    try
-    {
-        UsersManager::validate_user_sign_in(user);
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+    UsersManager::validate_user_sign_in(user);
     std::string newId = UsersManager::generate_user_id();
     user.setId(newId);
     json obj = usersManager.convert_user_to_json(user);

@@ -28,7 +28,7 @@ User Backend::user_login(const std::string &email, const std::string &password)
             return usr;
     }
 
-    throw 5;
+    throw std::runtime_error("Invalid email/password");
 }
 
 void Backend::add_card(Customer &customer, IFrontend &frontend)
@@ -69,7 +69,7 @@ int Backend::make_reservations(Customer &customer, const Itinerary &currItinerar
 void Backend::payItinerary(const Itinerary &currItinerary, const User &user, IFrontend &frontend)
 {
     if (currItinerary.getReservations().empty())
-        throw 6;
+        throw std::runtime_error("No Reservations to Pay");
 
     Customer customer = Database::get_database()->getCustomer(user);
 

@@ -8,5 +8,5 @@ int InputHandler::get_choice(int low, int high)
     if ((choice >= low && choice <= high) || choice == -1)
         return choice;
     else
-        throw 1;
+        throw std::runtime_error("Invalid Choice");
 }

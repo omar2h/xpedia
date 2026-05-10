@@ -8,22 +8,16 @@ void UsersManager::validate_user_sign_in(const User &u)
 {
     std::vector<std::string> emails{};
     std::vector<std::string> phones{};
-    try
-    {
-        emails = Database::get_database()->read_json_attribute_from_file(USERS_JSON, "email");
-        phones = Database::get_database()->read_json_attribute_from_file(USERS_JSON, "phone");
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+
+    emails = Database::get_database()->read_json_attribute_from_file(USERS_JSON, "email");
+    phones = Database::get_database()->read_json_attribute_from_file(USERS_JSON, "phone");
 
     auto it1 = find(emails.begin(), emails.end(), u.getEmail());
     auto it2 = find(phones.begin(), phones.end(), u.getPhone());
 
     if (it1 != emails.end() || it2 != phones.end())
     {
-        throw 2;
+        throw std::runtime_error("Email/Phone already in use");
     }
 }
 

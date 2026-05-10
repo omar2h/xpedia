@@ -13,12 +13,5 @@ User LoginHandler::login()
     std::cout << "Enter Password: ";
     std::cin >> password;
 
-    try
-    {
-        return Backend::user_login(email, password);
-    }
-    catch (int e)
-    {
-        throw e;
-    }
+    return Backend::user_login(email, password);
 }
