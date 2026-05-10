@@ -70,7 +70,7 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
 
 void Database::save_itinerary(const std::string &customerId, const Itinerary &itinerary)
 {
-    itinerariesManger.save_itinerary(customerId, itinerary);
+    itineraryRepository.save(customerId, itinerary);
 }
 
 bool Database::check_user_is_customer(const User &user)
@@ -82,7 +82,7 @@ bool Database::check_user_is_customer(const User &user)
 
 std::vector<Itinerary> Database::getCustomerItineraries(const std::string &customerId)
 {
-    return itinerariesManger.getItineraries_with_customerId(customerId);
+    return itineraryRepository.findByCustomerId(customerId);
 }
 
 json Database::get_arr_objects_with_att(const std::string &path, const std::string &jsonAtt, const std::string &att)

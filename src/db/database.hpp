@@ -5,6 +5,7 @@
 #include "../model/customer.hpp"
 #include "../model/itinerary.hpp"
 #include "itineraries_manager.hpp"
+#include "repositories/itinerary_repository.hpp"
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -20,7 +21,7 @@ class Database
 
     UsersManager usersManager{};
     CustomersManager customersManager{};
-    ItinerariesManager itinerariesManger{};
+    ItineraryRepository itineraryRepository{};
 
 public:
     static Database *get_database();
