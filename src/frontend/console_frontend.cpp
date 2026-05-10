@@ -5,6 +5,7 @@
 #include "flight_request_data_reader.hpp"
 #include "hotel_request_data_reader.hpp"
 #include "../model/itinerary_item.hpp"
+#include "../model/itinerary.hpp"
 #include "login_handler.hpp"
 #include "signup_handler.hpp"
 #include <iostream>
@@ -277,4 +278,14 @@ void ConsoleFrontend::signup()
             Error::display_error(e);
         }
     }
+}
+
+void ConsoleFrontend::show_message(const std::string &msg)
+{
+    std::cout << msg << "\n";
+}
+
+void ConsoleFrontend::show_error(const std::string &msg)
+{
+    std::cout << msg << "\n";
 }
