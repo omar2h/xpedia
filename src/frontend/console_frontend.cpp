@@ -1,7 +1,6 @@
 #include "console_frontend.hpp"
 #include "printer.hpp"
 #include "input_handler.hpp"
-#include "../error.hpp"
 #include "flight_request_data_reader.hpp"
 #include "hotel_request_data_reader.hpp"
 #include "../model/itinerary_item.hpp"
@@ -20,9 +19,9 @@ int ConsoleFrontend::display_create_itinerary_menu()
     {
         choice = InputHandler::get_choice(1, menuCount);
     }
-    catch (int e)
+    catch (const std::exception &e)
     {
-        Error::display_error(e);
+        show_error(e.what());
         return display_create_itinerary_menu();
     }
     return choice;
@@ -55,9 +54,9 @@ int ConsoleFrontend::read_reservation_choice(const std::vector<ItineraryItem *> 
     {
         choice = InputHandler::get_choice(1, itemsCount);
     }
-    catch (int e)
+    catch (const std::exception &e)
     {
-        Error::display_error(e);
+        show_error(e.what());
         return read_reservation_choice(items);
     }
     return choice;
@@ -77,9 +76,9 @@ int ConsoleFrontend::display_payment_options(const std::vector<PaymentCard> &car
     {
         choice = InputHandler::get_choice(0, cardsCount);
     }
-    catch (int e)
+    catch (const std::exception &e)
     {
-        Error::display_error(e);
+        show_error(e.what());
         return display_payment_options(cards);
     }
     return choice;
@@ -115,9 +114,9 @@ int ConsoleFrontend::display_payment_services()
     {
         choice = InputHandler::get_choice(1, count);
     }
-    catch (int e)
+    catch (const std::exception &e)
     {
-        Error::display_error(e);
+        show_error(e.what());
         return display_payment_services();
     }
     return choice;
@@ -209,11 +208,12 @@ int ConsoleFrontend::show_start_menu()
     {
         choice = InputHandler::get_choice(1, 3);
     }
-    catch (int e)
+    catch (const std::exception &e)
     {
-        Error::display_error(e);
+        show_error(e.what());
         return show_start_menu();
     }
+
     return choice;
 }
 
@@ -232,9 +232,9 @@ int ConsoleFrontend::display_main_menu()
     {
         choice = InputHandler::get_choice(1, menuCount);
     }
-    catch (int e)
+    catch (const std::exception &e)
     {
-        Error::display_error(e);
+        show_error(e.what());
         return display_main_menu();
     }
     return choice;
@@ -257,9 +257,9 @@ User ConsoleFrontend::login()
         {
             return LoginHandler::login();
         }
-        catch (int e)
+        catch (const std::exception &e)
         {
-            Error::display_error(e);
+            show_error(e.what());
         }
     }
 }
@@ -273,9 +273,9 @@ void ConsoleFrontend::signup()
             SignupHandler::signup();
             return;
         }
-        catch (int e)
+        catch (const std::exception &e)
         {
-            Error::display_error(e);
+            show_error(e.what());
         }
     }
 }
