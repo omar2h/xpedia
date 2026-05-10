@@ -46,8 +46,7 @@ void ConsoleFrontend::read_request_data(ReservationRequest &request, RequestType
     }
 }
 
-int ConsoleFrontend::read_reservation_choice(
-    const std::vector<ItineraryItem *> &items)
+int ConsoleFrontend::read_reservation_choice(const std::vector<ItineraryItem *> &items)
 {
     std::vector<std::string> options{};
 
@@ -75,8 +74,7 @@ int ConsoleFrontend::read_reservation_choice(
     }
 }
 
-int ConsoleFrontend::display_payment_options(
-    const std::vector<PaymentCard> &cards)
+int ConsoleFrontend::display_payment_options(const std::vector<PaymentCard> &cards)
 {
     std::vector<std::string> options;
 
@@ -91,8 +89,7 @@ int ConsoleFrontend::display_payment_options(
     {
         Printer::print_options(options);
 
-        std::cout
-            << "Enter choice(0 to add card, -1 to cancel): ";
+        std::cout << "Enter choice(0 to add card, -1 to cancel): ";
 
         try
         {
@@ -165,8 +162,7 @@ void ConsoleFrontend::display_itineraries(const std::vector<Itinerary> &itinerar
 
 void ConsoleFrontend::display_itinerary(const Itinerary &itinerary)
 {
-    std::vector<Reservation *> reservations{};
-    reservations = itinerary.getReservations();
+    const auto &reservations = itinerary.getReservations();
     int count{(int)reservations.size()};
     std::cout << "Itinerary of " << count << " reservations\n";
     std::cout << itinerary.toString2() << "\n";

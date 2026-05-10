@@ -98,8 +98,7 @@ void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IF
 
     frontend.read_request_data(*request, requestType);
 
-    std::vector<ItineraryItem *> items =
-        get_available_reservations(request.get(), requestType);
+    std::vector<ItineraryItem *> items = get_available_reservations(request.get(), requestType);
 
     int choice = frontend.read_reservation_choice(items);
 
@@ -116,8 +115,7 @@ void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IF
 
 void Backend::list_itineraries(const User &user, IFrontend &frontend)
 {
-    bool isCustomer =
-        Database::get_database()->check_user_is_customer(user);
+    bool isCustomer = Database::get_database()->check_user_is_customer(user);
 
     if (!isCustomer)
     {
@@ -133,8 +131,7 @@ void Backend::list_itineraries(const User &user, IFrontend &frontend)
         return;
     }
 
-    std::vector<Itinerary> customerItineraries =
-        Database::get_database()->getCustomerItineraries(customer.getId());
+    std::vector<Itinerary> customerItineraries = Database::get_database()->getCustomerItineraries(customer.getId());
 
     frontend.display_itineraries(customerItineraries);
 }
@@ -175,9 +172,7 @@ void Backend::create_itinerary(User &user, IFrontend &frontend)
     }
 }
 
-std::vector<ItineraryItem *> Backend::get_available_reservations(
-    ReservationRequest *request,
-    RequestType requestType)
+std::vector<ItineraryItem *> Backend::get_available_reservations(ReservationRequest *request, RequestType requestType)
 {
     std::vector<ItineraryItem *> items;
     std::vector<std::unique_ptr<ItineraryManager>> managers;
@@ -190,13 +185,9 @@ std::vector<ItineraryItem *> Backend::get_available_reservations(
         {
             manager->setRequest(request);
 
-            std::vector<ItineraryItem *> airlineFlights =
-                manager->search_reservations();
+            std::vector<ItineraryItem *> airlineFlights = manager->search_reservations();
 
-            items.insert(
-                items.end(),
-                airlineFlights.begin(),
-                airlineFlights.end());
+            items.insert(items.end(), airlineFlights.begin(), airlineFlights.end());
         }
     }
     else if (requestType == RequestType::hotel)
@@ -207,13 +198,9 @@ std::vector<ItineraryItem *> Backend::get_available_reservations(
         {
             manager->setRequest(request);
 
-            std::vector<ItineraryItem *> hotelRooms =
-                manager->search_reservations();
+            std::vector<ItineraryItem *> hotelRooms = manager->search_reservations();
 
-            items.insert(
-                items.end(),
-                hotelRooms.begin(),
-                hotelRooms.end());
+            items.insert(items.end(), hotelRooms.begin(), hotelRooms.end());
         }
     }
 
@@ -227,8 +214,7 @@ int Backend::select_card(Customer &customer, IFrontend &frontend)
     while (true)
     {
         choice =
-            frontend.display_payment_options(
-                customer.getCards());
+            frontend.display_payment_options(customer.getCards());
 
         if (choice == -1)
             return -1;
@@ -252,21 +238,19 @@ bool Backend::withdraw_money(
     return isPaid;
 }
 
-bool Backend::confirm_reservations(
-    Customer &customer,
-    const Itinerary &currItinerary)
+bool Backend::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
 {
     ItineraryManagerFactory factory;
 
     std::unique_ptr<ItineraryManager> manager{};
 
-    std::vector<Reservation *> reservations = currItinerary.getReservations();
+    const auto &reservations = currItinerary.getReservations();
 
-    for (Reservation *res : reservations)
+    for (const auto &res : reservations)
     {
         manager = factory.getManager(res->getType());
 
-        if (!manager->reserve(res))
+        if (!manager->reserve(res.get()))
         {
             return false;
         }

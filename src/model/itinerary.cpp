@@ -31,12 +31,10 @@ void Itinerary::Clear()
     reservations.clear();
 }
 
-std::vector<Reservation *> Itinerary::getReservations() const
+const std::vector<std::unique_ptr<Reservation>> &
+Itinerary::getReservations() const
 {
-    std::vector<Reservation *> result{};
-    for (const auto &res : reservations)
-        result.push_back(res.get());
-    return result;
+    return reservations;
 }
 
 void Itinerary::setReservations(std::vector<std::unique_ptr<Reservation>> reservations_)

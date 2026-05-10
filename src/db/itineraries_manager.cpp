@@ -8,8 +8,8 @@
 json ItinerariesManager::convert_itinerary_to_json(const Itinerary &itinerary)
 {
     json objects = json::array();
-    std::vector<Reservation *> reservations = itinerary.getReservations();
-    for (const Reservation *res : reservations)
+    const auto &reservations = itinerary.getReservations();
+    for (const auto &res : reservations)
     {
         std::cout << res->toJson() << "res json\n";
         objects.push_back(res->toJson());

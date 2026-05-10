@@ -26,7 +26,7 @@ public:
     std::string toString() const;
     std::string toString2() const;
     double total_cost() const;
-    std::vector<Reservation *> getReservations() const;
+    const std::vector<std::unique_ptr<Reservation>> &getReservations() const;
     void setReservations(std::vector<std::unique_ptr<Reservation>> reservations_);
 
     double getCost() const { return cost; }
