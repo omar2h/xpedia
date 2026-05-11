@@ -24,7 +24,7 @@ std::vector<Itinerary> Database::getCustomerItineraries(const std::string &custo
 std::vector<User> Database::getUsers(const std::string &path) const
 {
     json arr = storage.readAll(path);
-    return UserRepository::getUsersFromObjects(arr);
+    return getUsersFromObjects(arr);
 }
 
 Customer Database::getCustomer(const User &user)
@@ -40,8 +40,8 @@ void Database::updateCustomerInfo(const Customer &customer)
 void Database::saveUser(User &user)
 {
     userRepository.validateUserSignIn(user);
-    std::string newId = UserRepository::generateUserId();
+    std::string newId = userRepository.generateUserId();
     user.setId(newId);
-    json obj = UserRepository::convertUserToJson(user);
+    json obj = convertUserToJson(user);
     storage.writeJsonToFile("users.json", obj, true);
 }

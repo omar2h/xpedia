@@ -56,6 +56,7 @@ Thumbs.db
 # Optional: runtime/generated data
 # Uncomment if these are generated
 # =========================
+Docs/
 # customers.json
 # itineraries.json
 # users.json

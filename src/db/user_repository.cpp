@@ -1,7 +1,7 @@
 #include "user_repository.hpp"
+#include "../exception.hpp"
 #include "id_generator.hpp"
 #include "storage/file_storage.hpp"
-std::unordered_set<std::string> UserRepository::usersIds{};
 
 UserRepository::UserRepository(FileStorage &storage) : m_storage(storage) {}
 
@@ -18,7 +18,7 @@ void UserRepository::validateUserSignIn(const User &u)
 
     if (it1 != emails.end() || it2 != phones.end())
     {
-        throw std::runtime_error("Email/Phone already in use");
+        throw ValidationException("Email/Phone already in use");
     }
 }
 
@@ -29,7 +29,7 @@ std::string UserRepository::generateUserId()
     return newId;
 }
 
-json UserRepository::convertUserToJson(const User &user)
+json convertUserToJson(const User &user)
 {
     json obj;
     obj["id"] = user.getId();
@@ -41,7 +41,7 @@ json UserRepository::convertUserToJson(const User &user)
     return obj;
 }
 
-std::vector<User> UserRepository::getUsersFromObjects(json arr)
+std::vector<User> getUsersFromObjects(json arr)
 {
     std::vector<User> data{};
     for (const auto &u : arr)

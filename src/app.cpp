@@ -1,5 +1,7 @@
 #include "app.hpp"
 #include "frontend/console_frontend.hpp"
+#include "frontend/output.hpp"
+#include "frontend/input.hpp"
 #include "model/user.hpp"
 #include "frontend/login_handler.hpp"
 #include "frontend/signup_handler.hpp"
@@ -11,6 +13,8 @@
 #include "infrastructure/factories/payment_factory.hpp"
 #include "application/factories/reservation_provider_factory.hpp"
 #include "application/factories/payment_factory.hpp"
+#include "model/factories/reservation_request_factory.hpp"
+#include "model/factories/reservation_factory.hpp"
 #include <iostream>
 
 App::App(IFrontend &frontend, Application &backend)
@@ -71,11 +75,25 @@ int main()
     HotelProviderFactory hotelProviderFactory;
     RoutingReservationProviderFactory reservationProviderFactory;
     PaymentFactory paymentFactory;
-    Application application{database, flightProviderFactory, hotelProviderFactory, reservationProviderFactory, paymentFactory};
+    ReservationRequestFactory requestFactory;
+    ReservationFactory reservationFactory;
+    Application application{database, flightProviderFactory, hotelProviderFactory,
+                            reservationProviderFactory, paymentFactory,
+                            requestFactory, reservationFactory};
     LoginHandler loginHandler{application};
     SignupHandler signupHandler{application};
-    ConsoleFrontend frontend{application, loginHandler, signupHandler};
+    ConsoleOutput output;
+    ConsoleInput input;
+    ConsoleFrontend frontend{application, loginHandler, signupHandler, output, input};
 
     App app{frontend, application};
-    app.run();
+
+    try
+    {
+        app.run();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Fatal error: " << e.what() << "\n";
+    }
 }

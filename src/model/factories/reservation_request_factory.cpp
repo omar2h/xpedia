@@ -6,7 +6,7 @@ std::unique_ptr<ReservationRequest> ReservationRequestFactory::getRequest(Reques
 {
     if (type == RequestType::flight)
         return std::make_unique<FlightRequest>();
-    else if (type == RequestType::hotel)
+    if (type == RequestType::hotel)
         return std::make_unique<HotelRequest>();
     return nullptr;
 }

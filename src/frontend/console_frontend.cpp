@@ -1,16 +1,38 @@
 #include "console_frontend.hpp"
-#include "printer.hpp"
-#include "input_handler.hpp"
+#include "../exception.hpp"
+#include "output.hpp"
+#include "input.hpp"
 #include "../model/requests/flight_request.hpp"
 #include "../model/requests/hotel_request.hpp"
 #include "../model/itinerary_item.hpp"
 #include "../model/itinerary.hpp"
 #include "login_handler.hpp"
 #include "signup_handler.hpp"
-#include <iostream>
 
-ConsoleFrontend::ConsoleFrontend(Application &backend, LoginHandler &loginHandler, SignupHandler &signupHandler)
-    : m_application(backend), m_loginHandler(loginHandler), m_signupHandler(signupHandler) {}
+ConsoleFrontend::ConsoleFrontend(Application &backend, LoginHandler &loginHandler,
+                                 SignupHandler &signupHandler, IOutput &output, IInput &input)
+    : m_application(backend), m_loginHandler(loginHandler), m_signupHandler(signupHandler),
+      m_output(output), m_input(input) {}
+
+static void printMenu(IOutput &out, const std::vector<std::string> &menu)
+{
+    int size = (int)menu.size();
+    out.writeLine("Menu:");
+    for (int i = 0; i < size; i++)
+    {
+        out.write("\t" + std::to_string(i + 1) + ": " + menu[i] + "\n");
+    }
+    out.write("\nYour Choice: ");
+}
+
+static void printOptions(IOutput &out, const std::vector<std::string> &options)
+{
+    int count = (int)options.size();
+    for (int i = 0; i < count; i++)
+    {
+        out.write(std::to_string(i + 1) + ": " + options[i] + "\n");
+    }
+}
 
 int ConsoleFrontend::displayCreateItineraryMenu()
 {
@@ -24,13 +46,13 @@ int ConsoleFrontend::displayCreateItineraryMenu()
 
     while (true)
     {
-        Printer::printMenu(menu);
+        printMenu(m_output, menu);
 
         try
         {
-            return InputHandler::getChoice(1, menuCount);
+            return m_input.readInt(1, menuCount);
         }
-        catch (const std::exception &e)
+        catch (const AppException &e)
         {
             showError(e.what());
         }
@@ -62,15 +84,15 @@ int ConsoleFrontend::readReservationChoice(const std::vector<std::unique_ptr<Iti
 
     while (true)
     {
-        Printer::printOptions(options);
+        printOptions(m_output, options);
 
-        std::cout << "Enter choice(-1 to cancel): ";
+        m_output.write("Enter choice(-1 to cancel): ");
 
         try
         {
-            return InputHandler::getChoice(1, itemsCount);
+            return m_input.readInt(1, itemsCount);
         }
-        catch (const std::exception &e)
+        catch (const AppException &e)
         {
             showError(e.what());
         }
@@ -90,15 +112,15 @@ int ConsoleFrontend::displayPaymentOptions(const std::vector<PaymentCard> &cards
 
     while (true)
     {
-        Printer::printOptions(options);
+        printOptions(m_output, options);
 
-        std::cout << "Enter choice(0 to add card, -1 to cancel): ";
+        m_output.write("Enter choice(0 to add card, -1 to cancel): ");
 
         try
         {
-            return InputHandler::getChoice(0, cardsCount);
+            return m_input.readInt(0, cardsCount);
         }
-        catch (const std::exception &e)
+        catch (const AppException &e)
         {
             showError(e.what());
         }
@@ -107,18 +129,14 @@ int ConsoleFrontend::displayPaymentOptions(const std::vector<PaymentCard> &cards
 
 PaymentCard ConsoleFrontend::readCard()
 {
-    std::string number;
-    std::string owner;
-    std::string date;
-    std::string ccv;
-    std::cout << "Enter Card Number: ";
-    std::cin >> number;
-    std::cout << "Enter Card Owner: ";
-    std::cin >> owner;
-    std::cout << "Enter Catd Expiry Date: ";
-    std::cin >> date;
-    std::cout << "Enter Card CCV: ";
-    std::cin >> ccv;
+    m_output.write("Enter Card Number: ");
+    std::string number = m_input.readString();
+    m_output.write("Enter Card Owner: ");
+    std::string owner = m_input.readString();
+    m_output.write("Enter Card Expiry Date: ");
+    std::string date = m_input.readString();
+    m_output.write("Enter Card CCV: ");
+    std::string ccv = m_input.readString();
 
     return {number, owner, date, ccv};
 }
@@ -134,17 +152,15 @@ int ConsoleFrontend::displayPaymentServices()
 
     while (true)
     {
-        std::cout << "Payment Services:\n";
-
-        Printer::printOptions(services);
-
-        std::cout << "Enter choice(-1 to cancel): ";
+        m_output.writeLine("Payment Services:");
+        printOptions(m_output, services);
+        m_output.write("Enter choice(-1 to cancel): ");
 
         try
         {
-            return InputHandler::getChoice(1, count);
+            return m_input.readInt(1, count);
         }
-        catch (const std::exception &e)
+        catch (const AppException &e)
         {
             showError(e.what());
         }
@@ -154,12 +170,12 @@ int ConsoleFrontend::displayPaymentServices()
 void ConsoleFrontend::displayItineraries(const std::vector<Itinerary> &itineraries)
 {
     int count{(int)itineraries.size()};
-    std::cout << count << " itineraries\n";
+    m_output.writeLine(std::to_string(count) + " itineraries");
     for (int i = 0; i < count; i++)
     {
-        std::cout << i + 1 << "- ";
+        m_output.write(std::to_string(i + 1) + "- ");
         displayItinerary(itineraries[i]);
-        std::cout << "\n";
+        m_output.write("\n");
     }
 }
 
@@ -167,28 +183,22 @@ void ConsoleFrontend::displayItinerary(const Itinerary &itinerary)
 {
     const auto &reservations = itinerary.getReservations();
     int count{(int)reservations.size()};
-    std::cout << "Itinerary of " << count << " reservations\n";
-    std::cout << itinerary.toSummaryString() << "\n";
+    m_output.writeLine("Itinerary of " + std::to_string(count) + " reservations");
+    m_output.writeLine(itinerary.toSummaryString());
 }
 
 void ConsoleFrontend::readFlightRequestData(FlightRequest &request)
 {
-    std::string from{};
-    std::string to{};
-    std::string date{};
-    int adults{};
-    int children{};
-
-    std::cout << "Enter From City: ";
-    std::cin >> from;
-    std::cout << "Enter To City: ";
-    std::cin >> to;
-    std::cout << "Enter Date: ";
-    std::cin >> date;
-    std::cout << "Enter Adults: ";
-    std::cin >> adults;
-    std::cout << "Enter Children: ";
-    std::cin >> children;
+    m_output.write("Enter From City: ");
+    std::string from = m_input.readString();
+    m_output.write("Enter To City: ");
+    std::string to = m_input.readString();
+    m_output.write("Enter Date: ");
+    std::string date = m_input.readString();
+    m_output.write("Enter Adults: ");
+    int adults = m_input.readInt();
+    m_output.write("Enter Children: ");
+    int children = m_input.readInt();
 
     request.setFromCity(from);
     request.setToCity(to);
@@ -199,25 +209,18 @@ void ConsoleFrontend::readFlightRequestData(FlightRequest &request)
 
 void ConsoleFrontend::readHotelRequestData(HotelRequest &request)
 {
-    std::string city{};
-    std::string fromDate{};
-    std::string toDate{};
-    int adults{};
-    int children{};
-    int rooms{};
-
-    std::cout << "Enter City: ";
-    std::cin >> city;
-    std::cout << "Enter From Date: ";
-    std::cin >> fromDate;
-    std::cout << "Enter To Date: ";
-    std::cin >> toDate;
-    std::cout << "Enter Adults: ";
-    std::cin >> adults;
-    std::cout << "Enter Children: ";
-    std::cin >> children;
-    std::cout << "Enter Rooms: ";
-    std::cin >> rooms;
+    m_output.write("Enter City: ");
+    std::string city = m_input.readString();
+    m_output.write("Enter From Date: ");
+    std::string fromDate = m_input.readString();
+    m_output.write("Enter To Date: ");
+    std::string toDate = m_input.readString();
+    m_output.write("Enter Adults: ");
+    int adults = m_input.readInt();
+    m_output.write("Enter Children: ");
+    int children = m_input.readInt();
+    m_output.write("Enter Rooms: ");
+    int rooms = m_input.readInt();
 
     request.setCity(city);
     request.setFromDate(fromDate);
@@ -236,13 +239,13 @@ int ConsoleFrontend::showStartMenu()
 
     while (true)
     {
-        Printer::printMenu(startMenu);
+        printMenu(m_output, startMenu);
 
         try
         {
-            return InputHandler::getChoice(1, 3);
+            return m_input.readInt(1, 3);
         }
-        catch (const std::exception &e)
+        catch (const AppException &e)
         {
             showError(e.what());
         }
@@ -251,7 +254,7 @@ int ConsoleFrontend::showStartMenu()
 
 void ConsoleFrontend::displayWelcomeMessage(const std::string &firstName, const std::string &lastName)
 {
-    std::cout << "Welcome " << firstName << " " << lastName << "\n\n";
+    m_output.writeLine("Welcome " + firstName + " " + lastName + "\n");
 }
 
 int ConsoleFrontend::displayMainMenu()
@@ -266,13 +269,13 @@ int ConsoleFrontend::displayMainMenu()
 
     while (true)
     {
-        Printer::printMenu(startMenu);
+        printMenu(m_output, startMenu);
 
         try
         {
-            return InputHandler::getChoice(1, menuCount);
+            return m_input.readInt(1, menuCount);
         }
-        catch (const std::exception &e)
+        catch (const AppException &e)
         {
             showError(e.what());
         }
@@ -281,11 +284,11 @@ int ConsoleFrontend::displayMainMenu()
 
 void ConsoleFrontend::displayUserProfile(const User &user)
 {
-    std::cout << "\n";
-    std::cout << "Name: " << user.getFirstName() << " " << user.getLastName() << "\n";
-    std::cout << "Email: " << user.getEmail() << "\n";
-    std::cout << "Phone: " << user.getPhone() << "\n";
-    std::cout << "\n";
+    m_output.write("\n");
+    m_output.writeLine("Name: " + user.getFirstName() + " " + user.getLastName());
+    m_output.writeLine("Email: " + user.getEmail());
+    m_output.writeLine("Phone: " + user.getPhone());
+    m_output.write("\n");
 }
 
 User ConsoleFrontend::login()
@@ -296,7 +299,7 @@ User ConsoleFrontend::login()
         {
             return m_loginHandler.login();
         }
-        catch (const std::exception &e)
+        catch (const AppException &e)
         {
             showError(e.what());
         }
@@ -312,7 +315,7 @@ void ConsoleFrontend::signup()
             m_signupHandler.signup();
             return;
         }
-        catch (const std::exception &e)
+        catch (const AppException &e)
         {
             showError(e.what());
         }
@@ -321,10 +324,10 @@ void ConsoleFrontend::signup()
 
 void ConsoleFrontend::showMessage(const std::string &msg)
 {
-    std::cout << msg << "\n";
+    m_output.writeLine(msg);
 }
 
 void ConsoleFrontend::showError(const std::string &msg)
 {
-    std::cout << msg << "\n";
+    m_output.writeLine(msg);
 }

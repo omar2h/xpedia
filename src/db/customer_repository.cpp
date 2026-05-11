@@ -41,7 +41,7 @@ Customer CustomerRepository::getCustomer(const User &user) const
     }
     else
     {
-        json obj = UserRepository::convertUserToJson(user);
+        json obj = convertUserToJson(user);
 
         obj["cards"] = json::array();
         obj["itineraries"] = json::array();
@@ -66,7 +66,7 @@ json CustomerRepository::convertCardToJson(const PaymentCard &card) const
 
 json CustomerRepository::convertCustomerToJson(const Customer &customer) const
 {
-    json obj = UserRepository::convertUserToJson(customer);
+    json obj = convertUserToJson(customer);
 
     obj["cards"] = json::array();
     obj["itineraries"] = json::array();

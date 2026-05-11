@@ -7,5 +7,6 @@
 class ReservationRequestFactory
 {
 public:
-    static std::unique_ptr<ReservationRequest> getRequest(RequestType);
+    virtual ~ReservationRequestFactory() = default;
+    [[nodiscard]] virtual std::unique_ptr<ReservationRequest> getRequest(RequestType);
 };

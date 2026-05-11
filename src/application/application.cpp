@@ -1,4 +1,5 @@
 #include "application.hpp"
+#include "../exception.hpp"
 #include "../db/database.hpp"
 #include "../model/requests/flight_request.hpp"
 #include "../frontend/frontend_interface.hpp"
@@ -13,12 +14,16 @@ Application::Application(Database &database,
                          ReservationProviderFactory &flightProviderFactory,
                          ReservationProviderFactory &hotelProviderFactory,
                          ReservationProviderFactory &reservationProviderFactory,
-                         IPaymentFactory &paymentFactory)
+                         IPaymentFactory &paymentFactory,
+                         ReservationRequestFactory &requestFactory,
+                         ReservationFactory &reservationFactory)
     : m_database(database),
       m_flightProviderFactory(flightProviderFactory),
       m_hotelProviderFactory(hotelProviderFactory),
       m_reservationProviderFactory(reservationProviderFactory),
-      m_paymentFactory(paymentFactory) {}
+      m_paymentFactory(paymentFactory),
+      m_requestFactory(requestFactory),
+      m_reservationFactory(reservationFactory) {}
 
 void Application::saveUserInDb(User &user)
 {
@@ -35,7 +40,7 @@ User Application::userLogin(const std::string &email, const std::string &passwor
             return usr;
     }
 
-    throw std::runtime_error("Invalid email/password");
+    throw AuthException("Invalid email/password");
 }
 
 void Application::addCard(Customer &customer, IFrontend &frontend)
@@ -76,7 +81,7 @@ int Application::makeReservations(Customer &customer, const Itinerary &currItine
 void Application::payItinerary(const Itinerary &currItinerary, const User &user, IFrontend &frontend)
 {
     if (currItinerary.getReservations().empty())
-        throw std::runtime_error("No Reservations to Pay");
+        throw BusinessException("No Reservations to Pay");
 
     Customer customer = m_database.getCustomer(user);
 
@@ -101,7 +106,7 @@ void Application::payItinerary(const Itinerary &currItinerary, const User &user,
 
 void Application::addNewItem(RequestType requestType, Itinerary &currItinerary, IFrontend &frontend)
 {
-    auto request = ReservationRequestFactory::getRequest(requestType);
+    auto request = m_requestFactory.getRequest(requestType);
 
     frontend.readRequestData(*request, requestType);
 
@@ -112,7 +117,7 @@ void Application::addNewItem(RequestType requestType, Itinerary &currItinerary, 
     if (choice == -1)
         return;
 
-    auto reservation = ReservationFactory::getReservation(requestType);
+    auto reservation = m_reservationFactory.getReservation(requestType);
 
     reservation->setItem(*items[choice - 1]);
     reservation->setRequest(std::move(request));

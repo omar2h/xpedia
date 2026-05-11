@@ -1,4 +1,5 @@
 #include "file_storage.hpp"
+#include "../../exception.hpp"
 
 #include <fstream>
 
@@ -8,7 +9,7 @@ json FileStorage::readAll(const std::string &path) const
 
     if (file_handler.fail())
     {
-        throw std::runtime_error("Failed to open file");
+        throw PersistenceException("Failed to open file");
     }
 
     json arr;
@@ -24,7 +25,7 @@ void FileStorage::writeJsonToFile(const std::string &path, const json &obj, bool
 
     if (file_handler.fail())
     {
-        throw std::runtime_error("Failed to open file");
+        throw PersistenceException("Failed to open file");
     }
 
     json arr;
@@ -57,7 +58,7 @@ std::vector<std::string> FileStorage::readJsonAttributeFromFile(const std::strin
 
     if (file_handler.fail())
     {
-        throw std::runtime_error("Failed to open file");
+        throw PersistenceException("Failed to open file");
     }
 
     json arr;
@@ -81,7 +82,7 @@ json FileStorage::getObjectWithId(const std::string &path, const std::string &id
 
     if (file_handler.fail())
     {
-        throw std::runtime_error("Failed to open file");
+        throw PersistenceException("Failed to open file");
     }
 
     json arr;
@@ -105,7 +106,7 @@ void FileStorage::deleteObjectWithId(const std::string &path, const std::string 
 
     if (file_handler.fail())
     {
-        throw std::runtime_error("Failed to open file");
+        throw PersistenceException("Failed to open file");
     }
 
     json arr;
@@ -136,7 +137,7 @@ json FileStorage::getObjectsWithAttribute(const std::string &path, const std::st
 
     if (file_handler.fail())
     {
-        throw std::runtime_error("Failed to open file");
+        throw PersistenceException("Failed to open file");
     }
 
     json arr;

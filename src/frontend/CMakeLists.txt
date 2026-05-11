@@ -3,10 +3,9 @@ add_library(frontend)
 target_sources(frontend
     PRIVATE
         console_frontend.cpp
-        input_handler.cpp
+        input.cpp
+        output.cpp
         login_handler.cpp
-        menu_printer.cpp
-        printer.cpp
         signup_handler.cpp
 )
 

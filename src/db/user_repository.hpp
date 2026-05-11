@@ -11,13 +11,15 @@ class FileStorage;
 class UserRepository
 {
     FileStorage &m_storage;
-    static std::unordered_set<std::string> usersIds;
+    std::unordered_set<std::string> usersIds;
 
 public:
     explicit UserRepository(FileStorage &storage);
 
     void validateUserSignIn(const User &);
-    [[nodiscard]] static std::string generateUserId();
-    [[nodiscard]] static json convertUserToJson(const User &);
-    [[nodiscard]] static std::vector<User> getUsersFromObjects(json);
+    [[nodiscard]] std::string generateUserId();
 };
+
+[[nodiscard]] json convertUserToJson(const User &);
+[[nodiscard]] std::vector<User> getUsersFromObjects(json);
+
