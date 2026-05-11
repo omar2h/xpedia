@@ -10,7 +10,7 @@ public:
         return "AirFrance";
     }
 
-    std::vector<std::unique_ptr<ItineraryItem>> search_reservations() const override;
+    std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const override;
 
     bool reserve(Reservation *reservation) const override;
 

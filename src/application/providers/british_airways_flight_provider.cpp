@@ -4,7 +4,7 @@
 #include "../../model/requests/flight_request.hpp"
 #include <iostream>
 
-std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::searchReservations() const
 {
     auto req = getRequest();
     FlightRequest const *request = dynamic_cast<FlightRequest *>(req.get());

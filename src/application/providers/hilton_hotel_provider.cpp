@@ -3,7 +3,7 @@
 #include "../../model/factories/reservation_request_factory.hpp"
 #include "../../model/hotel_room.hpp"
 
-std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelProvider::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelProvider::searchReservations() const
 {
     auto reqPtr = getRequest();
     HotelRequest *req = dynamic_cast<HotelRequest *>(reqPtr.get());

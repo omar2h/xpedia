@@ -1,7 +1,7 @@
 #include "air_france_flight_provider.hpp"
 #include "../../apis/expedia_flights_api.hpp"
 
-std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightProvider::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightProvider::searchReservations() const
 {
     auto req = getRequest();
     const FlightRequest *request = dynamic_cast<FlightRequest *>(req.get());

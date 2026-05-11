@@ -5,7 +5,7 @@
 class HiltonHotelProvider : public HotelProvider
 {
 public:
-    std::vector<std::unique_ptr<ItineraryItem>> search_reservations() const override;
+    std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const override;
 
     bool reserve(Reservation *) const override;
 

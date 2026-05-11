@@ -10,7 +10,7 @@ class FlightProvider : public ReservationProvider
 {
 
 public:
-    std::vector<std::unique_ptr<ItineraryItem>> search_reservations() const override = 0;
+    std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const override = 0;
 
     bool reserve(Reservation *) const override = 0;
 

@@ -194,7 +194,7 @@ std::vector<std::unique_ptr<ItineraryItem>> Application::getAvailableReservation
         {
             provider->setRequest(request);
 
-            std::vector<std::unique_ptr<ItineraryItem>> airlineFlights = provider->search_reservations();
+            std::vector<std::unique_ptr<ItineraryItem>> airlineFlights = provider->searchReservations();
 
             items.insert(items.end(),
                          std::make_move_iterator(airlineFlights.begin()),
@@ -209,7 +209,7 @@ std::vector<std::unique_ptr<ItineraryItem>> Application::getAvailableReservation
         {
             provider->setRequest(request);
 
-            std::vector<std::unique_ptr<ItineraryItem>> hotelRooms = provider->search_reservations();
+            std::vector<std::unique_ptr<ItineraryItem>> hotelRooms = provider->searchReservations();
 
             items.insert(items.end(),
                          std::make_move_iterator(hotelRooms.begin()),

@@ -25,7 +25,7 @@ public:
     {
         request = request_->clone();
     }
-    virtual std::vector<std::unique_ptr<ItineraryItem>> search_reservations() const = 0;
+    virtual std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const = 0;
 
     virtual bool reserve(Reservation *) const = 0;
 
