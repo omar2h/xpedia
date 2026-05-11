@@ -1,4 +1,5 @@
 #include "file_storage.hpp"
+#include "../../model/json_keys.hpp"
 #include "../../exception.hpp"
 
 #include <fstream>
@@ -91,7 +92,7 @@ json FileStorage::getObjectWithId(const std::string &path, const std::string &id
 
     for (const auto &obj : arr)
     {
-        if (obj.value("id", "") == id)
+        if (obj.value(JsonKeys::id, "") == id)
         {
             return obj;
         }

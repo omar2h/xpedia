@@ -1,6 +1,7 @@
 #pragma once
 
 #include "payment_strategy.hpp"
+#include "../../model/json_keys.hpp"
 #include "../../apis/expedia_payments_api.hpp"
 #include "../../third_party/json.hpp"
 #include <sstream>
@@ -13,11 +14,11 @@ public:
     string getJsonQuery(const PaymentCard &card, double amount)
     {
         json obj;
-        obj["user_info"] = json::array({card.getOwner(), "cairo"});
-        obj["card_info"]["ID"] = "1";
-        obj["card_info"]["DATE"] = card.getExpiryDate();
-        obj["card_info"]["CCV"] = card.getCcv();
-        obj["money"] = amount;
+        obj[JsonKeys::userInfo] = json::array({card.getOwner(), "cairo"});
+        obj[JsonKeys::cardInfo][JsonKeys::paymentId] = "1";
+        obj[JsonKeys::cardInfo][JsonKeys::paymentDate] = card.getExpiryDate();
+        obj[JsonKeys::cardInfo][JsonKeys::paymentCcv] = card.getCcv();
+        obj[JsonKeys::paymentMoney] = amount;
         std::ostringstream oss;
         oss << obj;
         return oss.str();

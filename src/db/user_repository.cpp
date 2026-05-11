@@ -1,5 +1,6 @@
 #include "user_repository.hpp"
 #include "../exception.hpp"
+#include "../model/json_keys.hpp"
 #include "id_generator.hpp"
 #include "storage/file_storage.hpp"
 
@@ -10,8 +11,8 @@ void UserRepository::validateUserSignIn(const User &u)
     std::vector<std::string> emails{};
     std::vector<std::string> phones{};
 
-    emails = m_storage.readJsonAttributeFromFile("users.json", "email");
-    phones = m_storage.readJsonAttributeFromFile("users.json", "phone");
+    emails = m_storage.readJsonAttributeFromFile("users.json", JsonKeys::email);
+    phones = m_storage.readJsonAttributeFromFile("users.json", JsonKeys::phone);
 
     auto it1 = find(emails.begin(), emails.end(), u.getEmail());
     auto it2 = find(phones.begin(), phones.end(), u.getPhone());
@@ -32,12 +33,12 @@ std::string UserRepository::generateUserId()
 json convertUserToJson(const User &user)
 {
     json obj;
-    obj["id"] = user.getId();
-    obj["firstName"] = user.getFirstName();
-    obj["lastName"] = user.getLastName();
-    obj["email"] = user.getEmail();
-    obj["phone"] = user.getPhone();
-    obj["password"] = user.getPassword();
+    obj[JsonKeys::id] = user.getId();
+    obj[JsonKeys::firstName] = user.getFirstName();
+    obj[JsonKeys::lastName] = user.getLastName();
+    obj[JsonKeys::email] = user.getEmail();
+    obj[JsonKeys::phone] = user.getPhone();
+    obj[JsonKeys::password] = user.getPassword();
     return obj;
 }
 
@@ -46,12 +47,12 @@ std::vector<User> getUsersFromObjects(json arr)
     std::vector<User> data{};
     for (const auto &u : arr)
     {
-        std::string firstName = u.value("firstName", "not found");
-        std::string lastName = u.value("lastName", "not found");
-        std::string email = u.value("email", "not found");
-        std::string phone = u.value("phone", "not found");
-        std::string password = u.value("password", "not found");
-        std::string id = u.value("id", "not found");
+        std::string firstName = u.value(JsonKeys::firstName, "not found");
+        std::string lastName = u.value(JsonKeys::lastName, "not found");
+        std::string email = u.value(JsonKeys::email, "not found");
+        std::string phone = u.value(JsonKeys::phone, "not found");
+        std::string password = u.value(JsonKeys::password, "not found");
+        std::string id = u.value(JsonKeys::id, "not found");
         User tmp{id, firstName, lastName, email, phone, password};
         data.push_back(tmp);
     }

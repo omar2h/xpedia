@@ -1,4 +1,5 @@
 #include "reservation_serializer.hpp"
+#include "../json_keys.hpp"
 #include "../requests/reservation_request.hpp"
 #include "../reservations/flight_reservation.hpp"
 #include "../reservations/hotel_reservation.hpp"
@@ -20,81 +21,81 @@ json ReservationSerializer::toJson(const Reservation &reservation)
 
     reservation.accept(*this);
 
-    obj["type"] = reservation.getType();
-    obj["requestType"] = reservation.getRequestType();
+    obj[JsonKeys::type] = reservation.getType();
+    obj[JsonKeys::requestType] = reservation.getRequestType();
 
     return obj;
 }
 
 void ReservationSerializer::visit(const FlightReservation &flight)
 {
-    obj["airline"] = flight.getAirline();
+    obj[JsonKeys::airline] = flight.getAirline();
 
-    obj["from"] = flight.getFrom();
-    obj["to"] = flight.getTo();
+    obj[JsonKeys::from] = flight.getFrom();
+    obj[JsonKeys::to] = flight.getTo();
 
-    obj["date"] = flight.getDate();
+    obj[JsonKeys::date] = flight.getDate();
 
-    obj["adults"] = flight.getAdults();
-    obj["children"] = flight.getChildren();
+    obj[JsonKeys::adults] = flight.getAdults();
+    obj[JsonKeys::children] = flight.getChildren();
 
-    obj["cost"] = flight.totalCost();
+    obj[JsonKeys::cost] = flight.totalCost();
 }
 
 void ReservationSerializer::visit(const HotelReservation &hotel)
 {
-    obj["hotel"] = hotel.getHotelName();
+    obj[JsonKeys::hotel] = hotel.getHotelName();
 
-    obj["from"] = hotel.getFromDate();
-    obj["to"] = hotel.getToDate();
+    obj[JsonKeys::from] = hotel.getFromDate();
+    obj[JsonKeys::to] = hotel.getToDate();
 
-    obj["city"] = hotel.getCity();
+    obj[JsonKeys::city] = hotel.getCity();
 
-    obj["room_type"] = hotel.getRoomType();
+    obj[JsonKeys::roomType] = hotel.getRoomType();
 
-    obj["rooms"] = hotel.getRooms();
+    obj[JsonKeys::rooms] = hotel.getRooms();
 
-    obj["adults"] = hotel.getAdults();
-    obj["children"] = hotel.getChildren();
+    obj[JsonKeys::adults] = hotel.getAdults();
+    obj[JsonKeys::children] = hotel.getChildren();
 
-    obj["cost"] = hotel.totalCost();
+    obj[JsonKeys::cost] = hotel.totalCost();
 }
 
 std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json &obj)
 {
-    RequestType requestType = obj["requestType"].get<RequestType>();
+    RequestType requestType = obj[JsonKeys::requestType].get<RequestType>();
 
     if (requestType == RequestType::flight)
     {
         FlightReservationData data;
-        data.airline = obj["airline"];
-        data.from = obj["from"];
-        data.to = obj["to"];
+        data.airline = obj[JsonKeys::airline];
+        data.from = obj[JsonKeys::from];
+        data.to = obj[JsonKeys::to];
 
-        data.date = obj["date"];
+        data.date = obj[JsonKeys::date];
 
-        data.adults = obj["adults"];
-        data.children = obj["children"];
+        data.adults = obj[JsonKeys::adults];
+        data.children = obj[JsonKeys::children];
 
-        data.cost = obj["cost"];
+        data.cost = obj[JsonKeys::cost];
         return std::make_unique<FlightReservation>(data);
     }
 
     HotelReservationData data;
-    data.hotelName = obj["hotel"];
+    data.hotelName = obj[JsonKeys::hotel];
 
-    data.fromDate = obj["from"];
-    data.toDate = obj["to"];
+    data.fromDate = obj[JsonKeys::from];
+    data.toDate = obj[JsonKeys::to];
 
-    data.city = obj["city"];
+    data.city = obj[JsonKeys::city];
 
-    data.roomType = obj["room_type"];
+    data.roomType = obj[JsonKeys::roomType];
 
-    data.adults = obj["adults"];
-    data.children = obj["children"];
-    data.rooms = obj["rooms"];
+    data.adults = obj[JsonKeys::adults];
+    data.children = obj[JsonKeys::children];
+    data.rooms = obj[JsonKeys::rooms];
 
-    data.cost = obj["cost"];
+    data.cost = obj[JsonKeys::cost];
 
     return std::make_unique<HotelReservation>(data);
 }

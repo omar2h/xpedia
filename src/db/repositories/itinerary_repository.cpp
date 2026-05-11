@@ -1,3 +1,4 @@
+#include "../../model/json_keys.hpp"
 #include "../storage/file_storage.hpp"
 #include "../mappers/itinerary_mapper.hpp"
 #include "itinerary_repository.hpp"
@@ -11,13 +12,13 @@ void ItineraryRepository::save(const std::string &customerId, const Itinerary &i
 {
     json obj = ItineraryMapper::toJson(itinerary);
 
-    obj["customer_id"] = customerId;
+    obj[JsonKeys::customerId] = customerId;
     storage.writeJsonToFile("itineraries.json", obj, true);
 }
 
 std::vector<Itinerary> ItineraryRepository::findByCustomerId(const std::string &customerId) const
 {
-    json arr = storage.getObjectsWithAttribute("itineraries.json", "customer_id", customerId);
+    json arr = storage.getObjectsWithAttribute("itineraries.json", JsonKeys::customerId, customerId);
 
     std::vector<Itinerary> itineraries;
 

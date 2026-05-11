@@ -1,5 +1,6 @@
 #include "itinerary_mapper.hpp"
 
+#include "../../model/json_keys.hpp"
 #include "../../model/serializers/reservation_serializer.hpp"
 
 json ItineraryMapper::toJson(const Itinerary &itinerary)
@@ -15,9 +16,9 @@ json ItineraryMapper::toJson(const Itinerary &itinerary)
         reservations.push_back(serializer.toJson(*res));
     }
 
-    obj["reservations"] = reservations;
-    obj["id"] = itinerary.getId();
-    obj["cost"] = itinerary.totalCost();
+    obj[JsonKeys::reservations] = reservations;
+    obj[JsonKeys::id] = itinerary.getId();
+    obj[JsonKeys::cost] = itinerary.totalCost();
 
     return obj;
 }
@@ -26,11 +27,11 @@ Itinerary ItineraryMapper::fromJson(const json &obj)
 {
     Itinerary itinerary;
 
-    itinerary.setId(obj.value("id", "not found"));
+    itinerary.setId(obj.value(JsonKeys::id, "not found"));
 
-    itinerary.setCost(obj.value("cost", -1.0));
+    itinerary.setCost(obj.value(JsonKeys::cost, -1.0));
 
-    json arr = obj["reservations"];
+    json arr = obj[JsonKeys::reservations];
 
     for (const auto &resObj : arr)
     {
