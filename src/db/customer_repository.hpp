@@ -13,13 +13,13 @@ class CustomerRepository
 public:
     explicit CustomerRepository(FileStorage &storage);
 
-    Customer getCustomer(const User &) const;
+    [[nodiscard]] Customer getCustomer(const User &) const;
 
     void updateCustomer(const Customer &) const;
 
-    json convertCardToJson(const PaymentCard &) const;
+    [[nodiscard]] json convertCardToJson(const PaymentCard &) const;
 
-    json convertCustomerToJson(const Customer &) const;
+    [[nodiscard]] json convertCustomerToJson(const Customer &) const;
 
-    bool customerExists(const std::string &) const;
+    [[nodiscard]] bool customerExists(const std::string &) const;
 };

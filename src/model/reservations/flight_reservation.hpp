@@ -29,15 +29,15 @@ public:
     FlightReservation &operator=(FlightReservation &&) noexcept = default;
     ~FlightReservation() = default;
 
-    std::unique_ptr<Reservation> clone() const override;
+    [[nodiscard]] std::unique_ptr<Reservation> clone() const override;
 
     void accept(ReservationVisitor &) const override;
 
-    double totalCost() const override;
+    [[nodiscard]] double totalCost() const override;
 
-    std::string toString() const override;
+    [[nodiscard]] std::string toString() const override;
 
-    std::string toSummaryString() const override;
+    [[nodiscard]] std::string toSummaryString() const override;
 
     void setRequest(std::unique_ptr<ReservationRequest>) override;
 

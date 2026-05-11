@@ -3,5 +3,5 @@
 class InputHandler
 {
 public:
-    static int getChoice(int, int);
+    [[nodiscard]] static int getChoice(int, int);
 };

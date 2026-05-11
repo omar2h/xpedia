@@ -9,7 +9,7 @@ class FlightRequestDataReader : public RequestDataReader
 
 public:
     FlightRequestDataReader();
-    ReservationRequest *read() override;
+    [[nodiscard]] ReservationRequest *read() override;
     ~FlightRequestDataReader() override
     {
     }

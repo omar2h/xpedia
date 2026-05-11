@@ -10,5 +10,5 @@ class LoginHandler
 
 public:
     explicit LoginHandler(Application &backend);
-    User login();
+    [[nodiscard]] User login();
 };

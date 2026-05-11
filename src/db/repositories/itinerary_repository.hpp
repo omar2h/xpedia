@@ -16,5 +16,5 @@ public:
 
     void save(const std::string &customerId, const Itinerary &itinerary) const;
 
-    std::vector<Itinerary> findByCustomerId(const std::string &customerId) const;
+    [[nodiscard]] std::vector<Itinerary> findByCustomerId(const std::string &customerId) const;
 };

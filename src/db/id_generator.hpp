@@ -5,5 +5,5 @@
 class IdGenerator
 {
 public:
-    static std::string generateId(const std::unordered_set<std::string> &);
+    [[nodiscard]] static std::string generateId(const std::unordered_set<std::string> &);
 };

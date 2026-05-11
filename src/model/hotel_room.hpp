@@ -12,8 +12,8 @@ class HotelRoom : public ItineraryItem
     std::string dateTo{};
 
 public:
-    std::string toString() const override;
-    std::unique_ptr<ItineraryItem> clone() const { return std::make_unique<HotelRoom>(*this); }
+    [[nodiscard]] std::string toString() const override;
+    [[nodiscard]] std::unique_ptr<ItineraryItem> clone() const { return std::make_unique<HotelRoom>(*this); }
     virtual ~HotelRoom() = default;
 
     std::string getHotelName() const { return hotelName; }
@@ -34,7 +34,7 @@ public:
     std::string getDateTo() const { return dateTo; }
     void setDateTo(const std::string &dateTo_) { dateTo = dateTo_; }
 
-    double totalCost() const
+    [[nodiscard]] double totalCost() const
     {
         return pricePerNight;
     }

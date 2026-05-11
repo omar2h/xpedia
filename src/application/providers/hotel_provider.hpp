@@ -7,13 +7,13 @@
 class HotelProvider : public ReservationProvider
 {
 public:
-    std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const override = 0;
+    [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const override = 0;
 
-    bool reserve(Reservation *) const override = 0;
+    [[nodiscard]] bool reserve(Reservation *) const override = 0;
 
-    std::string getName() const override = 0;
+    [[nodiscard]] std::string getName() const override = 0;
 
-    std::unique_ptr<ReservationProvider> clone() const override = 0;
+    [[nodiscard]] std::unique_ptr<ReservationProvider> clone() const override = 0;
 
     ~HotelProvider() override = default;
 };

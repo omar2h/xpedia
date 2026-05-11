@@ -17,7 +17,7 @@ public:
     explicit UserRepository(FileStorage &storage);
 
     void validateUserSignIn(const User &);
-    static std::string generateUserId();
-    static json convertUserToJson(const User &);
-    static std::vector<User> getUsersFromObjects(json);
+    [[nodiscard]] static std::string generateUserId();
+    [[nodiscard]] static json convertUserToJson(const User &);
+    [[nodiscard]] static std::vector<User> getUsersFromObjects(json);
 };

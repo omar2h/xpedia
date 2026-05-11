@@ -5,6 +5,6 @@
 class RequestDataReader
 {
 public:
-    virtual ReservationRequest *read() = 0;
+    [[nodiscard]] virtual ReservationRequest *read() = 0;
     virtual ~RequestDataReader() = 0;
 };

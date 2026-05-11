@@ -9,6 +9,6 @@ class HotelRequestDataReader : public RequestDataReader
 
 public:
     HotelRequestDataReader();
-    ReservationRequest *read() override;
+    [[nodiscard]] ReservationRequest *read() override;
     ~HotelRequestDataReader() = default;
 };

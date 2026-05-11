@@ -14,11 +14,11 @@ public:
     std::string getDate() const { return date; }
     void setDate(const std::string &date_) { date = date_; }
 
-    double getTotalCost() const { return totalCost; }
+    [[nodiscard]] double getTotalCost() const { return totalCost; }
     void setTotalCost(double totalCost_) { totalCost = totalCost_; }
 
-    std::string toString() const override;
-    std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<Flight>(*this); }
+    [[nodiscard]] std::string toString() const override;
+    [[nodiscard]] std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<Flight>(*this); }
 
     ~Flight() override = default;
 };

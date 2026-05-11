@@ -17,19 +17,19 @@ class ConsoleFrontend : public IFrontend
 public:
     ConsoleFrontend(Application &backend, LoginHandler &loginHandler, SignupHandler &signupHandler);
 
-    int displayCreateItineraryMenu() override;
+    [[nodiscard]] int displayCreateItineraryMenu() override;
     void readRequestData(ReservationRequest &, RequestType) override;
-    int readReservationChoice(const std::vector<std::unique_ptr<ItineraryItem>> &) override;
-    int displayPaymentOptions(const std::vector<PaymentCard> &) override;
-    PaymentCard readCard() override;
-    int displayPaymentServices() override;
+    [[nodiscard]] int readReservationChoice(const std::vector<std::unique_ptr<ItineraryItem>> &) override;
+    [[nodiscard]] int displayPaymentOptions(const std::vector<PaymentCard> &) override;
+    [[nodiscard]] PaymentCard readCard() override;
+    [[nodiscard]] int displayPaymentServices() override;
     void displayItinerary(const Itinerary &) override;
     void displayItineraries(const std::vector<Itinerary> &) override;
-    int showStartMenu() override;
+    [[nodiscard]] int showStartMenu() override;
     void displayWelcomeMessage(const std::string &, const std::string &) override;
-    int displayMainMenu() override;
+    [[nodiscard]] int displayMainMenu() override;
     void displayUserProfile(const User &user) override;
-    User login() override;
+    [[nodiscard]] User login() override;
     void signup() override;
     void showMessage(const std::string &msg) override;
     void showError(const std::string &msg) override;
