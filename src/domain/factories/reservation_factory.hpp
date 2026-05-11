@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../../domain/entities/reservation.hpp"
+#include "../entities/reservation.hpp"
 enum class RequestType;
 
 class ReservationFactory

@@ -1,6 +1,6 @@
 #include "reservation_factory.hpp"
-#include "../../domain/entities/flight_reservation.hpp"
-#include "../../domain/entities/hotel_reservation.hpp"
+#include "../entities/flight_reservation.hpp"
+#include "../entities/hotel_reservation.hpp"
 
 std::unique_ptr<Reservation> ReservationFactory::getReservation(RequestType type)
 {

@@ -7,7 +7,7 @@
 #include "domain/entities/itinerary.hpp"
 #include "domain/entities/itinerary_item.hpp"
 #include "application/factories/reservation_request_factory.hpp"
-#include "application/factories/reservation_factory.hpp"
+#include "domain/factories/reservation_factory.hpp"
 #include "frontend/login_handler.hpp"
 #include "frontend/signup_handler.hpp"
 #include "application/services/auth_service.hpp"

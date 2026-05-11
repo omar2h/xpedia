@@ -10,7 +10,6 @@ target_sources(application
         use_cases/list_itineraries_use_case.cpp
         requests/flight_request.cpp
         requests/hotel_request.cpp
-        factories/reservation_factory.cpp
         factories/reservation_request_factory.cpp
 )
 

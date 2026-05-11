@@ -4,7 +4,7 @@
 #include "../../domain/entities/itinerary_item.hpp"
 #include "../../application/requests/reservation_request.hpp"
 #include "../../application/factories/reservation_request_factory.hpp"
-#include "../../application/factories/reservation_factory.hpp"
+#include "../../domain/factories/reservation_factory.hpp"
 #include "../../util/id_generator.hpp"
 #include <memory>
 #include <vector>

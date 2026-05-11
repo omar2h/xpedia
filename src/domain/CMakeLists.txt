@@ -11,6 +11,7 @@ target_sources(domain
         entities/itinerary_item.cpp
         entities/payment_card.cpp
         entities/user.cpp
+        factories/reservation_factory.cpp
 )
 
 target_include_directories(domain
