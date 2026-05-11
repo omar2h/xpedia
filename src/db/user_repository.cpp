@@ -25,8 +25,7 @@ void UserRepository::validateUserSignIn(const User &u)
 
 std::string UserRepository::generateUserId()
 {
-    std::string newId = generateId(usersIds);
-    usersIds.insert(newId);
+    std::string newId = generateId();
     return newId;
 }
 

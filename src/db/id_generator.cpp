@@ -1,24 +1,30 @@
 #include "id_generator.hpp"
-#include "database.hpp"
 #include <random>
-#include <string>
+#include <sstream>
+#include <iomanip>
 
-int randomInRange(int minimum, int maximum)
+static std::mt19937 &rng()
 {
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_int_distribution<int> dist(minimum, maximum);
-    return dist(mt);
+    static std::mt19937 mt{std::random_device{}()};
+    return mt;
 }
 
-std::string generateId(const std::unordered_set<std::string> &ids)
+static std::string hex8()
 {
-    int id{};
-    do
-    {
-        id = randomInRange(1, 999);
+    std::uniform_int_distribution<uint32_t> dist(0, 0xFFFFFFFF);
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0') << std::setw(8) << dist(rng());
+    return oss.str();
+}
 
-    } while (ids.count(std::to_string(id)));
-
-    return std::to_string(id);
+std::string generateId()
+{
+    std::ostringstream oss;
+    // UUID v4 format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+    oss << hex8() << "-"
+        << hex8().substr(0, 4) << "-4" << hex8().substr(0, 3) << "-"
+        << std::hex << (8 + std::uniform_int_distribution<int>(0, 3)(rng()))
+        << hex8().substr(0, 3) << "-"
+        << hex8() << hex8();
+    return oss.str();
 }

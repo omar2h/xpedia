@@ -150,12 +150,11 @@ void Application::listItineraries(const User &user, IFrontend &frontend)
 
 void Application::createItinerary(User &user, IFrontend &frontend)
 {
-    std::unordered_set<std::string> ids{};
     Itinerary currItinerary;
 
     while (true)
     {
-        currItinerary.setId(generateId(ids));
+        currItinerary.setId(generateId());
 
         int choice = frontend.displayCreateItineraryMenu();
 

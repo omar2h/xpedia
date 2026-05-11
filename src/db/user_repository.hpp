@@ -11,7 +11,6 @@ class FileStorage;
 class UserRepository
 {
     FileStorage &m_storage;
-    std::unordered_set<std::string> usersIds;
 
 public:
     explicit UserRepository(FileStorage &storage);
