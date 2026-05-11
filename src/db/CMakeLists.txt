@@ -4,7 +4,6 @@ target_sources(db
     PRIVATE
         customer_repository.cpp
         database.cpp
-        id_generator.cpp
         user_repository.cpp
         repositories/itinerary_repository.cpp
         storage/file_storage.cpp
@@ -20,6 +19,7 @@ target_include_directories(db
 target_link_libraries(db
     PUBLIC
         model
+        util
 )
 
 target_compile_features(db PUBLIC cxx_std_17)

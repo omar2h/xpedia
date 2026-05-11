@@ -20,6 +20,8 @@ target_link_libraries(application
     PUBLIC
         model
         db
+    PRIVATE
+        util
 )
 
 target_compile_features(application PUBLIC cxx_std_17)

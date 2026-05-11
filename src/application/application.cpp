@@ -5,7 +5,7 @@
 #include "frontend_interface.hpp"
 #include "../model/factories/reservation_request_factory.hpp"
 #include "../model/factories/reservation_factory.hpp"
-#include "../db/id_generator.hpp"
+#include "../util/id_generator.hpp"
 #include <iostream>
 #include <typeinfo>
 class ItineraryItem;

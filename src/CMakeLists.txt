@@ -21,6 +21,7 @@ option(ENABLE_WARNINGS "Enable compiler warnings" ON)
 # ---- Subdirectories ----
 
 add_subdirectory(model)
+add_subdirectory(util)
 add_subdirectory(db)
 add_subdirectory(application)
 add_subdirectory(infrastructure)
@@ -37,6 +38,7 @@ target_link_libraries(travel_app
         infrastructure
         db
         model
+        util
 )
 
 target_include_directories(travel_app
