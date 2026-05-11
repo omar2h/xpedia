@@ -27,7 +27,7 @@ void App::run()
     {
         while (true)
         {
-            std::cout << "\n\n";
+            m_frontend.showMessage("\n");
             int choice = m_frontend.showStartMenu();
 
             if (choice == 1)
@@ -80,10 +80,10 @@ int main()
     Application application{database, flightProviderFactory, hotelProviderFactory,
                             reservationProviderFactory, paymentFactory,
                             requestFactory, reservationFactory};
-    LoginHandler loginHandler{application};
-    SignupHandler signupHandler{application};
     ConsoleOutput output;
     ConsoleInput input;
+    LoginHandler loginHandler{application, output, input};
+    SignupHandler signupHandler{application, output, input};
     ConsoleFrontend frontend{application, loginHandler, signupHandler, output, input};
 
     App app{frontend, application};

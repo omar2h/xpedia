@@ -1,30 +1,24 @@
 #include "signup_handler.hpp"
+#include "output.hpp"
+#include "input.hpp"
 #include "../model/user.hpp"
 #include "../application/application.hpp"
-#include <string>
-#include <iostream>
 
-SignupHandler::SignupHandler(Application &backend) : m_application(backend) {}
+SignupHandler::SignupHandler(Application &backend, IOutput &output, IInput &input)
+    : m_application(backend), m_output(output), m_input(input) {}
 
 void SignupHandler::signup()
 {
-    std::string firstName{};
-    std::string lastName{};
-    std::string email{};
-    std::string phone{};
-    std::string id{};
-    std::string password{};
-
-    std::cout << "First Name: ";
-    std::cin >> firstName;
-    std::cout << "Last Name: ";
-    std::cin >> lastName;
-    std::cout << "Email: ";
-    std::cin >> email;
-    std::cout << "Phone: ";
-    std::cin >> phone;
-    std::cout << "Password: ";
-    std::cin >> password;
+    m_output.write("First Name: ");
+    std::string firstName = m_input.readString();
+    m_output.write("Last Name: ");
+    std::string lastName = m_input.readString();
+    m_output.write("Email: ");
+    std::string email = m_input.readString();
+    m_output.write("Phone: ");
+    std::string phone = m_input.readString();
+    m_output.write("Password: ");
+    std::string password = m_input.readString();
 
     User usr(firstName, lastName, email, phone, password);
 

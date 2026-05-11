@@ -1,18 +1,17 @@
 #include "login_handler.hpp"
+#include "output.hpp"
+#include "input.hpp"
 #include "../application/application.hpp"
-#include <iostream>
 
-LoginHandler::LoginHandler(Application &backend)     : m_application(backend) {}
+LoginHandler::LoginHandler(Application &backend, IOutput &output, IInput &input)
+    : m_application(backend), m_output(output), m_input(input) {}
 
 User LoginHandler::login()
 {
-    std::string email{};
-    std::string password{};
-
-    std::cout << "Enter Email: ";
-    std::cin >> email;
-    std::cout << "Enter Password: ";
-    std::cin >> password;
+    m_output.write("Enter Email: ");
+    std::string email = m_input.readString();
+    m_output.write("Enter Password: ");
+    std::string password = m_input.readString();
 
     return m_application.userLogin(email, password);
 }
