@@ -4,6 +4,7 @@
 #include "../visitors/reservation_visitor.hpp"
 
 #include <sstream>
+#include <string>
 
 HotelReservation::HotelReservation(const HotelReservation &other)
     : item(nullptr),
@@ -92,9 +93,20 @@ void HotelReservation::accept(ReservationVisitor &visitor) const
     visitor.visit(*this);
 }
 
+static int getNights(const std::string &from, const std::string &to)
+{
+    auto toInt = [](const std::string &s, size_t pos, size_t len) {
+        return std::stoi(s.substr(pos, len));
+    };
+    int fromDays = toInt(from, 0, 4) * 365 + toInt(from, 5, 2) * 30 + toInt(from, 8, 2);
+    int toDays = toInt(to, 0, 4) * 365 + toInt(to, 5, 2) * 30 + toInt(to, 8, 2);
+    int nights = toDays - fromDays;
+    return nights > 0 ? nights : 1;
+}
+
 double HotelReservation::totalCost() const
 {
-    return item->totalCost() * request->getRooms();
+    return item->totalCost() * rooms * getNights(fromDate, toDate);
 }
 
 std::string HotelReservation::toString() const
