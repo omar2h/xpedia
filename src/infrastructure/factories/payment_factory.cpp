@@ -5,10 +5,14 @@
 
 std::unique_ptr<PaymentStrategy> PaymentFactory::getPaymentService(PaymentService service)
 {
-    if (service == PaymentService::paypal)
+    switch (service)
+    {
+    case PaymentService::paypal:
         return std::make_unique<PayPalPaymentStrategy>();
-    else if (service == PaymentService::stripe)
+    case PaymentService::stripe:
         return std::make_unique<StripePaymentStrategy>();
-    else if (service == PaymentService::square)
+    case PaymentService::square:
         return std::make_unique<SquarePaymentStrategy>();
+    }
+    throw std::invalid_argument("Unknown payment service");
 }

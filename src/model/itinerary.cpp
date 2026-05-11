@@ -1,6 +1,5 @@
 #include "itinerary.hpp"
 #include "itinerary_item.hpp"
-#include <iostream>
 
 Itinerary::Itinerary(const Itinerary &other)
     : id(other.id), cost(other.cost)

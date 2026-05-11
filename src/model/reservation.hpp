@@ -24,13 +24,13 @@ class Reservation
     RequestType requestType;
 
 public:
-    virtual std::unique_ptr<Reservation> clone() const = 0;
+    [[nodiscard]] virtual std::unique_ptr<Reservation> clone() const = 0;
 
-    virtual double totalCost() const = 0;
+    [[nodiscard]] virtual double totalCost() const = 0;
 
-    virtual std::string toString() const = 0;
+    [[nodiscard]] virtual std::string toString() const = 0;
 
-    virtual std::string toSummaryString() const = 0;
+    [[nodiscard]] virtual std::string toSummaryString() const = 0;
 
     virtual void accept(ReservationVisitor &) const = 0;
 

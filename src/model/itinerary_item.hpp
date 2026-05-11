@@ -11,8 +11,8 @@ class ItineraryItem
     RequestType requestType;
 
 public:
-    virtual std::string toString() const = 0;
-    virtual std::unique_ptr<ItineraryItem> clone() const = 0;
+    [[nodiscard]] virtual std::string toString() const = 0;
+    [[nodiscard]] virtual std::unique_ptr<ItineraryItem> clone() const = 0;
     virtual ~ItineraryItem() = default;
 
     virtual ReservationType getType() const;

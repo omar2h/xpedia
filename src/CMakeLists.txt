@@ -28,7 +28,7 @@ add_subdirectory(frontend)
 
 # ---- Main executable ----
 
-add_executable(travel_app app.cpp error.cpp)
+add_executable(travel_app app.cpp)
 
 target_link_libraries(travel_app
     PRIVATE
