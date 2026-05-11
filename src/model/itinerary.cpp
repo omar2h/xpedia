@@ -21,12 +21,12 @@ Itinerary &Itinerary::operator=(const Itinerary &other)
     return *this;
 }
 
-void Itinerary::add_item(std::unique_ptr<Reservation> res)
+void Itinerary::addItem(std::unique_ptr<Reservation> res)
 {
     reservations.push_back(std::move(res));
 }
 
-void Itinerary::Clear()
+void Itinerary::clear()
 {
     reservations.clear();
 }

@@ -21,8 +21,8 @@ public:
 
     std::string getId() const { return id; }
     void setId(std::string id_) { id = id_; }
-    void add_item(std::unique_ptr<Reservation>);
-    void Clear();
+    void addItem(std::unique_ptr<Reservation>);
+    void clear();
     std::string toString() const;
     std::string toSummaryString() const;
     double total_cost() const;

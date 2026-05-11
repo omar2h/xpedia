@@ -34,7 +34,7 @@ Itinerary ItineraryMapper::from_json(const json &obj)
 
     for (const auto &resObj : arr)
     {
-        itinerary.add_item(ReservationSerializer::from_json(resObj));
+        itinerary.addItem(ReservationSerializer::from_json(resObj));
     }
 
     return itinerary;

@@ -119,7 +119,7 @@ void Application::add_new_item(RequestType requestType, Itinerary &currItinerary
     reservation->setItem(items[choice - 1].get());
     reservation->setRequest(std::move(request));
 
-    currItinerary.add_item(std::move(reservation));
+    currItinerary.addItem(std::move(reservation));
 }
 
 void Application::list_itineraries(const User &user, IFrontend &frontend)
@@ -170,12 +170,12 @@ void Application::create_itinerary(User &user, IFrontend &frontend)
 
             payItinerary(currItinerary, user, frontend);
 
-            currItinerary.Clear();
+            currItinerary.clear();
             return;
         }
         else if (choice == 4)
         {
-            currItinerary.Clear();
+            currItinerary.clear();
             return;
         }
     }
