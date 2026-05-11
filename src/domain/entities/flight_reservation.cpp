@@ -63,24 +63,6 @@ double FlightReservation::totalCost() const
     return cost;
 }
 
-std::string FlightReservation::toString() const
-{
-    std::ostringstream oss;
-    oss << "Airline: " << airline << ": From " << from << " to " << to << " on " << date << "\n";
-    oss << "Adults: " << adults << ", children: " << children << "\n";
-    oss << "Total Cost:" << totalCost() << "\n";
-    return oss.str();
-}
-
-std::string FlightReservation::toSummaryString() const
-{
-    std::ostringstream oss;
-    oss << "Airline: " << airline << ", From " << from << " to " << to << " on " << date << "\n";
-    oss << " Adults: " << adults << ", children: " << children << "\n";
-    oss << " Total Cost:" << totalCost() << "\n";
-    return oss.str();
-}
-
 void FlightReservation::setItem(const ItineraryItem &i)
 {
     assert(dynamic_cast<const Flight *>(&i) != nullptr && "Item must be a Flight");

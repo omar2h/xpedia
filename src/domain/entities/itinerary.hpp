@@ -23,8 +23,6 @@ public:
     void setId(std::string id_) { id = id_; }
     void addItem(std::unique_ptr<Reservation>);
     void clear();
-    [[nodiscard]] std::string toString() const;
-    [[nodiscard]] std::string toSummaryString() const;
     [[nodiscard]] double totalCost() const;
     const std::vector<std::unique_ptr<Reservation>> &getReservations() const;
     void setReservations(std::vector<std::unique_ptr<Reservation>> reservations_);

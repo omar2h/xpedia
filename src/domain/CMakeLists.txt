@@ -9,7 +9,6 @@ target_sources(domain
         entities/hotel_room.cpp
         entities/itinerary.cpp
         entities/itinerary_item.cpp
-        entities/payment_card.cpp
         entities/user.cpp
         factories/reservation_factory.cpp
 )

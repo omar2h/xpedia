@@ -41,26 +41,6 @@ void Itinerary::setReservations(std::vector<std::unique_ptr<Reservation>> reserv
     reservations = std::move(reservations_);
 }
 
-std::string Itinerary::toString() const
-{
-    std::string str{};
-    for (const auto &res : reservations)
-    {
-        str += res->toString();
-    }
-    return str;
-}
-
-std::string Itinerary::toSummaryString() const
-{
-    std::string str{};
-    for (const auto &res : reservations)
-    {
-        str += res->toSummaryString();
-    }
-    return str;
-}
-
 double Itinerary::totalCost() const
 {
     double cost{};

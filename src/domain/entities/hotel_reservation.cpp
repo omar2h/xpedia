@@ -81,26 +81,6 @@ double HotelReservation::totalCost() const
     return cost;
 }
 
-std::string HotelReservation::toString() const
-{
-    std::ostringstream oss;
-    oss << "Hotel: " << hotelName << "," << city << ", Room: " << roomType << "(" << rooms << ") "
-        << ", From: " << fromDate << " to: " << toDate << "\n";
-    oss << "Adults: " << adults << ", children: " << children << "\n";
-    oss << "Total Cost:" << totalCost() << "\n";
-    return oss.str();
-}
-
-std::string HotelReservation::toSummaryString() const
-{
-    std::ostringstream oss;
-    oss << "Hotel: " << hotelName << "," << city << ", Room: " << roomType << "(" << rooms << ") "
-        << ", From " << fromDate << " to " << toDate << "\n";
-    oss << " Adults: " << adults << ", children: " << children << "\n";
-    oss << " Total Cost:" << totalCost() << "\n";
-    return oss.str();
-}
-
 void HotelReservation::setItem(const ItineraryItem &i)
 {
     assert(dynamic_cast<const HotelRoom *>(&i) != nullptr && "Item must be a HotelRoom");

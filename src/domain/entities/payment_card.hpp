@@ -12,7 +12,6 @@ class PaymentCard
 public:
     PaymentCard() = default;
     PaymentCard(const std::string &number, const std::string &owner, const std::string &date, const std::string &ccv) : number{number}, owner{owner}, expiryDate{date}, ccv{ccv} {}
-    [[nodiscard]] std::string toString() const;
 
     std::string getOwner() const { return owner; }
     void setOwner(const std::string &owner_) { owner = owner_; }

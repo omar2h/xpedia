@@ -17,7 +17,6 @@ public:
     [[nodiscard]] double getTotalCost() const { return totalCost; }
     void setTotalCost(double totalCost_) { totalCost = totalCost_; }
 
-    [[nodiscard]] std::string toString() const override;
     [[nodiscard]] std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<Flight>(*this); }
 
     ~Flight() override = default;

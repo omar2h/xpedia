@@ -12,7 +12,6 @@ class HotelRoom : public ItineraryItem
     std::string dateTo{};
 
 public:
-    [[nodiscard]] std::string toString() const override;
     [[nodiscard]] std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<HotelRoom>(*this); }
     virtual ~HotelRoom() = default;
 

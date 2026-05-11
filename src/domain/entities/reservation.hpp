@@ -27,10 +27,6 @@ public:
 
     [[nodiscard]] virtual double totalCost() const = 0;
 
-    [[nodiscard]] virtual std::string toString() const = 0;
-
-    [[nodiscard]] virtual std::string toSummaryString() const = 0;
-
     virtual void accept(ReservationVisitor &) const = 0;
 
     virtual void setItem(const ItineraryItem &) = 0;

@@ -6,8 +6,77 @@
 #include "../application/requests/hotel_request.hpp"
 #include "../domain/entities/itinerary_item.hpp"
 #include "../domain/entities/itinerary.hpp"
+#include "../domain/entities/flight.hpp"
+#include "../domain/entities/hotel_room.hpp"
+#include "../domain/entities/flight_reservation.hpp"
+#include "../domain/entities/hotel_reservation.hpp"
+#include "../domain/entities/payment_card.hpp"
 #include "login_handler.hpp"
 #include "signup_handler.hpp"
+
+// Formatters (presentation layer - moved out of domain)
+namespace
+{
+    std::string formatItineraryItem(const ItineraryItem &item)
+    {
+        if (const Flight *flight = dynamic_cast<const Flight *>(&item))
+        {
+            std::ostringstream oss;
+            oss << "Airline: " << flight->getAirline() << ", Cost: " << flight->getTotalCost() << ", Date: " << flight->getDate();
+            return oss.str();
+        }
+        else if (const HotelRoom *hotel = dynamic_cast<const HotelRoom *>(&item))
+        {
+            std::ostringstream oss;
+            oss << "Hotel: " << hotel->getHotelName() << ", " << hotel->getRoomType() << " (" << hotel->getAvailableRooms() << " available), "
+                << "Price/night: " << hotel->getPricePerNight() << ", From: " << hotel->getDateFrom() << " To: " << hotel->getDateTo();
+            return oss.str();
+        }
+        return "Unknown item";
+    }
+
+    std::string formatReservationSummary(const Reservation &res)
+    {
+        if (const FlightReservation *flight = dynamic_cast<const FlightReservation *>(&res))
+        {
+            std::ostringstream oss;
+            oss << "Flight: " << flight->getAirline() << ", From " << flight->getFrom() << " to " << flight->getTo()
+                << " on " << flight->getDate() << ", Adults: " << flight->getAdults()
+                << ", Children: " << flight->getChildren() << ", Total Cost: " << flight->totalCost() << "\n";
+            return oss.str();
+        }
+        else if (const HotelReservation *hotel = dynamic_cast<const HotelReservation *>(&res))
+        {
+            std::ostringstream oss;
+            oss << "Hotel: " << hotel->getHotelName() << ", " << hotel->getCity() << ", Room: " << hotel->getRoomType()
+                << " (" << hotel->getRooms() << " rooms), From " << hotel->getFromDate() << " to " << hotel->getToDate()
+                << ", Adults: " << hotel->getAdults() << ", Children: " << hotel->getChildren()
+                << ", Total Cost: " << hotel->totalCost() << "\n";
+            return oss.str();
+        }
+        return "Unknown reservation";
+    }
+
+    std::string formatItinerarySummary(const Itinerary &itinerary)
+    {
+        std::ostringstream oss;
+        const auto &reservations = itinerary.getReservations();
+        int count = static_cast<int>(reservations.size());
+        oss << "Itinerary of " << count << " reservations\n";
+        for (const auto &resPtr : reservations)
+        {
+            oss << formatReservationSummary(*resPtr);
+        }
+        return oss.str();
+    }
+
+    std::string formatPaymentCard(const PaymentCard &card)
+    {
+        std::ostringstream oss;
+        oss << "Card: " << card.getNumber() << ", Owner: " << card.getOwner() << ", Expiry: " << card.getExpiryDate();
+        return oss.str();
+    }
+} // namespace
 
 ConsoleFrontend::ConsoleFrontend(LoginHandler &loginHandler,
                                  SignupHandler &signupHandler, IOutput &output, IInput &input)
@@ -77,7 +146,7 @@ int ConsoleFrontend::readReservationChoice(const std::vector<std::unique_ptr<Iti
 
     for (const auto &item : items)
     {
-        options.push_back(item->toString());
+        options.push_back(formatItineraryItem(*item));
     }
 
     int itemsCount{(int)items.size()};
@@ -105,7 +174,7 @@ int ConsoleFrontend::displayPaymentOptions(const std::vector<PaymentCard> &cards
 
     for (const auto &card : cards)
     {
-        options.push_back(card.toString());
+        options.push_back(formatPaymentCard(card));
     }
 
     int cardsCount{(int)cards.size()};
@@ -184,7 +253,7 @@ void ConsoleFrontend::displayItinerary(const Itinerary &itinerary)
     const auto &reservations = itinerary.getReservations();
     int count{(int)reservations.size()};
     m_output.writeLine("Itinerary of " + std::to_string(count) + " reservations");
-    m_output.writeLine(itinerary.toSummaryString());
+    m_output.writeLine(formatItinerarySummary(itinerary));
 }
 
 void ConsoleFrontend::readFlightRequestData(FlightRequest &request)

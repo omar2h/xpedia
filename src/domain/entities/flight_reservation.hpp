@@ -29,10 +29,6 @@ public:
 
     [[nodiscard]] double totalCost() const override;
 
-    [[nodiscard]] std::string toString() const override;
-
-    [[nodiscard]] std::string toSummaryString() const override;
-
     void setItem(const ItineraryItem &) override;
 
     // Setters for domain state
