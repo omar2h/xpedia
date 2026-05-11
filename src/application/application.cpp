@@ -155,7 +155,7 @@ void Application::createItinerary(User &user, IFrontend &frontend)
 
     while (true)
     {
-        currItinerary.setId(IdGenerator::generateId(ids));
+        currItinerary.setId(generateId(ids));
 
         int choice = frontend.displayCreateItineraryMenu();
 

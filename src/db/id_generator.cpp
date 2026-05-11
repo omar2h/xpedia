@@ -11,7 +11,7 @@ int randomInRange(int minimum, int maximum)
     return dist(mt);
 }
 
-std::string IdGenerator::generateId(const std::unordered_set<std::string> &ids)
+std::string generateId(const std::unordered_set<std::string> &ids)
 {
     int id{};
     do
