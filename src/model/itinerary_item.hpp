@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <iostream>
 #include <memory>
 
 enum class ReservationType;
@@ -14,10 +13,7 @@ class ItineraryItem
 public:
     virtual std::string toString() const = 0;
     virtual std::unique_ptr<ItineraryItem> clone() const = 0;
-    virtual ~ItineraryItem()
-    {
-        std::cout << "ItineraryItem destructor\n";
-    }
+    virtual ~ItineraryItem() = default;
 
     virtual ReservationType getType() const;
     virtual void setType(const ReservationType &);

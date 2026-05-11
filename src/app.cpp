@@ -1,5 +1,4 @@
 #include "app.hpp"
-#include "frontend/frontend.hpp"
 #include "frontend/console_frontend.hpp"
 #include "model/user.hpp"
 #include "frontend/login_handler.hpp"

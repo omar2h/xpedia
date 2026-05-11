@@ -1,8 +1,6 @@
 #pragma once
 
 #include "itinerary_item.hpp"
-#include <iostream>
-
 class Flight : public ItineraryItem
 {
     std::string airline{};
@@ -22,8 +20,5 @@ public:
     std::string toString() const override;
     std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<Flight>(*this); }
 
-    ~Flight() override
-    {
-        std::cout << "flight destructor\n";
-    }
+    ~Flight() override = default;
 };
