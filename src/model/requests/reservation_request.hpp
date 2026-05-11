@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 enum class RequestType
@@ -11,7 +12,7 @@ enum class RequestType
 class ReservationRequest
 {
 public:
-    virtual ReservationRequest *clone() = 0;
+    virtual std::unique_ptr<ReservationRequest> clone() = 0;
     virtual std::string toString() const = 0;
     virtual ~ReservationRequest() = 0;
 };

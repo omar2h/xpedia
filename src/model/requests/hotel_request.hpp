@@ -1,6 +1,7 @@
 #pragma once
 
 #include "reservation_request.hpp"
+#include <memory>
 
 class HotelRequest : public ReservationRequest
 {
@@ -14,7 +15,7 @@ class HotelRequest : public ReservationRequest
 public:
     HotelRequest() = default;
     HotelRequest(const std::string &, const std::string &, const std::string &, int, int);
-    ReservationRequest *clone() override;
+    std::unique_ptr<ReservationRequest> clone() override;
     std::string toString() const override;
 
     std::string getFromDate() const { return fromDate; }

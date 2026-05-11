@@ -24,7 +24,7 @@ ReservationRequest *FlightRequestDataReader::read()
     request->setAdults(adults);
     request->setChildren(children);
 
-    return request->clone();
+    return request->clone().release();
 }
 FlightRequestDataReader::FlightRequestDataReader()
 {

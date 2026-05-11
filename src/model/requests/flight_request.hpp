@@ -1,6 +1,7 @@
 #pragma once
 
 #include "reservation_request.hpp"
+#include <memory>
 #include <string>
 
 class FlightRequest : public ReservationRequest
@@ -15,7 +16,7 @@ public:
     FlightRequest() = default;
     FlightRequest(const std::string &, const std::string &, const std::string &, int, int);
 
-    ReservationRequest *clone() override;
+    std::unique_ptr<ReservationRequest> clone() override;
 
     int getAdults() const { return adults; }
     void setAdults(int adults_) { adults = adults_; }

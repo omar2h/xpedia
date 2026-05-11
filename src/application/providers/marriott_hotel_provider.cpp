@@ -5,7 +5,8 @@
 
 std::vector<std::unique_ptr<ItineraryItem>> MarriottHotelProvider::search_reservations() const
 {
-    HotelRequest *req = dynamic_cast<HotelRequest *>(getRequest());
+    auto reqPtr = getRequest();
+    HotelRequest *req = dynamic_cast<HotelRequest *>(reqPtr.get());
     std::vector<std::unique_ptr<ItineraryItem>> rooms;
     std::vector<MarriottFoundRoom> marriottRooms = MarriottHotelAPI::FindRooms(req->getFromDate(), req->getToDate(), req->getCity(), req->getRooms(), req->getAdults(), req->getChildren());
     for (const auto &room : marriottRooms)

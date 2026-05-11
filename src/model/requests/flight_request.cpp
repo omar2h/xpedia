@@ -1,4 +1,5 @@
 #include "flight_request.hpp"
+#include <memory>
 #include <sstream>
 
 FlightRequest::FlightRequest(const std::string &from, const std::string &to, const std::string &date, int adults,
@@ -6,9 +7,9 @@ FlightRequest::FlightRequest(const std::string &from, const std::string &to, con
 {
 }
 
-ReservationRequest *FlightRequest::clone()
+std::unique_ptr<ReservationRequest> FlightRequest::clone()
 {
-    return new FlightRequest(*this);
+    return std::make_unique<FlightRequest>(*this);
 }
 
 std::string FlightRequest::toString() const

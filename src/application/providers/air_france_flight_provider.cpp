@@ -3,7 +3,8 @@
 
 std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightProvider::search_reservations() const
 {
-    const FlightRequest *request = dynamic_cast<FlightRequest *>(getRequest());
+    auto req = getRequest();
+    const FlightRequest *request = dynamic_cast<FlightRequest *>(req.get());
 
     AirFranceOnlineAPI api{};
     api.SetInfo(request->getDate(), request->getFromCity(), request->getToCity());

@@ -5,7 +5,8 @@
 
 std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelProvider::search_reservations() const
 {
-    HotelRequest *req = dynamic_cast<HotelRequest *>(getRequest());
+    auto reqPtr = getRequest();
+    HotelRequest *req = dynamic_cast<HotelRequest *>(reqPtr.get());
     std::vector<std::unique_ptr<ItineraryItem>> rooms;
     std::vector<HiltonRoom> hiltonRooms = HiltonHotelAPI::SearchRooms(req->getCity(), req->getFromDate(), req->getToDate(), req->getAdults(), req->getChildren(), req->getRooms());
     for (const auto &room : hiltonRooms)

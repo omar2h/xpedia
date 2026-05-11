@@ -6,7 +6,8 @@
 
 std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::search_reservations() const
 {
-    FlightRequest const *request = dynamic_cast<FlightRequest *>(getRequest());
+    auto req = getRequest();
+    FlightRequest const *request = dynamic_cast<FlightRequest *>(req.get());
 
     vector<BritishAirwaysFlight> flightsBritishAirways = BritishAirwaysOnlineAPI::GetFlights(request->getFromCity(), request->getDate(), request->getToCity(), request->getAdults(), request->getChildren());
     std::vector<std::unique_ptr<ItineraryItem>> flights;
