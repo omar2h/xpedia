@@ -42,7 +42,7 @@ User Application::userLogin(const std::string &email, const std::string &passwor
 
 void Application::addCard(Customer &customer, IFrontend &frontend)
 {
-    PaymentCard card = frontend.read_card();
+    PaymentCard card = frontend.readCard();
     customer.addCard(card);
 
     m_database.updateCustomerInfo(customer);
@@ -57,7 +57,7 @@ int Application::makeReservations(Customer &customer, const Itinerary &currItine
 
     PaymentCard card = customer.getCards()[choice - 1];
 
-    choice = frontend.display_payment_services();
+    choice = frontend.displayPaymentServices();
 
     if (choice == -1)
         return choice;
@@ -65,10 +65,10 @@ int Application::makeReservations(Customer &customer, const Itinerary &currItine
     bool isPaid = withdrawMoney(card, choice, currItinerary);
 
     if (isPaid)
-        frontend.show_message("Transaction Succeeded");
+        frontend.showMessage("Transaction Succeeded");
     else
     {
-        frontend.show_error("Transaction Failed");
+        frontend.showError("Transaction Failed");
         return -1;
     }
 
@@ -86,7 +86,7 @@ void Application::payItinerary(const Itinerary &currItinerary, const User &user,
 
     if (isConfirmed == 1)
     {
-        frontend.show_message("Reservation is Confirmed");
+        frontend.showMessage("Reservation is Confirmed");
 
         m_database.saveItinerary(customer.getId(), currItinerary);
 
@@ -98,18 +98,18 @@ void Application::payItinerary(const Itinerary &currItinerary, const User &user,
     }
 
     if (isConfirmed == 0)
-        frontend.show_error("Reservation Failed, Itinerary Cancelled");
+        frontend.showError("Reservation Failed, Itinerary Cancelled");
 }
 
 void Application::addNewItem(RequestType requestType, Itinerary &currItinerary, IFrontend &frontend)
 {
     auto request = ReservationRequestFactory::getRequest(requestType);
 
-    frontend.read_request_data(*request, requestType);
+    frontend.readRequestData(*request, requestType);
 
     std::vector<std::unique_ptr<ItineraryItem>> items = getAvailableReservations(request.get(), requestType);
 
-    int choice = frontend.read_reservation_choice(items);
+    int choice = frontend.readReservationChoice(items);
 
     if (choice == -1)
         return;
@@ -128,7 +128,7 @@ void Application::listItineraries(const User &user, IFrontend &frontend)
 
     if (!isCustomer)
     {
-        frontend.show_message("User has no itineraries");
+        frontend.showMessage("User has no itineraries");
         return;
     }
 
@@ -136,13 +136,13 @@ void Application::listItineraries(const User &user, IFrontend &frontend)
 
     if (customer.getItinerariesIds().empty())
     {
-        frontend.show_message("User has no itineraries");
+        frontend.showMessage("User has no itineraries");
         return;
     }
 
     std::vector<Itinerary> customerItineraries = m_database.getCustomerItineraries(customer.getId());
 
-    frontend.display_itineraries(customerItineraries);
+    frontend.displayItineraries(customerItineraries);
 }
 
 void Application::createItinerary(User &user, IFrontend &frontend)
@@ -154,7 +154,7 @@ void Application::createItinerary(User &user, IFrontend &frontend)
     {
         currItinerary.setId(IdGenerator::generateId(ids));
 
-        int choice = frontend.display_create_itinerary_menu();
+        int choice = frontend.displayCreateItineraryMenu();
 
         if (choice == 1)
         {
@@ -166,7 +166,7 @@ void Application::createItinerary(User &user, IFrontend &frontend)
         }
         else if (choice == 3)
         {
-            frontend.display_itinerary(currItinerary);
+            frontend.displayItinerary(currItinerary);
 
             payItinerary(currItinerary, user, frontend);
 
@@ -228,7 +228,7 @@ int Application::selectCard(Customer &customer, IFrontend &frontend)
     while (true)
     {
         choice =
-            frontend.display_payment_options(customer.getCards());
+            frontend.displayPaymentOptions(customer.getCards());
 
         if (choice == -1)
             return -1;

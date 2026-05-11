@@ -21,12 +21,12 @@ void App::run()
         while (true)
         {
             std::cout << "\n\n";
-            int choice = m_frontend.show_start_menu();
+            int choice = m_frontend.showStartMenu();
 
             if (choice == 1)
             {
                 user = m_frontend.login();
-                m_frontend.display_welcome_message(user.getFirstName(), user.getLastName());
+                m_frontend.displayWelcomeMessage(user.getFirstName(), user.getLastName());
                 break;
             }
             else if (choice == 2)
@@ -39,11 +39,11 @@ void App::run()
 
         while (true)
         {
-            int choice = m_frontend.display_main_menu();
+            int choice = m_frontend.displayMainMenu();
 
             if (choice == 1)
             {
-                m_frontend.display_user_profile(user);
+                m_frontend.displayUserProfile(user);
             }
             else if (choice == 2)
             {

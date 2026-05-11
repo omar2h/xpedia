@@ -3,5 +3,5 @@
 class InputHandler
 {
 public:
-    static int get_choice(int, int);
+    static int getChoice(int, int);
 };

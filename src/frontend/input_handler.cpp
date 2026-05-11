@@ -1,7 +1,7 @@
 #include "input_handler.hpp"
 #include <iostream>
 
-int InputHandler::get_choice(int low, int high)
+int InputHandler::getChoice(int low, int high)
 {
     int choice{};
     std::cin >> choice;

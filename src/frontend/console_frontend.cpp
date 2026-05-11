@@ -12,7 +12,7 @@
 ConsoleFrontend::ConsoleFrontend(Application &backend, LoginHandler &loginHandler, SignupHandler &signupHandler)
     : m_application(backend), m_loginHandler(loginHandler), m_signupHandler(signupHandler) {}
 
-int ConsoleFrontend::display_create_itinerary_menu()
+int ConsoleFrontend::displayCreateItineraryMenu()
 {
     std::vector<std::string> menu{
         "Add Flight",
@@ -24,32 +24,32 @@ int ConsoleFrontend::display_create_itinerary_menu()
 
     while (true)
     {
-        Printer::print_menu(menu);
+        Printer::printMenu(menu);
 
         try
         {
-            return InputHandler::get_choice(1, menuCount);
+            return InputHandler::getChoice(1, menuCount);
         }
         catch (const std::exception &e)
         {
-            show_error(e.what());
+            showError(e.what());
         }
     }
 }
 
-void ConsoleFrontend::read_request_data(ReservationRequest &request, RequestType type)
+void ConsoleFrontend::readRequestData(ReservationRequest &request, RequestType type)
 {
     if (type == RequestType::flight)
     {
-        read_flight_request_data(dynamic_cast<FlightRequest &>(request));
+        readFlightRequestData(dynamic_cast<FlightRequest &>(request));
     }
     else if (type == RequestType::hotel)
     {
-        read_hotel_request_data(dynamic_cast<HotelRequest &>(request));
+        readHotelRequestData(dynamic_cast<HotelRequest &>(request));
     }
 }
 
-int ConsoleFrontend::read_reservation_choice(const std::vector<std::unique_ptr<ItineraryItem>> &items)
+int ConsoleFrontend::readReservationChoice(const std::vector<std::unique_ptr<ItineraryItem>> &items)
 {
     std::vector<std::string> options{};
 
@@ -62,22 +62,22 @@ int ConsoleFrontend::read_reservation_choice(const std::vector<std::unique_ptr<I
 
     while (true)
     {
-        Printer::print_options(options);
+        Printer::printOptions(options);
 
         std::cout << "Enter choice(-1 to cancel): ";
 
         try
         {
-            return InputHandler::get_choice(1, itemsCount);
+            return InputHandler::getChoice(1, itemsCount);
         }
         catch (const std::exception &e)
         {
-            show_error(e.what());
+            showError(e.what());
         }
     }
 }
 
-int ConsoleFrontend::display_payment_options(const std::vector<PaymentCard> &cards)
+int ConsoleFrontend::displayPaymentOptions(const std::vector<PaymentCard> &cards)
 {
     std::vector<std::string> options;
 
@@ -90,22 +90,22 @@ int ConsoleFrontend::display_payment_options(const std::vector<PaymentCard> &car
 
     while (true)
     {
-        Printer::print_options(options);
+        Printer::printOptions(options);
 
         std::cout << "Enter choice(0 to add card, -1 to cancel): ";
 
         try
         {
-            return InputHandler::get_choice(0, cardsCount);
+            return InputHandler::getChoice(0, cardsCount);
         }
         catch (const std::exception &e)
         {
-            show_error(e.what());
+            showError(e.what());
         }
     }
 }
 
-PaymentCard ConsoleFrontend::read_card()
+PaymentCard ConsoleFrontend::readCard()
 {
     std::string number;
     std::string owner;
@@ -123,7 +123,7 @@ PaymentCard ConsoleFrontend::read_card()
     return {number, owner, date, ccv};
 }
 
-int ConsoleFrontend::display_payment_services()
+int ConsoleFrontend::displayPaymentServices()
 {
     std::vector<std::string> services{
         "Paypal",
@@ -136,34 +136,34 @@ int ConsoleFrontend::display_payment_services()
     {
         std::cout << "Payment Services:\n";
 
-        Printer::print_options(services);
+        Printer::printOptions(services);
 
         std::cout << "Enter choice(-1 to cancel): ";
 
         try
         {
-            return InputHandler::get_choice(1, count);
+            return InputHandler::getChoice(1, count);
         }
         catch (const std::exception &e)
         {
-            show_error(e.what());
+            showError(e.what());
         }
     }
 }
 
-void ConsoleFrontend::display_itineraries(const std::vector<Itinerary> &itineraries)
+void ConsoleFrontend::displayItineraries(const std::vector<Itinerary> &itineraries)
 {
     int count{(int)itineraries.size()};
     std::cout << count << " itineraries\n";
     for (int i = 0; i < count; i++)
     {
         std::cout << i + 1 << "- ";
-        display_itinerary(itineraries[i]);
+        displayItinerary(itineraries[i]);
         std::cout << "\n";
     }
 }
 
-void ConsoleFrontend::display_itinerary(const Itinerary &itinerary)
+void ConsoleFrontend::displayItinerary(const Itinerary &itinerary)
 {
     const auto &reservations = itinerary.getReservations();
     int count{(int)reservations.size()};
@@ -171,7 +171,7 @@ void ConsoleFrontend::display_itinerary(const Itinerary &itinerary)
     std::cout << itinerary.toSummaryString() << "\n";
 }
 
-void ConsoleFrontend::read_flight_request_data(FlightRequest &request)
+void ConsoleFrontend::readFlightRequestData(FlightRequest &request)
 {
     std::string from{};
     std::string to{};
@@ -197,7 +197,7 @@ void ConsoleFrontend::read_flight_request_data(FlightRequest &request)
     request.setChildren(children);
 }
 
-void ConsoleFrontend::read_hotel_request_data(HotelRequest &request)
+void ConsoleFrontend::readHotelRequestData(HotelRequest &request)
 {
     std::string city{};
     std::string fromDate{};
@@ -227,7 +227,7 @@ void ConsoleFrontend::read_hotel_request_data(HotelRequest &request)
     request.setRooms(rooms);
 }
 
-int ConsoleFrontend::show_start_menu()
+int ConsoleFrontend::showStartMenu()
 {
     std::vector<std::string> startMenu{
         "Login",
@@ -236,25 +236,25 @@ int ConsoleFrontend::show_start_menu()
 
     while (true)
     {
-        Printer::print_menu(startMenu);
+        Printer::printMenu(startMenu);
 
         try
         {
-            return InputHandler::get_choice(1, 3);
+            return InputHandler::getChoice(1, 3);
         }
         catch (const std::exception &e)
         {
-            show_error(e.what());
+            showError(e.what());
         }
     }
 }
 
-void ConsoleFrontend::display_welcome_message(const std::string &firstName, const std::string &lastName)
+void ConsoleFrontend::displayWelcomeMessage(const std::string &firstName, const std::string &lastName)
 {
     std::cout << "Welcome " << firstName << " " << lastName << "\n\n";
 }
 
-int ConsoleFrontend::display_main_menu()
+int ConsoleFrontend::displayMainMenu()
 {
     std::vector<std::string> startMenu{
         "View Profile",
@@ -266,20 +266,20 @@ int ConsoleFrontend::display_main_menu()
 
     while (true)
     {
-        Printer::print_menu(startMenu);
+        Printer::printMenu(startMenu);
 
         try
         {
-            return InputHandler::get_choice(1, menuCount);
+            return InputHandler::getChoice(1, menuCount);
         }
         catch (const std::exception &e)
         {
-            show_error(e.what());
+            showError(e.what());
         }
     }
 }
 
-void ConsoleFrontend::display_user_profile(const User &user)
+void ConsoleFrontend::displayUserProfile(const User &user)
 {
     std::cout << "\n";
     std::cout << "Name: " << user.getFirstName() << " " << user.getLastName() << "\n";
@@ -298,7 +298,7 @@ User ConsoleFrontend::login()
         }
         catch (const std::exception &e)
         {
-            show_error(e.what());
+            showError(e.what());
         }
     }
 }
@@ -314,17 +314,17 @@ void ConsoleFrontend::signup()
         }
         catch (const std::exception &e)
         {
-            show_error(e.what());
+            showError(e.what());
         }
     }
 }
 
-void ConsoleFrontend::show_message(const std::string &msg)
+void ConsoleFrontend::showMessage(const std::string &msg)
 {
     std::cout << msg << "\n";
 }
 
-void ConsoleFrontend::show_error(const std::string &msg)
+void ConsoleFrontend::showError(const std::string &msg)
 {
     std::cout << msg << "\n";
 }

@@ -9,6 +9,6 @@ class Printer
 {
 
 public:
-    static void print_menu(const std::vector<std::string> &);
-    static void print_options(const std::vector<std::string> &);
+    static void printMenu(const std::vector<std::string> &);
+    static void printOptions(const std::vector<std::string> &);
 };

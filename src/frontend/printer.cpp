@@ -3,12 +3,12 @@
 #include "../model/itinerary_item.hpp"
 
 #include <iostream>
-void Printer::print_menu(const std::vector<std::string> &strings)
+void Printer::printMenu(const std::vector<std::string> &strings)
 {
     MenuPrinter::print(strings);
 }
 
-void Printer::print_options(const std::vector<std::string> &options)
+void Printer::printOptions(const std::vector<std::string> &options)
 {
     int count{(int)options.size()};
     for (int i = 0; i < count; i++)

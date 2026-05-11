@@ -13,20 +13,20 @@ class IFrontend
 {
 public:
     virtual ~IFrontend() = default;
-    virtual int display_create_itinerary_menu() = 0;
-    virtual void read_request_data(ReservationRequest &, RequestType) = 0;
-    virtual int read_reservation_choice(const std::vector<std::unique_ptr<ItineraryItem>> &) = 0;
-    virtual int display_payment_options(const std::vector<PaymentCard> &) = 0;
-    virtual PaymentCard read_card() = 0;
-    virtual int display_payment_services() = 0;
-    virtual void display_itineraries(const std::vector<Itinerary> &) = 0;
-    virtual void display_itinerary(const Itinerary &) = 0;
-    virtual int show_start_menu() = 0;
-    virtual void display_welcome_message(const std::string &, const std::string &) = 0;
-    virtual int display_main_menu() = 0;
-    virtual void display_user_profile(const User &) = 0;
+    virtual int displayCreateItineraryMenu() = 0;
+    virtual void readRequestData(ReservationRequest &, RequestType) = 0;
+    virtual int readReservationChoice(const std::vector<std::unique_ptr<ItineraryItem>> &) = 0;
+    virtual int displayPaymentOptions(const std::vector<PaymentCard> &) = 0;
+    virtual PaymentCard readCard() = 0;
+    virtual int displayPaymentServices() = 0;
+    virtual void displayItineraries(const std::vector<Itinerary> &) = 0;
+    virtual void displayItinerary(const Itinerary &) = 0;
+    virtual int showStartMenu() = 0;
+    virtual void displayWelcomeMessage(const std::string &, const std::string &) = 0;
+    virtual int displayMainMenu() = 0;
+    virtual void displayUserProfile(const User &) = 0;
     virtual User login() = 0;
     virtual void signup() = 0;
-    virtual void show_message(const std::string &) = 0;
-    virtual void show_error(const std::string &) = 0;
+    virtual void showMessage(const std::string &) = 0;
+    virtual void showError(const std::string &) = 0;
 };
