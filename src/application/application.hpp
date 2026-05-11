@@ -6,23 +6,21 @@
 #include "../model/customer.hpp"
 #include "payments/payment_strategy.hpp"
 #include "../frontend/frontend_interface.hpp"
+#include "factories/reservation_provider_factory.hpp"
 
 class Database;
-class FlightProviderFactory;
-class HotelProviderFactory;
-class ReservationProviderFactory;
 
 class Application
 {
     Database &m_database;
-    FlightProviderFactory &m_flightProviderFactory;
-    HotelProviderFactory &m_hotelProviderFactory;
+    ReservationProviderFactory &m_flightProviderFactory;
+    ReservationProviderFactory &m_hotelProviderFactory;
     ReservationProviderFactory &m_reservationProviderFactory;
 
 public:
     Application(Database &database,
-                FlightProviderFactory &flightProviderFactory,
-                HotelProviderFactory &hotelProviderFactory,
+                ReservationProviderFactory &flightProviderFactory,
+                ReservationProviderFactory &hotelProviderFactory,
                 ReservationProviderFactory &reservationProviderFactory);
 
     void saveUserInDb(User &);

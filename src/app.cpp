@@ -8,6 +8,7 @@
 #include "infrastructure/factories/flight_provider_factory.hpp"
 #include "infrastructure/factories/hotel_provider_factory.hpp"
 #include "infrastructure/factories/reservation_provider_factory.hpp"
+#include "application/factories/reservation_provider_factory.hpp"
 #include <iostream>
 
 App::App(IFrontend &frontend, Application &backend)
@@ -66,7 +67,7 @@ int main()
     Database database;
     FlightProviderFactory flightProviderFactory;
     HotelProviderFactory hotelProviderFactory;
-    ReservationProviderFactory reservationProviderFactory;
+    RoutingReservationProviderFactory reservationProviderFactory;
     Application application{database, flightProviderFactory, hotelProviderFactory, reservationProviderFactory};
     LoginHandler loginHandler{application};
     SignupHandler signupHandler{application};

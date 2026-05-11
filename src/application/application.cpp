@@ -2,19 +2,17 @@
 #include "../db/database.hpp"
 #include "../model/requests/flight_request.hpp"
 #include "../frontend/frontend_interface.hpp"
-#include "factories/flight_provider_factory.hpp"
-#include "factories/hotel_provider_factory.hpp"
 #include "../model/factories/reservation_request_factory.hpp"
 #include "../model/factories/reservation_factory.hpp"
-#include "factories/payment_factory.hpp"
+#include "../infrastructure/factories/payment_factory.hpp"
 #include "../db/id_generator.hpp"
 #include <iostream>
 #include <typeinfo>
 class ItineraryItem;
 
 Application::Application(Database &database,
-                         FlightProviderFactory &flightProviderFactory,
-                         HotelProviderFactory &hotelProviderFactory,
+                         ReservationProviderFactory &flightProviderFactory,
+                         ReservationProviderFactory &hotelProviderFactory,
                          ReservationProviderFactory &reservationProviderFactory)
     : m_database(database),
       m_flightProviderFactory(flightProviderFactory),

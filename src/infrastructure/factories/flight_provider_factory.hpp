@@ -1,13 +1,13 @@
 #pragma once
 
-#include "reservation_provider_factory.hpp"
+#include "../../application/factories/reservation_provider_factory.hpp"
 #include "providers/flight_provider.hpp"
 #include <vector>
 
-enum class ReservationType;
 class FlightProviderFactory : public ReservationProviderFactory
 {
 public:
-    std::unique_ptr<ReservationProvider> getProvider(ReservationType) const override;
-    std::vector<std::unique_ptr<ReservationProvider>> getProviders() const;
+    [[nodiscard]] std::unique_ptr<ReservationProvider> getProvider(ReservationType) const override;
+
+    [[nodiscard]] std::vector<std::unique_ptr<ReservationProvider>> getProviders() const override;
 };
