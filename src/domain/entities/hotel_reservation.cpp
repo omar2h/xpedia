@@ -103,7 +103,7 @@ std::string HotelReservation::toSummaryString() const
 
 void HotelReservation::setItem(const ItineraryItem &i)
 {
-    assert(i.getRequestType() == RequestType::hotel);
+    assert(dynamic_cast<const HotelRoom *>(&i) != nullptr && "Item must be a HotelRoom");
     item = std::make_unique<HotelRoom>(static_cast<const HotelRoom &>(i));
     setType(&i);
     setRequestType(&i);

@@ -83,7 +83,7 @@ std::string FlightReservation::toSummaryString() const
 
 void FlightReservation::setItem(const ItineraryItem &i)
 {
-    assert(i.getRequestType() == RequestType::flight);
+    assert(dynamic_cast<const Flight *>(&i) != nullptr && "Item must be a Flight");
     item = std::make_unique<Flight>(static_cast<const Flight &>(i));
     setType(&i);
     setRequestType(&i);
