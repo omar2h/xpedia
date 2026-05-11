@@ -1,12 +1,15 @@
 #pragma once
 
+#include <vector>
+#include <memory>
+
 class User;
-class IFrontend;
+class Itinerary;
+class ItineraryItem;
+class ReservationRequest;
 class ReservationRequestFactory;
 class ReservationFactory;
 class ReservationService;
-class PayItineraryUseCase;
-class Itinerary;
 enum class RequestType;
 
 class CreateItineraryUseCase
@@ -14,17 +17,19 @@ class CreateItineraryUseCase
     ReservationRequestFactory &m_requestFactory;
     ReservationFactory &m_reservationFactory;
     ReservationService &m_reservationService;
-    PayItineraryUseCase &m_payItineraryUseCase;
 
 public:
     CreateItineraryUseCase(
         ReservationRequestFactory &requestFactory,
         ReservationFactory &reservationFactory,
-        ReservationService &reservationService,
-        PayItineraryUseCase &payItineraryUseCase);
+        ReservationService &reservationService);
 
-    void execute(User &user, IFrontend &frontend);
+    [[nodiscard]] Itinerary createItinerary();
 
-private:
-    void addNewItem(RequestType requestType, Itinerary &currItinerary, IFrontend &frontend);
+    [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> searchItems(
+        RequestType type, ReservationRequest &request);
+
+    void addItemToItinerary(Itinerary &itinerary, RequestType type,
+                            std::unique_ptr<ReservationRequest> request,
+                            const ItineraryItem &selectedItem);
 };

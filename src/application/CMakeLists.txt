@@ -2,7 +2,6 @@ add_library(application)
 
 target_sources(application
     PRIVATE
-        application.cpp
         services/auth_service.cpp
         services/reservation_service.cpp
         services/payment_service.cpp

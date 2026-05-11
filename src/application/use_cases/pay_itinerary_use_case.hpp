@@ -1,8 +1,11 @@
 #pragma once
 
+#include <vector>
+#include "../results/pay_itinerary_result.hpp"
+
 class User;
 class Itinerary;
-class IFrontend;
+class PaymentCard;
 class IDatabase;
 class PaymentProcessor;
 
@@ -14,5 +17,9 @@ class PayItineraryUseCase
 public:
     PayItineraryUseCase(IDatabase &database, PaymentProcessor &paymentProcessor);
 
-    void execute(const Itinerary &currItinerary, const User &user, IFrontend &frontend);
+    [[nodiscard]] std::vector<PaymentCard> getCustomerCards(const User &user);
+    void addCard(const User &user, const PaymentCard &card);
+
+    [[nodiscard]] PayItineraryResult execute(const User &user, const Itinerary &itinerary,
+                                              const PaymentCard &card, int serviceChoice);
 };

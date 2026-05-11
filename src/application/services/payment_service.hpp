@@ -4,7 +4,6 @@
 #include <functional>
 
 class Customer;
-class IFrontend;
 class PaymentCard;
 class Itinerary;
 class IDatabase;
@@ -24,7 +23,6 @@ public:
         std::function<bool(const Itinerary &)> confirmReservations);
 
     bool withdrawMoney(const PaymentCard &card, int service, const Itinerary &currItinerary);
-    int makeReservations(Customer &customer, const Itinerary &currItinerary, IFrontend &frontend);
-    int selectCard(Customer &customer, IFrontend &frontend);
-    void addCard(Customer &customer, IFrontend &frontend);
+    int makeReservations(Customer &customer, const PaymentCard &card, int serviceChoice, const Itinerary &currItinerary);
+    void addCard(Customer &customer, const PaymentCard &card);
 };

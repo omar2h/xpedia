@@ -1,7 +1,8 @@
 #pragma once
 
+#include "../results/list_itineraries_result.hpp"
+
 class User;
-class IFrontend;
 class IDatabase;
 
 class ListItinerariesUseCase
@@ -11,5 +12,5 @@ class ListItinerariesUseCase
 public:
     explicit ListItinerariesUseCase(IDatabase &database);
 
-    void execute(const User &user, IFrontend &frontend);
+    [[nodiscard]] ListItinerariesResult execute(const User &user);
 };
