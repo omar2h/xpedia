@@ -7,6 +7,8 @@
 #include "frontend/signup_handler.hpp"
 #include "application/application.hpp"
 #include "application/services/auth_service.hpp"
+#include "application/services/reservation_service.hpp"
+#include "application/services/payment_service.hpp"
 #include "db/database.hpp"
 #include "infrastructure/factories/flight_provider_factory.hpp"
 #include "infrastructure/factories/hotel_provider_factory.hpp"
@@ -81,8 +83,10 @@ int main()
     ReservationRequestFactory requestFactory;
     ReservationFactory reservationFactory;
     AuthService authService{database};
-    Application application{database, getFlightProviders, getHotelProviders,
-                            getReservationProvider, getPaymentService,
+    ReservationService reservationService{getFlightProviders, getHotelProviders, getReservationProvider};
+    auto confirmReservations = [&](const Itinerary &itin) { return reservationService.confirmReservations(itin); };
+    PaymentProcessor paymentProcessor{database, getPaymentService, confirmReservations};
+    Application application{database, reservationService, paymentProcessor,
                             requestFactory, reservationFactory};
     ConsoleOutput output;
     ConsoleInput input;

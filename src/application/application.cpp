@@ -1,25 +1,19 @@
 #include "application.hpp"
 #include "../exception.hpp"
 #include "database_interface.hpp"
-#include "../model/requests/flight_request.hpp"
 #include "frontend_interface.hpp"
 #include "../model/factories/reservation_request_factory.hpp"
 #include "../model/factories/reservation_factory.hpp"
 #include "../util/id_generator.hpp"
-class ItineraryItem;
 
 Application::Application(IDatabase &database,
-                         std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getFlightProviders,
-                         std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getHotelProviders,
-                         std::function<std::unique_ptr<ReservationProvider>(ReservationType)> getReservationProvider,
-                         std::function<std::unique_ptr<PaymentStrategy>(PaymentService)> getPaymentService,
+                         ReservationService &reservationService,
+                         PaymentProcessor &paymentService,
                          ReservationRequestFactory &requestFactory,
                          ReservationFactory &reservationFactory)
     : m_database(database),
-      m_getFlightProviders(std::move(getFlightProviders)),
-      m_getHotelProviders(std::move(getHotelProviders)),
-      m_getReservationProvider(std::move(getReservationProvider)),
-      m_getPaymentService(std::move(getPaymentService)),
+      m_reservationService(reservationService),
+      m_paymentService(paymentService),
       m_requestFactory(requestFactory),
       m_reservationFactory(reservationFactory) {}
 
@@ -31,33 +25,6 @@ void Application::addCard(Customer &customer, IFrontend &frontend)
     m_database.updateCustomerInfo(customer);
 }
 
-int Application::makeReservations(Customer &customer, const Itinerary &currItinerary, IFrontend &frontend)
-{
-    int choice = selectCard(customer, frontend);
-
-    if (choice == -1)
-        return -1;
-
-    PaymentCard card = customer.getCards()[choice - 1];
-
-    choice = frontend.displayPaymentServices();
-
-    if (choice == -1)
-        return choice;
-
-    bool isPaid = withdrawMoney(card, choice, currItinerary);
-
-    if (isPaid)
-        frontend.showMessage("Transaction Succeeded");
-    else
-    {
-        frontend.showError("Transaction Failed");
-        return -1;
-    }
-
-    return confirmReservations(customer, currItinerary);
-}
-
 void Application::payItinerary(const Itinerary &currItinerary, const User &user, IFrontend &frontend)
 {
     if (currItinerary.getReservations().empty())
@@ -65,7 +32,7 @@ void Application::payItinerary(const Itinerary &currItinerary, const User &user,
 
     Customer customer = m_database.getCustomer(user);
 
-    int isConfirmed = makeReservations(customer, currItinerary, frontend);
+    int isConfirmed = m_paymentService.makeReservations(customer, currItinerary, frontend);
 
     if (isConfirmed == 1)
     {
@@ -90,7 +57,7 @@ void Application::addNewItem(RequestType requestType, Itinerary &currItinerary, 
 
     frontend.readRequestData(*request, requestType);
 
-    std::vector<std::unique_ptr<ItineraryItem>> items = getAvailableReservations(request.get(), requestType);
+    std::vector<std::unique_ptr<ItineraryItem>> items = m_reservationService.getAvailableReservations(request.get(), requestType);
 
     int choice = frontend.readReservationChoice(items);
 
@@ -161,93 +128,4 @@ void Application::createItinerary(User &user, IFrontend &frontend)
             return;
         }
     }
-}
-
-std::vector<std::unique_ptr<ItineraryItem>> Application::getAvailableReservations(ReservationRequest *request, RequestType requestType)
-{
-    std::vector<std::unique_ptr<ItineraryItem>> items;
-    std::vector<std::unique_ptr<ReservationProvider>> providers;
-
-    if (requestType == RequestType::flight)
-    {
-        providers = m_getFlightProviders();
-
-        for (auto &provider : providers)
-        {
-            provider->setRequest(request);
-
-            std::vector<std::unique_ptr<ItineraryItem>> airlineFlights = provider->searchReservations();
-
-            items.insert(items.end(),
-                         std::make_move_iterator(airlineFlights.begin()),
-                         std::make_move_iterator(airlineFlights.end()));
-        }
-    }
-    else if (requestType == RequestType::hotel)
-    {
-        providers = m_getHotelProviders();
-
-        for (auto &provider : providers)
-        {
-            provider->setRequest(request);
-
-            std::vector<std::unique_ptr<ItineraryItem>> hotelRooms = provider->searchReservations();
-
-            items.insert(items.end(),
-                         std::make_move_iterator(hotelRooms.begin()),
-                         std::make_move_iterator(hotelRooms.end()));
-            ;
-        }
-    }
-
-    return items;
-}
-
-int Application::selectCard(Customer &customer, IFrontend &frontend)
-{
-    int choice{};
-
-    while (true)
-    {
-        choice =
-            frontend.displayPaymentOptions(customer.getCards());
-
-        if (choice == -1)
-            return -1;
-
-        if (choice == 0)
-            addCard(customer, frontend);
-        else
-            break;
-    }
-
-    return choice;
-}
-
-bool Application::withdrawMoney(
-    const PaymentCard &card,
-    int service,
-    const Itinerary &currItinerary)
-{
-    auto paymentStrategy = m_getPaymentService(static_cast<PaymentService>(service - 1));
-    bool isPaid = paymentStrategy->pay(card, currItinerary.totalCost());
-    return isPaid;
-}
-
-bool Application::confirmReservations(Customer &customer, const Itinerary &currItinerary)
-{
-    std::unique_ptr<ReservationProvider> provider{};
-
-    const auto &reservations = currItinerary.getReservations();
-
-    for (const auto &res : reservations)
-    {
-        provider = m_getReservationProvider(res->getType());
-
-        if (!provider->reserve(res.get()))
-        {
-            return false;
-        }
-    }
-    return true;
 }
