@@ -13,8 +13,8 @@ class ReservationSerializer : public ReservationVisitor
     json obj;
 
 public:
-    json to_json(const Reservation &);
-    static std::unique_ptr<Reservation> from_json(const json &);
+    json toJson(const Reservation &);
+    static std::unique_ptr<Reservation> fromJson(const json &);
 
     json serialize(const Reservation &);
 

@@ -14,7 +14,7 @@ json ReservationSerializer::serialize(const Reservation &reservation)
     return obj;
 }
 
-json ReservationSerializer::to_json(const Reservation &reservation)
+json ReservationSerializer::toJson(const Reservation &reservation)
 {
     obj.clear();
 
@@ -60,7 +60,7 @@ void ReservationSerializer::visit(const HotelReservation &hotel)
     obj["cost"] = hotel.total_cost();
 }
 
-std::unique_ptr<Reservation> ReservationSerializer::from_json(const json &obj)
+std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json &obj)
 {
     RequestType requestType = obj["requestType"].get<RequestType>();
 

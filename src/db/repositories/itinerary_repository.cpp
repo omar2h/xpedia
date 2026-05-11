@@ -9,7 +9,7 @@ ItineraryRepository::ItineraryRepository(FileStorage &storage_)
 
 void ItineraryRepository::save(const std::string &customerId, const Itinerary &itinerary) const
 {
-    json obj = ItineraryMapper::to_json(itinerary);
+    json obj = ItineraryMapper::toJson(itinerary);
 
     obj["customer_id"] = customerId;
     storage.writeJsonToFile("itineraries.json", obj, true);
@@ -23,7 +23,7 @@ std::vector<Itinerary> ItineraryRepository::findByCustomerId(const std::string &
 
     for (const auto &obj : arr)
     {
-        itineraries.push_back(ItineraryMapper::from_json(obj));
+        itineraries.push_back(ItineraryMapper::fromJson(obj));
     }
 
     return itineraries;

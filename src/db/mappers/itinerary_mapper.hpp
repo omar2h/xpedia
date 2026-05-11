@@ -9,7 +9,7 @@ using json = nlohmann::json;
 class ItineraryMapper
 {
 public:
-    static json to_json(const Itinerary &itinerary);
+    static json toJson(const Itinerary &itinerary);
 
-    static Itinerary from_json(const json &obj);
+    static Itinerary fromJson(const json &obj);
 };

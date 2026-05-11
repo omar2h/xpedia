@@ -2,7 +2,7 @@
 
 #include "../../model/serializers/reservation_serializer.hpp"
 
-json ItineraryMapper::to_json(const Itinerary &itinerary)
+json ItineraryMapper::toJson(const Itinerary &itinerary)
 {
     json obj;
 
@@ -12,7 +12,7 @@ json ItineraryMapper::to_json(const Itinerary &itinerary)
 
     for (const auto &res : itinerary.getReservations())
     {
-        reservations.push_back(serializer.to_json(*res));
+        reservations.push_back(serializer.toJson(*res));
     }
 
     obj["reservations"] = reservations;
@@ -22,7 +22,7 @@ json ItineraryMapper::to_json(const Itinerary &itinerary)
     return obj;
 }
 
-Itinerary ItineraryMapper::from_json(const json &obj)
+Itinerary ItineraryMapper::fromJson(const json &obj)
 {
     Itinerary itinerary;
 
@@ -34,7 +34,7 @@ Itinerary ItineraryMapper::from_json(const json &obj)
 
     for (const auto &resObj : arr)
     {
-        itinerary.addItem(ReservationSerializer::from_json(resObj));
+        itinerary.addItem(ReservationSerializer::fromJson(resObj));
     }
 
     return itinerary;
