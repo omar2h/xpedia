@@ -2,7 +2,7 @@
 #include "flight_provider_factory.hpp"
 #include "hotel_provider_factory.hpp"
 
-std::unique_ptr<ReservationProvider> ReservationProviderFactory::getProvider(ReservationType type)
+std::unique_ptr<ReservationProvider> ReservationProviderFactory::getProvider(ReservationType type) const
 {
     FlightProviderFactory flightsFactory;
     HotelProviderFactory hotelsFactory;

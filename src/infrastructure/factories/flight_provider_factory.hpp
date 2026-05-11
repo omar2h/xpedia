@@ -8,6 +8,6 @@ enum class ReservationType;
 class FlightProviderFactory : public ReservationProviderFactory
 {
 public:
-    std::unique_ptr<ReservationProvider> getProvider(ReservationType) override;
-    std::vector<std::unique_ptr<ReservationProvider>> getProviders();
+    std::unique_ptr<ReservationProvider> getProvider(ReservationType) const override;
+    std::vector<std::unique_ptr<ReservationProvider>> getProviders() const;
 };

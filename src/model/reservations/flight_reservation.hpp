@@ -41,7 +41,7 @@ public:
 
     void setRequest(std::unique_ptr<ReservationRequest>) override;
 
-    void setItem(ItineraryItem *const) override;
+    void setItem(const ItineraryItem &) override;
 
     std::string getAirline() const
     {

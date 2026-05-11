@@ -5,7 +5,7 @@
 
 #include "../model/reservation.hpp"
 
-std::unique_ptr<ReservationProvider> FlightProviderFactory::getProvider(ReservationType type)
+std::unique_ptr<ReservationProvider> FlightProviderFactory::getProvider(ReservationType type) const
 {
     if (type == ReservationType::britishAirways)
         return std::make_unique<BritishAirwaysFlightProvider>();
@@ -16,7 +16,7 @@ std::unique_ptr<ReservationProvider> FlightProviderFactory::getProvider(Reservat
     return nullptr;
 }
 
-std::vector<std::unique_ptr<ReservationProvider>> FlightProviderFactory::getProviders()
+std::vector<std::unique_ptr<ReservationProvider>> FlightProviderFactory::getProviders() const
 {
     std::vector<std::unique_ptr<ReservationProvider>> providers{};
     providers.push_back(std::make_unique<BritishAirwaysFlightProvider>());

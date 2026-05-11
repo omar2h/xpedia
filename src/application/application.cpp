@@ -115,7 +115,7 @@ void Application::addNewItem(RequestType requestType, Itinerary &currItinerary, 
 
     auto reservation = ReservationFactory::getReservation(requestType);
 
-    reservation->setItem(items[choice - 1].get());
+    reservation->setItem(*items[choice - 1]);
     reservation->setRequest(std::move(request));
 
     currItinerary.addItem(std::move(reservation));

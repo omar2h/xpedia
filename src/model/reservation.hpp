@@ -35,7 +35,7 @@ public:
     virtual void accept(ReservationVisitor &) const = 0;
 
     virtual void setRequest(std::unique_ptr<ReservationRequest>) = 0;
-    virtual void setItem(ItineraryItem *const) = 0;
+    virtual void setItem(const ItineraryItem &) = 0;
     ReservationType getType() const { return type; }
     void setType(ItineraryItem const *item) { type = item->getType(); }
 

@@ -123,9 +123,9 @@ void HotelReservation::setRequest(std::unique_ptr<ReservationRequest> request)
     this->request.reset(dynamic_cast<HotelRequest *>(request.release()));
 }
 
-void HotelReservation::setItem(ItineraryItem *const i)
+void HotelReservation::setItem(const ItineraryItem &i)
 {
-    item.reset(dynamic_cast<HotelRoom *>(i->clone().release()));
-    setType(i);
-    setRequestType(i);
+    item.reset(dynamic_cast<HotelRoom *>(i.clone().release()));
+    setType(&i);
+    setRequestType(&i);
 }
