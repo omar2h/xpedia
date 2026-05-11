@@ -47,11 +47,11 @@ void App::run()
             }
             else if (choice == 2)
             {
-                m_application.create_itinerary(user, m_frontend);
+                m_application.createItinerary(user, m_frontend);
             }
             else if (choice == 3)
             {
-                m_application.list_itineraries(user, m_frontend);
+                m_application.listItineraries(user, m_frontend);
             }
             else if (choice == 4)
             {

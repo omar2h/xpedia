@@ -22,12 +22,12 @@ Application::Application(Database &database,
       m_hotelProviderFactory(hotelProviderFactory),
       m_reservationProviderFactory(reservationProviderFactory) {}
 
-void Application::save_user_in_db(User &user)
+void Application::saveUserInDb(User &user)
 {
     m_database.saveUser(user);
 }
 
-User Application::user_login(const std::string &email, const std::string &password)
+User Application::userLogin(const std::string &email, const std::string &password)
 {
     std::vector<User> users = m_database.getUsers("users.json");
 
@@ -40,7 +40,7 @@ User Application::user_login(const std::string &email, const std::string &passwo
     throw std::runtime_error("Invalid email/password");
 }
 
-void Application::add_card(Customer &customer, IFrontend &frontend)
+void Application::addCard(Customer &customer, IFrontend &frontend)
 {
     PaymentCard card = frontend.read_card();
     customer.addCard(card);
@@ -48,9 +48,9 @@ void Application::add_card(Customer &customer, IFrontend &frontend)
     m_database.updateCustomerInfo(customer);
 }
 
-int Application::make_reservations(Customer &customer, const Itinerary &currItinerary, IFrontend &frontend)
+int Application::makeReservations(Customer &customer, const Itinerary &currItinerary, IFrontend &frontend)
 {
-    int choice = select_card(customer, frontend);
+    int choice = selectCard(customer, frontend);
 
     if (choice == -1)
         return -1;
@@ -62,7 +62,7 @@ int Application::make_reservations(Customer &customer, const Itinerary &currItin
     if (choice == -1)
         return choice;
 
-    bool isPaid = withdraw_money(card, choice, currItinerary);
+    bool isPaid = withdrawMoney(card, choice, currItinerary);
 
     if (isPaid)
         frontend.show_message("Transaction Succeeded");
@@ -72,7 +72,7 @@ int Application::make_reservations(Customer &customer, const Itinerary &currItin
         return -1;
     }
 
-    return confirm_reservations(customer, currItinerary);
+    return confirmReservations(customer, currItinerary);
 }
 
 void Application::payItinerary(const Itinerary &currItinerary, const User &user, IFrontend &frontend)
@@ -82,7 +82,7 @@ void Application::payItinerary(const Itinerary &currItinerary, const User &user,
 
     Customer customer = m_database.getCustomer(user);
 
-    int isConfirmed = make_reservations(customer, currItinerary, frontend);
+    int isConfirmed = makeReservations(customer, currItinerary, frontend);
 
     if (isConfirmed == 1)
     {
@@ -101,13 +101,13 @@ void Application::payItinerary(const Itinerary &currItinerary, const User &user,
         frontend.show_error("Reservation Failed, Itinerary Cancelled");
 }
 
-void Application::add_new_item(RequestType requestType, Itinerary &currItinerary, IFrontend &frontend)
+void Application::addNewItem(RequestType requestType, Itinerary &currItinerary, IFrontend &frontend)
 {
     auto request = ReservationRequestFactory::getRequest(requestType);
 
     frontend.read_request_data(*request, requestType);
 
-    std::vector<std::unique_ptr<ItineraryItem>> items = get_available_reservations(request.get(), requestType);
+    std::vector<std::unique_ptr<ItineraryItem>> items = getAvailableReservations(request.get(), requestType);
 
     int choice = frontend.read_reservation_choice(items);
 
@@ -122,7 +122,7 @@ void Application::add_new_item(RequestType requestType, Itinerary &currItinerary
     currItinerary.addItem(std::move(reservation));
 }
 
-void Application::list_itineraries(const User &user, IFrontend &frontend)
+void Application::listItineraries(const User &user, IFrontend &frontend)
 {
     bool isCustomer = m_database.checkUserIsCustomer(user);
 
@@ -145,7 +145,7 @@ void Application::list_itineraries(const User &user, IFrontend &frontend)
     frontend.display_itineraries(customerItineraries);
 }
 
-void Application::create_itinerary(User &user, IFrontend &frontend)
+void Application::createItinerary(User &user, IFrontend &frontend)
 {
     std::unordered_set<std::string> ids{};
     Itinerary currItinerary;
@@ -158,11 +158,11 @@ void Application::create_itinerary(User &user, IFrontend &frontend)
 
         if (choice == 1)
         {
-            add_new_item(RequestType::flight, currItinerary, frontend);
+            addNewItem(RequestType::flight, currItinerary, frontend);
         }
         else if (choice == 2)
         {
-            add_new_item(RequestType::hotel, currItinerary, frontend);
+            addNewItem(RequestType::hotel, currItinerary, frontend);
         }
         else if (choice == 3)
         {
@@ -181,7 +181,7 @@ void Application::create_itinerary(User &user, IFrontend &frontend)
     }
 }
 
-std::vector<std::unique_ptr<ItineraryItem>> Application::get_available_reservations(ReservationRequest *request, RequestType requestType)
+std::vector<std::unique_ptr<ItineraryItem>> Application::getAvailableReservations(ReservationRequest *request, RequestType requestType)
 {
     std::vector<std::unique_ptr<ItineraryItem>> items;
     std::vector<std::unique_ptr<ReservationProvider>> providers;
@@ -221,7 +221,7 @@ std::vector<std::unique_ptr<ItineraryItem>> Application::get_available_reservati
     return items;
 }
 
-int Application::select_card(Customer &customer, IFrontend &frontend)
+int Application::selectCard(Customer &customer, IFrontend &frontend)
 {
     int choice{};
 
@@ -234,7 +234,7 @@ int Application::select_card(Customer &customer, IFrontend &frontend)
             return -1;
 
         if (choice == 0)
-            add_card(customer, frontend);
+            addCard(customer, frontend);
         else
             break;
     }
@@ -242,7 +242,7 @@ int Application::select_card(Customer &customer, IFrontend &frontend)
     return choice;
 }
 
-bool Application::withdraw_money(
+bool Application::withdrawMoney(
     const PaymentCard &card,
     int service,
     const Itinerary &currItinerary)
@@ -252,7 +252,7 @@ bool Application::withdraw_money(
     return isPaid;
 }
 
-bool Application::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
+bool Application::confirmReservations(Customer &customer, const Itinerary &currItinerary)
 {
     std::unique_ptr<ReservationProvider> provider{};
 

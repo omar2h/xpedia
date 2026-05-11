@@ -25,16 +25,16 @@ public:
                 HotelProviderFactory &hotelProviderFactory,
                 ReservationProviderFactory &reservationProviderFactory);
 
-    void save_user_in_db(User &);
-    User user_login(const std::string &, const std::string &);
-    void create_itinerary(User &, IFrontend &);
-    void add_new_item(RequestType, Itinerary &, IFrontend &);
-    std::vector<std::unique_ptr<ItineraryItem>> get_available_reservations(ReservationRequest *, RequestType);
-    int make_reservations(Customer &, const Itinerary &, IFrontend &);
-    bool confirm_reservations(Customer &customer, const Itinerary &currItinerary);
-    bool withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary);
-    int select_card(Customer &customer, IFrontend &);
+    void saveUserInDb(User &);
+    User userLogin(const std::string &, const std::string &);
+    void createItinerary(User &, IFrontend &);
+    void addNewItem(RequestType, Itinerary &, IFrontend &);
+    std::vector<std::unique_ptr<ItineraryItem>> getAvailableReservations(ReservationRequest *, RequestType);
+    int makeReservations(Customer &, const Itinerary &, IFrontend &);
+    bool confirmReservations(Customer &customer, const Itinerary &currItinerary);
+    bool withdrawMoney(const PaymentCard &card, int service, const Itinerary &currItinerary);
+    int selectCard(Customer &customer, IFrontend &);
     void payItinerary(const Itinerary &, const User &, IFrontend &);
-    void add_card(Customer &, IFrontend &);
-    void list_itineraries(const User &, IFrontend &);
+    void addCard(Customer &, IFrontend &);
+    void listItineraries(const User &, IFrontend &);
 };

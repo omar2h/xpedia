@@ -28,5 +28,5 @@ void SignupHandler::signup()
 
     User usr(firstName, lastName, email, phone, password);
 
-    m_application.save_user_in_db(usr);
+    m_application.saveUserInDb(usr);
 }

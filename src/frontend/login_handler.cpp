@@ -14,5 +14,5 @@ User LoginHandler::login()
     std::cout << "Enter Password: ";
     std::cin >> password;
 
-    return m_application.user_login(email, password);
+    return m_application.userLogin(email, password);
 }
