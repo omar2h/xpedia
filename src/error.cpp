@@ -5,22 +5,22 @@ void Error::display(ErrorCode code)
 {
     switch (code)
     {
-    case ErrorCode::invalid_choice:
+    case ErrorCode::invalidChoice:
         std::cout << "\nInvalid Choice\n\n";
         break;
-    case ErrorCode::email_phone_in_use:
+    case ErrorCode::emailPhoneInUse:
         std::cout << "\nEmail/Phone already in use\n\n";
         break;
-    case ErrorCode::cant_open_file:
+    case ErrorCode::cantOpenFile:
         std::cout << "\nCan't open file\n\n";
         break;
-    case ErrorCode::invalid_email_password_empty:
+    case ErrorCode::invalidEmailPasswordEmpty:
         std::cout << "\nInvalid email/password(empty)\n\n";
         break;
-    case ErrorCode::invalid_email_password:
+    case ErrorCode::invalidEmailPassword:
         std::cout << "\nInvalid email/password\n\n";
         break;
-    case ErrorCode::no_reservations_to_pay:
+    case ErrorCode::noReservationsToPay:
         std::cout << "\nNo Reservations to Pay\n\n";
         break;
     }
