@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 Database::Database()
-    : usersManager(storage), customersManager(storage), itineraryRepository(storage)
+    : userRepository(storage), customerRepository(storage), itineraryRepository(storage)
 {
 }
 
@@ -74,7 +74,7 @@ void Database::save_itinerary(const std::string &customerId, const Itinerary &it
 
 bool Database::check_user_is_customer(const User &user)
 {
-    bool exist = customersManager.check_if_customer_exists(user.getId());
+    bool exist = customerRepository.check_if_customer_exists(user.getId());
 
     return exist;
 }
@@ -198,17 +198,17 @@ std::vector<User> Database::get_users(const std::string &path) const
 {
     json arr;
     arr = get_objects_from_file(path);
-    return UsersManager::get_users_from_objects(arr);
+    return UserRepository::get_users_from_objects(arr);
 }
 
 Customer Database::getCustomer(const User &user)
 {
-    return customersManager.getCustomer(user);
+    return customerRepository.getCustomer(user);
 }
 
 void Database::update_customer_info(const Customer &customer)
 {
-    customersManager.update_customer(customer);
+    customerRepository.update_customer(customer);
 }
 
 std::vector<std::string> Database::read_json_attribute_from_file(const std::string &path, const std::string &att) const
@@ -240,9 +240,9 @@ std::vector<std::string> Database::read_json_attribute_from_file(const std::stri
 
 void Database::save_user(User &user)
 {
-    usersManager.validate_user_sign_in(user);
-    std::string newId = UsersManager::generate_user_id();
+    userRepository.validate_user_sign_in(user);
+    std::string newId = UserRepository::generate_user_id();
     user.setId(newId);
-    json obj = UsersManager::convert_user_to_json(user);
+    json obj = UserRepository::convert_user_to_json(user);
     write_json_to_file("users.json", obj);
 }

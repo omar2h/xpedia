@@ -2,9 +2,9 @@
 
 #include "../../model/requests/hotel_request.hpp"
 #include "../../model/reservations/hotel_reservation.hpp"
-#include "itinerary_manager.hpp"
+#include "reservation_provider.hpp"
 #include <vector>
-class HotelsManager : public ItineraryManager
+class HotelProvider : public ReservationProvider
 {
 public:
     std::vector<std::unique_ptr<ItineraryItem>> search_reservations() const override = 0;
@@ -13,7 +13,7 @@ public:
 
     std::string getName() const override = 0;
 
-    ItineraryManager *clone() override = 0;
+    ReservationProvider *clone() override = 0;
 
-    ~HotelsManager() override = default;
+    ~HotelProvider() override = default;
 };

@@ -1,7 +1,7 @@
-#include "air_france_flights_manager.hpp"
+#include "air_france_flight_provider.hpp"
 #include "../../apis/expedia_flights_api.hpp"
 
-std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightsManager::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightProvider::search_reservations() const
 {
     const FlightRequest *request = dynamic_cast<FlightRequest *>(getRequest());
 
@@ -26,7 +26,7 @@ std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightsManager::search_rese
     return flights;
 }
 
-bool AirFranceFlightsManager::reserve(Reservation *reservation) const
+bool AirFranceFlightProvider::reserve(Reservation *reservation) const
 {
     return AirFranceOnlineAPI::ReserveFlight(AirFranceCustomerInfo(), AirFranceFlight());
 }

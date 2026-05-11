@@ -2,11 +2,14 @@ add_library(db)
 
 target_sources(db
     PRIVATE
-        customers_manager.cpp
+        customer_repository.cpp
         database.cpp
         id_generator.cpp
-        itineraries_manager.cpp
-        users_manager.cpp
+        user_repository.cpp
+        repositories/itinerary_repository.cpp
+        storage/file_storage.cpp
+        mappers/itinerary_mapper.cpp
+
 )
 
 target_include_directories(db

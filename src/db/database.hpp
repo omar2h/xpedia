@@ -1,10 +1,9 @@
 #pragma once
 
-#include "users_manager.hpp"
-#include "customers_manager.hpp"
+#include "user_repository.hpp"
+#include "customer_repository.hpp"
 #include "../model/customer.hpp"
 #include "../model/itinerary.hpp"
-#include "itineraries_manager.hpp"
 #include "repositories/itinerary_repository.hpp"
 #include "storage/file_storage.hpp"
 #include <string>
@@ -13,8 +12,8 @@
 
 class Database
 {
-    UsersManager usersManager;
-    CustomersManager customersManager;
+    UserRepository userRepository;
+    CustomerRepository customerRepository;
     FileStorage storage{};
     ItineraryRepository itineraryRepository;
 

@@ -1,11 +1,11 @@
-#include "customers_manager.hpp"
+#include "customer_repository.hpp"
 #include "storage/file_storage.hpp"
-#include "users_manager.hpp"
+#include "user_repository.hpp"
 #include <iostream>
 
-CustomersManager::CustomersManager(FileStorage &storage) : m_storage(storage) {}
+CustomerRepository::CustomerRepository(FileStorage &storage) : m_storage(storage) {}
 
-Customer CustomersManager::getCustomer(const User &user) const
+Customer CustomerRepository::getCustomer(const User &user) const
 {
     Customer customer{user};
 
@@ -44,7 +44,7 @@ Customer CustomersManager::getCustomer(const User &user) const
     }
     else
     {
-        json obj = UsersManager::convert_user_to_json(user);
+        json obj = UserRepository::convert_user_to_json(user);
 
         obj["cards"] = json::array();
         obj["itineraries"] = json::array();
@@ -55,7 +55,7 @@ Customer CustomersManager::getCustomer(const User &user) const
     return customer;
 }
 
-json CustomersManager::convert_card_to_json(const PaymentCard &card) const
+json CustomerRepository::convert_card_to_json(const PaymentCard &card) const
 {
     json obj;
 
@@ -67,9 +67,9 @@ json CustomersManager::convert_card_to_json(const PaymentCard &card) const
     return obj;
 }
 
-json CustomersManager::convert_customer_to_json(const Customer &customer) const
+json CustomerRepository::convert_customer_to_json(const Customer &customer) const
 {
-    json obj = UsersManager::convert_user_to_json(customer);
+    json obj = UserRepository::convert_user_to_json(customer);
 
     obj["cards"] = json::array();
     obj["itineraries"] = json::array();
@@ -95,7 +95,7 @@ json CustomersManager::convert_customer_to_json(const Customer &customer) const
     return obj;
 }
 
-bool CustomersManager::check_if_customer_exists(const std::string &uId) const
+bool CustomerRepository::check_if_customer_exists(const std::string &uId) const
 {
     json obj =
         m_storage.get_object_with_id("customers.json", uId);
@@ -103,7 +103,7 @@ bool CustomersManager::check_if_customer_exists(const std::string &uId) const
     return !obj.empty();
 }
 
-void CustomersManager::update_customer(const Customer &customer) const
+void CustomerRepository::update_customer(const Customer &customer) const
 {
     json obj = convert_customer_to_json(customer);
 

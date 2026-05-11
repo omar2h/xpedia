@@ -5,7 +5,7 @@
 class ReservationRequest;
 class Reservation;
 
-class ItineraryManager
+class ReservationProvider
 {
     ReservationRequest *request{};
 
@@ -22,9 +22,9 @@ public:
 
     ReservationRequest *getRequest() const { return request->clone(); }
 
-    virtual ItineraryManager *clone() = 0;
+    virtual ReservationProvider *clone() = 0;
 
-    virtual ~ItineraryManager()
+    virtual ~ReservationProvider()
     {
     }
 };

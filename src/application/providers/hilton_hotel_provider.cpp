@@ -1,9 +1,9 @@
-#include "hilton_hotels_manager.hpp"
+#include "hilton_hotel_provider.hpp"
 #include "../../apis/expedia_hotels_api.hpp"
 #include "../../model/factories/reservation_request_factory.hpp"
 #include "../../model/hotel_room.hpp"
 
-std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelsManager::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelProvider::search_reservations() const
 {
     HotelRequest *req = dynamic_cast<HotelRequest *>(getRequest());
     std::vector<std::unique_ptr<ItineraryItem>> rooms;
@@ -24,17 +24,17 @@ std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelsManager::search_reservat
     return rooms;
 }
 
-bool HiltonHotelsManager::reserve(Reservation *) const
+bool HiltonHotelProvider::reserve(Reservation *) const
 {
     return HiltonHotelAPI::reserve();
 }
 
-std::string HiltonHotelsManager::getName() const
+std::string HiltonHotelProvider::getName() const
 {
     return "Hilton";
 }
 
-ItineraryManager *HiltonHotelsManager::clone()
+ReservationProvider *HiltonHotelProvider::clone()
 {
-    return new HiltonHotelsManager(*this);
+    return new HiltonHotelProvider(*this);
 }

@@ -6,12 +6,12 @@ using json = nlohmann::json;
 
 class FileStorage;
 
-class CustomersManager
+class CustomerRepository
 {
     FileStorage &m_storage;
 
 public:
-    explicit CustomersManager(FileStorage &storage);
+    explicit CustomerRepository(FileStorage &storage);
 
     Customer getCustomer(const User &) const;
 

@@ -1,12 +1,12 @@
-#include "users_manager.hpp"
+#include "user_repository.hpp"
 #include "id_generator.hpp"
 #include "storage/file_storage.hpp"
 #include <iostream>
-std::unordered_set<std::string> UsersManager::usersIds{};
+std::unordered_set<std::string> UserRepository::usersIds{};
 
-UsersManager::UsersManager(FileStorage &storage) : m_storage(storage) {}
+UserRepository::UserRepository(FileStorage &storage) : m_storage(storage) {}
 
-void UsersManager::validate_user_sign_in(const User &u)
+void UserRepository::validate_user_sign_in(const User &u)
 {
     std::vector<std::string> emails{};
     std::vector<std::string> phones{};
@@ -23,14 +23,14 @@ void UsersManager::validate_user_sign_in(const User &u)
     }
 }
 
-std::string UsersManager::generate_user_id()
+std::string UserRepository::generate_user_id()
 {
     std::string newId = IdGenerator::generate_id(usersIds);
     usersIds.insert(newId);
     return newId;
 }
 
-json UsersManager::convert_user_to_json(const User &user)
+json UserRepository::convert_user_to_json(const User &user)
 {
     json obj;
     obj["id"] = user.getId();
@@ -42,7 +42,7 @@ json UsersManager::convert_user_to_json(const User &user)
     return obj;
 }
 
-std::vector<User> UsersManager::get_users_from_objects(json arr)
+std::vector<User> UserRepository::get_users_from_objects(json arr)
 {
     std::vector<User> data{};
     for (const auto &u : arr)

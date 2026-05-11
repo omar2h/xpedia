@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../model/user.hpp"
-#include "managers/flights_manager.hpp"
+#include "providers/flight_provider.hpp"
 #include "../model/itinerary.hpp"
 #include "../model/customer.hpp"
 #include "payments/payment_strategy.hpp"

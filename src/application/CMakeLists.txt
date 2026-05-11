@@ -4,10 +4,10 @@ target_sources(application
     PRIVATE
         application.cpp
 
-        managers/air_france_flights_manager.cpp
-        managers/british_airways_flights_manager.cpp
-        managers/hilton_hotels_manager.cpp
-        managers/marriott_hotels_manager.cpp
+        providers/air_france_flight_provider.cpp
+        providers/british_airways_flight_provider.cpp
+        providers/hilton_hotel_provider.cpp
+        providers/marriott_hotel_provider.cpp
 )
 
 target_include_directories(application

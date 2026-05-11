@@ -2,8 +2,8 @@
 #include "../db/database.hpp"
 #include "../model/requests/flight_request.hpp"
 #include "../frontend/frontend_interface.hpp"
-#include "factories/flights_manager_factory.hpp"
-#include "factories/hotels_manager_factory.hpp"
+#include "factories/flight_provider_factory.hpp"
+#include "factories/hotel_provider_factory.hpp"
 #include "../model/factories/reservation_request_factory.hpp"
 #include "../model/factories/reservation_factory.hpp"
 #include "factories/payment_factory.hpp"
@@ -177,17 +177,17 @@ void Application::create_itinerary(User &user, IFrontend &frontend)
 std::vector<std::unique_ptr<ItineraryItem>> Application::get_available_reservations(ReservationRequest *request, RequestType requestType)
 {
     std::vector<std::unique_ptr<ItineraryItem>> items;
-    std::vector<std::unique_ptr<ItineraryManager>> managers;
+    std::vector<std::unique_ptr<ReservationProvider>> providers;
 
     if (requestType == RequestType::flight)
     {
-        managers = FlightsManagerFactory::getManagers();
+        providers = FlightProviderFactory::getProviders();
 
-        for (auto &manager : managers)
+        for (auto &provider : providers)
         {
-            manager->setRequest(request);
+            provider->setRequest(request);
 
-            std::vector<std::unique_ptr<ItineraryItem>> airlineFlights = manager->search_reservations();
+            std::vector<std::unique_ptr<ItineraryItem>> airlineFlights = provider->search_reservations();
 
             items.insert(items.end(),
                          std::make_move_iterator(airlineFlights.begin()),
@@ -196,13 +196,13 @@ std::vector<std::unique_ptr<ItineraryItem>> Application::get_available_reservati
     }
     else if (requestType == RequestType::hotel)
     {
-        managers = HotelsManagerFactory::getManagers();
+        providers = HotelProviderFactory::getProviders();
 
-        for (auto &manager : managers)
+        for (auto &provider : providers)
         {
-            manager->setRequest(request);
+            provider->setRequest(request);
 
-            std::vector<std::unique_ptr<ItineraryItem>> hotelRooms = manager->search_reservations();
+            std::vector<std::unique_ptr<ItineraryItem>> hotelRooms = provider->search_reservations();
 
             items.insert(items.end(),
                          std::make_move_iterator(hotelRooms.begin()),
@@ -247,17 +247,17 @@ bool Application::withdraw_money(
 
 bool Application::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
 {
-    ItineraryManagerFactory factory;
+    ReservationProviderFactory factory;
 
-    std::unique_ptr<ItineraryManager> manager{};
+    std::unique_ptr<ReservationProvider> provider{};
 
     const auto &reservations = currItinerary.getReservations();
 
     for (const auto &res : reservations)
     {
-        manager = factory.getManager(res->getType());
+        provider = factory.getProvider(res->getType());
 
-        if (!manager->reserve(res.get()))
+        if (!provider->reserve(res.get()))
         {
             return false;
         }

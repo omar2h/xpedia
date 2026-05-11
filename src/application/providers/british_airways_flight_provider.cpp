@@ -1,10 +1,10 @@
-#include "british_airways_flights_manager.hpp"
+#include "british_airways_flight_provider.hpp"
 #include "../../apis/expedia_flights_api.hpp"
 #include "../../model/flight.hpp"
 #include "../../model/requests/flight_request.hpp"
 #include <iostream>
 
-std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightsManager::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::search_reservations() const
 {
     FlightRequest const *request = dynamic_cast<FlightRequest *>(getRequest());
 
@@ -25,7 +25,7 @@ std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightsManager::search
     return flights;
 }
 
-bool BritishAirwaysFlightsManager::reserve(Reservation *reservation) const
+bool BritishAirwaysFlightProvider::reserve(Reservation *reservation) const
 {
     // Just dummy. We should map from reservation to the agency api
     return BritishAirwaysOnlineAPI::ReserveFlight(BritishAirwaysFlight(), BritishAirwaysCustomerInfo());

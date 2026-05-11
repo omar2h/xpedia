@@ -1,9 +1,9 @@
-#include "marriott_hotels_manager.hpp"
+#include "marriott_hotel_provider.hpp"
 #include "../../apis/expedia_hotels_api.hpp"
 #include "../../model/factories/reservation_request_factory.hpp"
 #include "../../model/hotel_room.hpp"
 
-std::vector<std::unique_ptr<ItineraryItem>> MarriottHotelsManager::search_reservations() const
+std::vector<std::unique_ptr<ItineraryItem>> MarriottHotelProvider::search_reservations() const
 {
     HotelRequest *req = dynamic_cast<HotelRequest *>(getRequest());
     std::vector<std::unique_ptr<ItineraryItem>> rooms;
@@ -24,17 +24,17 @@ std::vector<std::unique_ptr<ItineraryItem>> MarriottHotelsManager::search_reserv
     return rooms;
 }
 
-bool MarriottHotelsManager::reserve(Reservation *) const
+bool MarriottHotelProvider::reserve(Reservation *) const
 {
     return MarriottHotelAPI::reserve();
 }
 
-std::string MarriottHotelsManager::getName() const
+std::string MarriottHotelProvider::getName() const
 {
     return "Marriott";
 }
 
-ItineraryManager *MarriottHotelsManager::clone()
+ReservationProvider *MarriottHotelProvider::clone()
 {
-    return new MarriottHotelsManager(*this);
+    return new MarriottHotelProvider(*this);
 }

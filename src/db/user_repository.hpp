@@ -8,13 +8,13 @@ using json = nlohmann::json;
 
 class FileStorage;
 
-class UsersManager
+class UserRepository
 {
     FileStorage &m_storage;
     static std::unordered_set<std::string> usersIds;
 
 public:
-    explicit UsersManager(FileStorage &storage);
+    explicit UserRepository(FileStorage &storage);
 
     void validate_user_sign_in(const User &);
     static std::string generate_user_id();

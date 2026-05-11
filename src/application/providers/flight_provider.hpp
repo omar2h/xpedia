@@ -3,10 +3,10 @@
 #include "../../model/requests/flight_request.hpp"
 #include "../../model/reservations/flight_reservation.hpp"
 #include "../../model/flight.hpp"
-#include "itinerary_manager.hpp"
+#include "reservation_provider.hpp"
 #include <vector>
 
-class FlightsManager : public ItineraryManager
+class FlightProvider : public ReservationProvider
 {
 
 public:
@@ -16,9 +16,9 @@ public:
 
     std::string getName() const override = 0;
 
-    ItineraryManager *clone() override = 0;
+    ReservationProvider *clone() override = 0;
 
-    virtual ~FlightsManager()
+    virtual ~FlightProvider()
     {
     }
 };

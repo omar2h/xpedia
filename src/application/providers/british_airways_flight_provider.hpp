@@ -1,8 +1,8 @@
 #pragma once
 
-#include "flights_manager.hpp"
+#include "flight_provider.hpp"
 
-class BritishAirwaysFlightsManager : public FlightsManager
+class BritishAirwaysFlightProvider : public FlightProvider
 {
 public:
     std::string getName() const override
@@ -14,7 +14,7 @@ public:
 
     bool reserve(Reservation *reservation) const override;
 
-    ItineraryManager *clone() override { return new BritishAirwaysFlightsManager(*this); };
+    ReservationProvider *clone() override { return new BritishAirwaysFlightProvider(*this); };
 
-    ~BritishAirwaysFlightsManager() override = default;
+    ~BritishAirwaysFlightProvider() override = default;
 };
