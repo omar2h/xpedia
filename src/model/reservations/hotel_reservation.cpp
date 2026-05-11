@@ -108,7 +108,7 @@ std::string HotelReservation::toString() const
     return oss.str();
 }
 
-std::string HotelReservation::toString2() const
+std::string HotelReservation::toSummaryString() const
 {
     std::ostringstream oss;
     oss << "Hotel: " << hotelName << "," << city << ", Room: " << roomType << "(" << rooms << ") "

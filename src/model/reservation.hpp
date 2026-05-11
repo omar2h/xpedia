@@ -30,7 +30,7 @@ public:
 
     virtual std::string toString() const = 0;
 
-    virtual std::string toString2() const = 0;
+    virtual std::string toSummaryString() const = 0;
 
     virtual void accept(ReservationVisitor &) const = 0;
 

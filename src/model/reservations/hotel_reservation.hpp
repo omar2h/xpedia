@@ -38,7 +38,7 @@ public:
 
     std::string toString() const override;
 
-    std::string toString2() const override;
+    std::string toSummaryString() const override;
 
     void setRequest(std::unique_ptr<ReservationRequest>) override;
 

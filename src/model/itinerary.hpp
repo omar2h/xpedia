@@ -24,7 +24,7 @@ public:
     void add_item(std::unique_ptr<Reservation>);
     void Clear();
     std::string toString() const;
-    std::string toString2() const;
+    std::string toSummaryString() const;
     double total_cost() const;
     const std::vector<std::unique_ptr<Reservation>> &getReservations() const;
     void setReservations(std::vector<std::unique_ptr<Reservation>> reservations_);

@@ -100,7 +100,7 @@ std::string FlightReservation::toString() const
     return oss.str();
 }
 
-std::string FlightReservation::toString2() const
+std::string FlightReservation::toSummaryString() const
 {
     std::ostringstream oss;
     oss << "Airline: " << airline << ", From " << from << " to " << to << " on " << date << "\n";

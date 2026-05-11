@@ -52,12 +52,12 @@ std::string Itinerary::toString() const
     return str;
 }
 
-std::string Itinerary::toString2() const
+std::string Itinerary::toSummaryString() const
 {
     std::string str{};
     for (const auto &res : reservations)
     {
-        str += res->toString2();
+        str += res->toSummaryString();
     }
     return str;
 }

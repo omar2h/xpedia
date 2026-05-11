@@ -168,7 +168,7 @@ void ConsoleFrontend::display_itinerary(const Itinerary &itinerary)
     const auto &reservations = itinerary.getReservations();
     int count{(int)reservations.size()};
     std::cout << "Itinerary of " << count << " reservations\n";
-    std::cout << itinerary.toString2() << "\n";
+    std::cout << itinerary.toSummaryString() << "\n";
 }
 
 void ConsoleFrontend::read_flight_request_data(FlightRequest &request)
