@@ -197,7 +197,7 @@ std::vector<User> Database::getUsers(const std::string &path) const
 {
     json arr;
     arr = getObjectsFromFile(path);
-    return UserRepository::get_users_from_objects(arr);
+    return UserRepository::getUsersFromObjects(arr);
 }
 
 Customer Database::getCustomer(const User &user)
@@ -242,6 +242,6 @@ void Database::saveUser(User &user)
     userRepository.validateUserSignIn(user);
     std::string newId = UserRepository::generateUserId();
     user.setId(newId);
-    json obj = UserRepository::convert_user_to_json(user);
+    json obj = UserRepository::convertUserToJson(user);
     writeJsonToFile("users.json", obj);
 }

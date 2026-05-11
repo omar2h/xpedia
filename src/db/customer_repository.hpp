@@ -17,9 +17,9 @@ public:
 
     void updateCustomer(const Customer &) const;
 
-    json convert_card_to_json(const PaymentCard &) const;
+    json convertCardToJson(const PaymentCard &) const;
 
-    json convert_customer_to_json(const Customer &) const;
+    json convertCustomerToJson(const Customer &) const;
 
     bool customerExists(const std::string &) const;
 };

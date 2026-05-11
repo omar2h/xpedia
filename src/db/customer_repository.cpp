@@ -44,7 +44,7 @@ Customer CustomerRepository::getCustomer(const User &user) const
     }
     else
     {
-        json obj = UserRepository::convert_user_to_json(user);
+        json obj = UserRepository::convertUserToJson(user);
 
         obj["cards"] = json::array();
         obj["itineraries"] = json::array();
@@ -55,7 +55,7 @@ Customer CustomerRepository::getCustomer(const User &user) const
     return customer;
 }
 
-json CustomerRepository::convert_card_to_json(const PaymentCard &card) const
+json CustomerRepository::convertCardToJson(const PaymentCard &card) const
 {
     json obj;
 
@@ -67,9 +67,9 @@ json CustomerRepository::convert_card_to_json(const PaymentCard &card) const
     return obj;
 }
 
-json CustomerRepository::convert_customer_to_json(const Customer &customer) const
+json CustomerRepository::convertCustomerToJson(const Customer &customer) const
 {
-    json obj = UserRepository::convert_user_to_json(customer);
+    json obj = UserRepository::convertUserToJson(customer);
 
     obj["cards"] = json::array();
     obj["itineraries"] = json::array();
@@ -82,7 +82,7 @@ json CustomerRepository::convert_customer_to_json(const Customer &customer) cons
 
     for (const PaymentCard &card : cards)
     {
-        cardObj = convert_card_to_json(card);
+        cardObj = convertCardToJson(card);
         obj["cards"].push_back(cardObj);
     }
 
@@ -105,7 +105,7 @@ bool CustomerRepository::customerExists(const std::string &uId) const
 
 void CustomerRepository::updateCustomer(const Customer &customer) const
 {
-    json obj = convert_customer_to_json(customer);
+    json obj = convertCustomerToJson(customer);
 
     m_storage.deleteObjectWithId("customers.json", customer.getId());
 

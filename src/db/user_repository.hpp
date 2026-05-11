@@ -18,6 +18,6 @@ public:
 
     void validateUserSignIn(const User &);
     static std::string generateUserId();
-    static json convert_user_to_json(const User &);
-    static std::vector<User> get_users_from_objects(json);
+    static json convertUserToJson(const User &);
+    static std::vector<User> getUsersFromObjects(json);
 };

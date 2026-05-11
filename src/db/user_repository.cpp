@@ -25,12 +25,12 @@ void UserRepository::validateUserSignIn(const User &u)
 
 std::string UserRepository::generateUserId()
 {
-    std::string newId = IdGenerator::generate_id(usersIds);
+    std::string newId = IdGenerator::generateId(usersIds);
     usersIds.insert(newId);
     return newId;
 }
 
-json UserRepository::convert_user_to_json(const User &user)
+json UserRepository::convertUserToJson(const User &user)
 {
     json obj;
     obj["id"] = user.getId();
@@ -42,7 +42,7 @@ json UserRepository::convert_user_to_json(const User &user)
     return obj;
 }
 
-std::vector<User> UserRepository::get_users_from_objects(json arr)
+std::vector<User> UserRepository::getUsersFromObjects(json arr)
 {
     std::vector<User> data{};
     for (const auto &u : arr)
