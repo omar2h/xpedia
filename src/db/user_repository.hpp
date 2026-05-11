@@ -16,8 +16,8 @@ class UserRepository
 public:
     explicit UserRepository(FileStorage &storage);
 
-    void validate_user_sign_in(const User &);
-    static std::string generate_user_id();
+    void validateUserSignIn(const User &);
+    static std::string generateUserId();
     static json convert_user_to_json(const User &);
     static std::vector<User> get_users_from_objects(json);
 };

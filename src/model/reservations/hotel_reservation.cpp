@@ -127,5 +127,5 @@ void HotelReservation::setItem(ItineraryItem *const i)
 {
     item.reset(dynamic_cast<HotelRoom *>(i->clone().release()));
     setType(i);
-    setReqType(i);
+    setRequestType(i);
 }

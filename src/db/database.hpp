@@ -19,18 +19,18 @@ class Database
 public:
     Database();
 
-    void save_user(User &);
-    json get_objects_from_file(const std::string &) const;
-    json get_object_with_id(const std::string &, const std::string &) const;
-    std::vector<std::string> read_json_attribute_from_file(const std::string &, const std::string &) const;
-    void write_json_to_file(const std::string &, json, bool);
-    std::vector<User> get_users(const std::string &) const;
+    void saveUser(User &);
+    json getObjectsFromFile(const std::string &) const;
+    json getObjectWithId(const std::string &, const std::string &) const;
+    std::vector<std::string> readJsonAttributeFromFile(const std::string &, const std::string &) const;
+    void writeJsonToFile(const std::string &, json, bool);
+    std::vector<User> getUsers(const std::string &) const;
     Customer getCustomer(const User &);
-    void update_customer_info(const Customer &);
-    void write_json_array_to_file(const std::string &, json, bool);
-    void delete_object_with_id(const std::string &path, const std::string &id);
-    void save_itinerary(const std::string &, const Itinerary &);
-    bool check_user_is_customer(const User &);
+    void updateCustomerInfo(const Customer &);
+    void writeJsonArrayToFile(const std::string &, json, bool);
+    void deleteObjectWithId(const std::string &path, const std::string &id);
+    void saveItinerary(const std::string &, const Itinerary &);
+    bool checkUserIsCustomer(const User &);
     std::vector<Itinerary> getCustomerItineraries(const std::string &);
     json getObjectsWithAttribute(const std::string &, const std::string &, const std::string &);
 };

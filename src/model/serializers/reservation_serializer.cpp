@@ -21,7 +21,7 @@ json ReservationSerializer::to_json(const Reservation &reservation)
     reservation.accept(*this);
 
     obj["type"] = reservation.getType();
-    obj["reqType"] = reservation.getReqType();
+    obj["requestType"] = reservation.getRequestType();
 
     return obj;
 }
@@ -62,9 +62,9 @@ void ReservationSerializer::visit(const HotelReservation &hotel)
 
 std::unique_ptr<Reservation> ReservationSerializer::from_json(const json &obj)
 {
-    RequestType reqType = obj["reqType"].get<RequestType>();
+    RequestType requestType = obj["requestType"].get<RequestType>();
 
-    if (reqType == RequestType::flight)
+    if (requestType == RequestType::flight)
     {
         FlightReservationData data;
         data.airline = obj["airline"];

@@ -21,7 +21,7 @@ class ReservationRequest;
 class Reservation
 {
     ReservationType type;
-    RequestType reqType;
+    RequestType requestType;
 
 public:
     virtual std::unique_ptr<Reservation> clone() const = 0;
@@ -41,6 +41,6 @@ public:
 
     virtual ~Reservation() = default;
 
-    RequestType getReqType() const { return reqType; }
-    void setReqType(ItineraryItem const *item) { reqType = item->getReqType(); }
+    RequestType getRequestType() const { return requestType; }
+    void setRequestType(ItineraryItem const *item) { requestType = item->getRequestType(); }
 };

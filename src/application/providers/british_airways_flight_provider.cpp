@@ -17,7 +17,7 @@ std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::search
     {
         Flight flight;
         flight.setType(ReservationType::britishAirways);
-        flight.setReqType(RequestType::flight);
+        flight.setRequestType(RequestType::flight);
         flight.setAirline(getName());
         flight.setDate(flight_.date);
         flight.setTotalCost(flight_.price);

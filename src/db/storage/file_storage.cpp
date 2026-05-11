@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-void FileStorage::write_json_to_file(const std::string &path, const json &obj, bool append) const
+void FileStorage::writeJsonToFile(const std::string &path, const json &obj, bool append) const
 {
     std::fstream file_handler(path.c_str());
 
@@ -34,8 +34,8 @@ void FileStorage::write_json_to_file(const std::string &path, const json &obj, b
     out << arr.dump(4);
 }
 
-std::vector<std::string> FileStorage::read_json_attribute_from_file(const std::string &path,
-                                                                    const std::string &attribute) const
+std::vector<std::string> FileStorage::readJsonAttributeFromFile(const std::string &path,
+                                                                const std::string &attribute) const
 {
     std::fstream file_handler(path.c_str());
 
@@ -59,7 +59,7 @@ std::vector<std::string> FileStorage::read_json_attribute_from_file(const std::s
     return attributes;
 }
 
-json FileStorage::get_object_with_id(const std::string &path, const std::string &id) const
+json FileStorage::getObjectWithId(const std::string &path, const std::string &id) const
 {
     std::fstream file_handler(path.c_str());
 
@@ -83,7 +83,7 @@ json FileStorage::get_object_with_id(const std::string &path, const std::string 
     return json{};
 }
 
-void FileStorage::delete_object_with_id(const std::string &path, const std::string &id) const
+void FileStorage::deleteObjectWithId(const std::string &path, const std::string &id) const
 {
     std::fstream file_handler(path.c_str());
 

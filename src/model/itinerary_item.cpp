@@ -3,12 +3,12 @@
 
 ReservationType ItineraryItem::getType() const { return type; }
 void ItineraryItem::setType(const ReservationType &type_) { type = type_; }
-RequestType ItineraryItem::getReqType() const
+RequestType ItineraryItem::getRequestType() const
 {
-    return reqType;
+    return requestType;
 }
 
-void ItineraryItem::setReqType(const RequestType &reqType_)
+void ItineraryItem::setRequestType(const RequestType &requestType_)
 {
-    reqType = reqType_;
+    requestType = requestType_;
 }

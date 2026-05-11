@@ -8,7 +8,7 @@ enum class RequestType;
 class ItineraryItem
 {
     ReservationType type;
-    RequestType reqType;
+    RequestType requestType;
 
 public:
     virtual std::string toString() const = 0;
@@ -18,6 +18,6 @@ public:
     virtual ReservationType getType() const;
     virtual void setType(const ReservationType &);
 
-    RequestType getReqType() const;
-    void setReqType(const RequestType &reqType_);
+    RequestType getRequestType() const;
+    void setRequestType(const RequestType &requestType_);
 };

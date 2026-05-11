@@ -6,13 +6,13 @@ std::unordered_set<std::string> UserRepository::usersIds{};
 
 UserRepository::UserRepository(FileStorage &storage) : m_storage(storage) {}
 
-void UserRepository::validate_user_sign_in(const User &u)
+void UserRepository::validateUserSignIn(const User &u)
 {
     std::vector<std::string> emails{};
     std::vector<std::string> phones{};
 
-    emails = m_storage.read_json_attribute_from_file("users.json", "email");
-    phones = m_storage.read_json_attribute_from_file("users.json", "phone");
+    emails = m_storage.readJsonAttributeFromFile("users.json", "email");
+    phones = m_storage.readJsonAttributeFromFile("users.json", "phone");
 
     auto it1 = find(emails.begin(), emails.end(), u.getEmail());
     auto it2 = find(phones.begin(), phones.end(), u.getPhone());
@@ -23,7 +23,7 @@ void UserRepository::validate_user_sign_in(const User &u)
     }
 }
 
-std::string UserRepository::generate_user_id()
+std::string UserRepository::generateUserId()
 {
     std::string newId = IdGenerator::generate_id(usersIds);
     usersIds.insert(newId);

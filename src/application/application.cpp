@@ -24,12 +24,12 @@ Application::Application(Database &database,
 
 void Application::save_user_in_db(User &user)
 {
-    m_database.save_user(user);
+    m_database.saveUser(user);
 }
 
 User Application::user_login(const std::string &email, const std::string &password)
 {
-    std::vector<User> users = m_database.get_users("users.json");
+    std::vector<User> users = m_database.getUsers("users.json");
 
     for (const auto &usr : users)
     {
@@ -45,7 +45,7 @@ void Application::add_card(Customer &customer, IFrontend &frontend)
     PaymentCard card = frontend.read_card();
     customer.addCard(card);
 
-    m_database.update_customer_info(customer);
+    m_database.updateCustomerInfo(customer);
 }
 
 int Application::make_reservations(Customer &customer, const Itinerary &currItinerary, IFrontend &frontend)
@@ -88,11 +88,11 @@ void Application::payItinerary(const Itinerary &currItinerary, const User &user,
     {
         frontend.show_message("Reservation is Confirmed");
 
-        m_database.save_itinerary(customer.getId(), currItinerary);
+        m_database.saveItinerary(customer.getId(), currItinerary);
 
         customer.addItineraryId(currItinerary.getId());
 
-        m_database.update_customer_info(customer);
+        m_database.updateCustomerInfo(customer);
 
         return;
     }
@@ -124,7 +124,7 @@ void Application::add_new_item(RequestType requestType, Itinerary &currItinerary
 
 void Application::list_itineraries(const User &user, IFrontend &frontend)
 {
-    bool isCustomer = m_database.check_user_is_customer(user);
+    bool isCustomer = m_database.checkUserIsCustomer(user);
 
     if (!isCustomer)
     {

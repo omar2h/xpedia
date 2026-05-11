@@ -8,7 +8,6 @@ target_sources(model
         itinerary.cpp
         itinerary_item.cpp
         payment_card.cpp
-        reservation.cpp
         user.cpp
 
         factories/reservation_factory.cpp
@@ -19,6 +18,8 @@ target_sources(model
 
         reservations/flight_reservation.cpp
         reservations/hotel_reservation.cpp
+
+        serializers/reservation_serializer.cpp
 )
 
 target_include_directories(model

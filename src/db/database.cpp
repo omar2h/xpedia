@@ -9,7 +9,7 @@ Database::Database()
 {
 }
 
-json Database::get_objects_from_file(const std::string &path) const
+json Database::getObjectsFromFile(const std::string &path) const
 {
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
@@ -33,7 +33,7 @@ json Database::get_objects_from_file(const std::string &path) const
     return arr;
 }
 
-void Database::delete_object_with_id(const std::string &path, const std::string &id)
+void Database::deleteObjectWithId(const std::string &path, const std::string &id)
 {
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
@@ -63,17 +63,17 @@ void Database::delete_object_with_id(const std::string &path, const std::string 
             break;
         }
     }
-    write_json_array_to_file(path, arr, false);
+    writeJsonArrayToFile(path, arr, false);
 }
 
-void Database::save_itinerary(const std::string &customerId, const Itinerary &itinerary)
+void Database::saveItinerary(const std::string &customerId, const Itinerary &itinerary)
 {
     itineraryRepository.save(customerId, itinerary);
 }
 
-bool Database::check_user_is_customer(const User &user)
+bool Database::checkUserIsCustomer(const User &user)
 {
-    bool exist = customerRepository.check_if_customer_exists(user.getId());
+    bool exist = customerRepository.customerExists(user.getId());
 
     return exist;
 }
@@ -83,7 +83,7 @@ std::vector<Itinerary> Database::getCustomerItineraries(const std::string &custo
     return itineraryRepository.findByCustomerId(customerId);
 }
 
-json Database::getObjectsWithAttribute(const std::string &path, const std::string &jsonAtt, const std::string &att)
+json Database::getObjectsWithAttribute(const std::string &path, const std::string &attribute, const std::string &value)
 {
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
@@ -106,13 +106,13 @@ json Database::getObjectsWithAttribute(const std::string &path, const std::strin
     json objectsArr;
     for (const auto &u : arr)
     {
-        if (u.value(jsonAtt, "not found") == att)
+        if (u.value(attribute, "not found") == value)
             objectsArr.push_back(u);
     }
     return objectsArr;
 }
 
-void Database::write_json_array_to_file(const std::string &path, json arr, bool append = false)
+void Database::writeJsonArrayToFile(const std::string &path, json arr, bool append = false)
 {
     auto status = std::ios::in | std::ios::out | std::ios::app;
 
@@ -130,7 +130,7 @@ void Database::write_json_array_to_file(const std::string &path, json arr, bool 
     file_handler.close();
 }
 
-json Database::get_object_with_id(const std::string &path, const std::string &id) const
+json Database::getObjectWithId(const std::string &path, const std::string &id) const
 {
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
@@ -160,7 +160,7 @@ json Database::get_object_with_id(const std::string &path, const std::string &id
     return obj;
 }
 
-void Database::write_json_to_file(const std::string &path, json obj, bool append = true)
+void Database::writeJsonToFile(const std::string &path, json obj, bool append = true)
 {
     auto status = std::ios::in | std::ios::out | std::ios::app;
 
@@ -193,10 +193,10 @@ void Database::write_json_to_file(const std::string &path, json obj, bool append
     f.close();
 }
 
-std::vector<User> Database::get_users(const std::string &path) const
+std::vector<User> Database::getUsers(const std::string &path) const
 {
     json arr;
-    arr = get_objects_from_file(path);
+    arr = getObjectsFromFile(path);
     return UserRepository::get_users_from_objects(arr);
 }
 
@@ -205,12 +205,12 @@ Customer Database::getCustomer(const User &user)
     return customerRepository.getCustomer(user);
 }
 
-void Database::update_customer_info(const Customer &customer)
+void Database::updateCustomerInfo(const Customer &customer)
 {
-    customerRepository.update_customer(customer);
+    customerRepository.updateCustomer(customer);
 }
 
-std::vector<std::string> Database::read_json_attribute_from_file(const std::string &path, const std::string &att) const
+std::vector<std::string> Database::readJsonAttributeFromFile(const std::string &path, const std::string &attribute) const
 {
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
@@ -232,16 +232,16 @@ std::vector<std::string> Database::read_json_attribute_from_file(const std::stri
     std::vector<std::string> data{};
     for (const auto &u : arr)
     {
-        data.push_back(u.value(att, "not found"));
+        data.push_back(u.value(attribute, "not found"));
     }
     return data;
 }
 
-void Database::save_user(User &user)
+void Database::saveUser(User &user)
 {
-    userRepository.validate_user_sign_in(user);
-    std::string newId = UserRepository::generate_user_id();
+    userRepository.validateUserSignIn(user);
+    std::string newId = UserRepository::generateUserId();
     user.setId(newId);
     json obj = UserRepository::convert_user_to_json(user);
-    write_json_to_file("users.json", obj);
+    writeJsonToFile("users.json", obj);
 }

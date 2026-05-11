@@ -12,7 +12,7 @@ void ItineraryRepository::save(const std::string &customerId, const Itinerary &i
     json obj = ItineraryMapper::to_json(itinerary);
 
     obj["customer_id"] = customerId;
-    storage.write_json_to_file("itineraries.json", obj, true);
+    storage.writeJsonToFile("itineraries.json", obj, true);
 }
 
 std::vector<Itinerary> ItineraryRepository::findByCustomerId(const std::string &customerId) const

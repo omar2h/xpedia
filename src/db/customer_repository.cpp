@@ -10,7 +10,7 @@ Customer CustomerRepository::getCustomer(const User &user) const
     Customer customer{user};
 
     std::vector<std::string> customersIds =
-        m_storage.read_json_attribute_from_file("customers.json", "id");
+        m_storage.readJsonAttributeFromFile("customers.json", "id");
 
     std::cout << "line 8\n";
 
@@ -19,7 +19,7 @@ Customer CustomerRepository::getCustomer(const User &user) const
     if (it != customersIds.end())
     {
         json jsonCustomer =
-            m_storage.get_object_with_id("customers.json", customer.getId());
+            m_storage.getObjectWithId("customers.json", customer.getId());
 
         nlohmann::json cardsArr = jsonCustomer["cards"];
 
@@ -49,7 +49,7 @@ Customer CustomerRepository::getCustomer(const User &user) const
         obj["cards"] = json::array();
         obj["itineraries"] = json::array();
 
-        m_storage.write_json_to_file("customers.json", obj, true);
+        m_storage.writeJsonToFile("customers.json", obj, true);
     }
 
     return customer;
@@ -95,19 +95,19 @@ json CustomerRepository::convert_customer_to_json(const Customer &customer) cons
     return obj;
 }
 
-bool CustomerRepository::check_if_customer_exists(const std::string &uId) const
+bool CustomerRepository::customerExists(const std::string &uId) const
 {
     json obj =
-        m_storage.get_object_with_id("customers.json", uId);
+        m_storage.getObjectWithId("customers.json", uId);
 
     return !obj.empty();
 }
 
-void CustomerRepository::update_customer(const Customer &customer) const
+void CustomerRepository::updateCustomer(const Customer &customer) const
 {
     json obj = convert_customer_to_json(customer);
 
-    m_storage.delete_object_with_id("customers.json", customer.getId());
+    m_storage.deleteObjectWithId("customers.json", customer.getId());
 
-    m_storage.write_json_to_file("customers.json", obj, true);
+    m_storage.writeJsonToFile("customers.json", obj, true);
 }

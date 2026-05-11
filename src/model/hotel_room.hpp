@@ -36,6 +36,6 @@ public:
 
     double total_cost() const
     {
-        return 100;
+        return pricePerNight;
     }
 };

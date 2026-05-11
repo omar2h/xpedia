@@ -118,5 +118,5 @@ void FlightReservation::setItem(ItineraryItem *const i)
 {
     item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(i->clone().release()));
     setType(i);
-    setReqType(i);
+    setRequestType(i);
 }
