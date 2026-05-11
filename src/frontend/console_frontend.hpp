@@ -1,6 +1,6 @@
 #pragma once
 
-#include "frontend_interface.hpp"
+#include "../application/frontend_interface.hpp"
 
 class FlightRequest;
 class HotelRequest;

@@ -5,7 +5,7 @@
 #include "../model/itinerary.hpp"
 #include "../model/customer.hpp"
 #include "payments/payment_strategy.hpp"
-#include "../frontend/frontend_interface.hpp"
+#include "frontend_interface.hpp"
 #include "factories/reservation_provider_factory.hpp"
 #include "factories/payment_factory.hpp"
 

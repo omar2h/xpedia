@@ -2,7 +2,7 @@
 #include "../exception.hpp"
 #include "../db/database.hpp"
 #include "../model/requests/flight_request.hpp"
-#include "../frontend/frontend_interface.hpp"
+#include "frontend_interface.hpp"
 #include "../model/factories/reservation_request_factory.hpp"
 #include "../model/factories/reservation_factory.hpp"
 #include "../db/id_generator.hpp"
