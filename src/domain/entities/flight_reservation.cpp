@@ -1,6 +1,7 @@
 #include "flight_reservation.hpp"
 #include "../visitors/reservation_visitor.hpp"
 #include <sstream>
+#include <cassert>
 
 FlightReservation::FlightReservation(const FlightReservation &other)
     : Reservation(other),
@@ -11,12 +12,8 @@ FlightReservation::FlightReservation(const FlightReservation &other)
       adults(other.adults),
       children(other.children),
       cost(other.cost),
-      item(nullptr)
+      item(other.item ? std::make_unique<Flight>(*other.item) : nullptr)
 {
-    if (other.item)
-    {
-        item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->clone().release()));
-    }
 }
 
 FlightReservation &FlightReservation::operator=(const FlightReservation &other)
@@ -36,7 +33,7 @@ FlightReservation &FlightReservation::operator=(const FlightReservation &other)
 
     if (other.item)
     {
-        item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->clone().release()));
+        item = std::make_unique<Flight>(*other.item);
     }
     else
     {
@@ -86,7 +83,8 @@ std::string FlightReservation::toSummaryString() const
 
 void FlightReservation::setItem(const ItineraryItem &i)
 {
-    item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(i.clone().release()));
+    assert(i.getRequestType() == RequestType::flight);
+    item = std::make_unique<Flight>(static_cast<const Flight &>(i));
     setType(&i);
     setRequestType(&i);
     airline = item->getAirline();

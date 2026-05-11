@@ -3,10 +3,11 @@
 
 #include <sstream>
 #include <string>
+#include <cassert>
 
 HotelReservation::HotelReservation(const HotelReservation &other)
     : Reservation(other),
-      item(nullptr),
+      item(other.item ? std::make_unique<HotelRoom>(*other.item) : nullptr),
       hotelName(other.hotelName),
       fromDate(other.fromDate),
       toDate(other.toDate),
@@ -17,10 +18,6 @@ HotelReservation::HotelReservation(const HotelReservation &other)
       rooms(other.rooms),
       cost(other.cost)
 {
-    if (other.item)
-    {
-        item = std::unique_ptr<HotelRoom>(dynamic_cast<HotelRoom *>(other.item->clone().release()));
-    }
 }
 
 HotelReservation &HotelReservation::operator=(
@@ -33,7 +30,7 @@ HotelReservation &HotelReservation::operator=(
 
     if (other.item)
     {
-        item = std::unique_ptr<HotelRoom>(dynamic_cast<HotelRoom *>(other.item->clone().release()));
+        item = std::make_unique<HotelRoom>(*other.item);
     }
     else
     {
@@ -106,7 +103,8 @@ std::string HotelReservation::toSummaryString() const
 
 void HotelReservation::setItem(const ItineraryItem &i)
 {
-    item.reset(dynamic_cast<HotelRoom *>(i.clone().release()));
+    assert(i.getRequestType() == RequestType::hotel);
+    item = std::make_unique<HotelRoom>(static_cast<const HotelRoom &>(i));
     setType(&i);
     setRequestType(&i);
     hotelName = item->getHotelName();
