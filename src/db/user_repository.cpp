@@ -1,7 +1,6 @@
 #include "user_repository.hpp"
 #include "id_generator.hpp"
 #include "storage/file_storage.hpp"
-#include <iostream>
 std::unordered_set<std::string> UserRepository::usersIds{};
 
 UserRepository::UserRepository(FileStorage &storage) : m_storage(storage) {}

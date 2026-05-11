@@ -1,8 +1,7 @@
 #include "database.hpp"
 #include <fstream>
 #include <vector>
-#include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 Database::Database()
     : userRepository(storage), customerRepository(storage), itineraryRepository(storage)
@@ -56,7 +55,6 @@ void Database::deleteObjectWithId(const std::string &path, const std::string &id
 
     for (int i = 0; i < (int)arr.size(); i++)
     {
-        std::cout << "database line 64 " << arr[i].value("id", "not found") << "\n";
         if (arr[i].value("id", "not found") == id)
         {
             arr.erase(i);
@@ -182,7 +180,6 @@ void Database::writeJsonToFile(const std::string &path, json obj, bool append = 
         /* return the cursor to the beginning of the file */
         file_handler.seekg(0, std::ios::beg);
         arr = json::parse(file_handler);
-        std::cout << arr.size() << "\n";
     }
     arr.push_back(obj);
     file_handler.close();

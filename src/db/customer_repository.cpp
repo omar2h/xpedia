@@ -1,7 +1,6 @@
 #include "customer_repository.hpp"
 #include "storage/file_storage.hpp"
 #include "user_repository.hpp"
-#include <iostream>
 
 CustomerRepository::CustomerRepository(FileStorage &storage) : m_storage(storage) {}
 
@@ -11,8 +10,6 @@ Customer CustomerRepository::getCustomer(const User &user) const
 
     std::vector<std::string> customersIds =
         m_storage.readJsonAttributeFromFile("customers.json", "id");
-
-    std::cout << "line 8\n";
 
     auto it = std::find(customersIds.begin(), customersIds.end(), customer.getId());
 
