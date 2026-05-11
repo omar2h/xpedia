@@ -1,8 +1,8 @@
 #include "reservation_service.hpp"
 #include "../providers/reservation_provider.hpp"
-#include "../../model/itinerary.hpp"
-#include "../../model/reservation.hpp"
-#include "../../model/requests/reservation_request.hpp"
+#include "../../domain/entities/itinerary.hpp"
+#include "../../domain/entities/reservation.hpp"
+#include "../../application/requests/reservation_request.hpp"
 
 ReservationService::ReservationService(
     std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getFlightProviders,

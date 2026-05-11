@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "../../model/itinerary.hpp"
+#include "../../domain/entities/itinerary.hpp"
 
 struct ListItinerariesResult
 {

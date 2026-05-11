@@ -11,6 +11,8 @@ target_sources(infrastructure
         providers/british_airways_flight_provider.cpp
         providers/hilton_hotel_provider.cpp
         providers/marriott_hotel_provider.cpp
+
+        serialization/reservation_serializer.cpp
 )
 
 target_include_directories(infrastructure

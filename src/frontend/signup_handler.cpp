@@ -1,7 +1,7 @@
 #include "signup_handler.hpp"
 #include "output.hpp"
 #include "input.hpp"
-#include "../model/user.hpp"
+#include "../domain/entities/user.hpp"
 #include "../application/services/auth_service.hpp"
 
 SignupHandler::SignupHandler(AuthService &authService, IOutput &output, IInput &input)

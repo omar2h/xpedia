@@ -1,10 +1,10 @@
 #include "pay_itinerary_use_case.hpp"
 #include "../database_interface.hpp"
 #include "../services/payment_service.hpp"
-#include "../../model/itinerary.hpp"
-#include "../../model/customer.hpp"
-#include "../../model/user.hpp"
-#include "../../model/payment_card.hpp"
+#include "../../domain/entities/itinerary.hpp"
+#include "../../domain/entities/customer.hpp"
+#include "../../domain/entities/user.hpp"
+#include "../../domain/entities/payment_card.hpp"
 
 PayItineraryUseCase::PayItineraryUseCase(IDatabase &database, PaymentProcessor &paymentProcessor)
     : m_database(database), m_paymentProcessor(paymentProcessor) {}

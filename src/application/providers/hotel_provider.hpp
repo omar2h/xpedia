@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../model/requests/hotel_request.hpp"
-#include "../../model/reservations/hotel_reservation.hpp"
+#include "../../application/requests/hotel_request.hpp"
+#include "../../domain/entities/hotel_reservation.hpp"
 #include "reservation_provider.hpp"
 #include <vector>
 class HotelProvider : public ReservationProvider

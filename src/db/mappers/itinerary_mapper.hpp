@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../model/itinerary.hpp"
+#include "../../domain/entities/itinerary.hpp"
 
 #include "../../third_party/json.hpp"
 

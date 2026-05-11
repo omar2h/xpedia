@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../application/payments/payment_strategy.hpp"
-#include "../../model/json_keys.hpp"
+#include "../../infrastructure/json_keys.hpp"
 #include "../../apis/expedia_payments_api.hpp"
 #include "../../third_party/json.hpp"
 #include <sstream>

@@ -1,7 +1,7 @@
 #include "british_airways_flight_provider.hpp"
 #include "../../apis/expedia_flights_api.hpp"
-#include "../../model/flight.hpp"
-#include "../../model/requests/flight_request.hpp"
+#include "../../domain/entities/flight.hpp"
+#include "../../application/requests/flight_request.hpp"
 #include <iostream>
 
 std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::searchReservations() const

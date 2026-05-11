@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../reservation.hpp"
-#include "../flight.hpp"
-#include "../requests/flight_request.hpp"
+#include "reservation.hpp"
+#include "flight.hpp"
+#include "../../application/requests/flight_request.hpp"
 #include <memory>
 using json = nlohmann::json;
 

@@ -3,11 +3,11 @@
 #include <string>
 #include <memory>
 
-#include "../third_party/json.hpp"
+#include "../../third_party/json.hpp"
 using json = nlohmann::json;
 
 #include "itinerary_item.hpp"
-#include "visitors/reservation_visitor.hpp"
+#include "../visitors/reservation_visitor.hpp"
 
 enum class RequestType;
 enum class ReservationType

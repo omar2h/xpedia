@@ -3,8 +3,8 @@
 #include <string>
 #include <memory>
 
-#include "../reservation.hpp"
-#include "../visitors/reservation_visitor.hpp"
+#include "../../domain/entities/reservation.hpp"
+#include "../../domain/visitors/reservation_visitor.hpp"
 #include "../../third_party/json.hpp"
 using json = nlohmann::json;
 

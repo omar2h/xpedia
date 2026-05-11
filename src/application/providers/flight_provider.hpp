@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../model/requests/flight_request.hpp"
-#include "../../model/reservations/flight_reservation.hpp"
-#include "../../model/flight.hpp"
+#include "../../application/requests/flight_request.hpp"
+#include "../../domain/entities/flight_reservation.hpp"
+#include "../../domain/entities/flight.hpp"
 #include "reservation_provider.hpp"
 #include <vector>
 

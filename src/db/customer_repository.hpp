@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../model/customer.hpp"
+#include "../domain/entities/customer.hpp"
 #include "../third_party/json.hpp"
 using json = nlohmann::json;
 

@@ -1,6 +1,6 @@
 #include "flight_reservation.hpp"
-#include "../factories/reservation_request_factory.hpp"
-#include "../dto/flight_reservation_data.hpp"
+#include "../../application/factories/reservation_request_factory.hpp"
+#include "../../application/dto/flight_reservation_data.hpp"
 #include "../visitors/reservation_visitor.hpp"
 #include <sstream>
 

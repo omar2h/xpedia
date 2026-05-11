@@ -1,6 +1,6 @@
 #include "user_repository.hpp"
 #include "../exception.hpp"
-#include "../model/json_keys.hpp"
+#include "../infrastructure/json_keys.hpp"
 #include "id_generator.hpp"
 #include "storage/file_storage.hpp"
 

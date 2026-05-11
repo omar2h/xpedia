@@ -3,7 +3,7 @@
 #include "providers/british_airways_flight_provider.hpp"
 #include "providers/air_france_flight_provider.hpp"
 
-#include "../model/reservation.hpp"
+#include "../../domain/entities/reservation.hpp"
 
 std::unique_ptr<ReservationProvider> FlightProviderFactory::getProvider(ReservationType type) const
 {

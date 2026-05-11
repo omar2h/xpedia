@@ -1,10 +1,10 @@
 #include "reservation_serializer.hpp"
 #include "../json_keys.hpp"
-#include "../requests/reservation_request.hpp"
-#include "../reservations/flight_reservation.hpp"
-#include "../reservations/hotel_reservation.hpp"
-#include "../dto/flight_reservation_data.hpp"
-#include "../dto/hotel_reservation_data.hpp"
+#include "../../application/requests/reservation_request.hpp"
+#include "../../domain/entities/flight_reservation.hpp"
+#include "../../domain/entities/hotel_reservation.hpp"
+#include "../../application/dto/flight_reservation_data.hpp"
+#include "../../application/dto/hotel_reservation_data.hpp"
 
 json ReservationSerializer::serialize(const Reservation &reservation)
 {

@@ -1,8 +1,8 @@
 #include "list_itineraries_use_case.hpp"
 #include "../database_interface.hpp"
-#include "../../model/customer.hpp"
-#include "../../model/user.hpp"
-#include "../../model/itinerary.hpp"
+#include "../../domain/entities/customer.hpp"
+#include "../../domain/entities/user.hpp"
+#include "../../domain/entities/itinerary.hpp"
 #include <vector>
 
 ListItinerariesUseCase::ListItinerariesUseCase(IDatabase &database)

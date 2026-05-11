@@ -1,5 +1,5 @@
 #include "customer_repository.hpp"
-#include "../model/json_keys.hpp"
+#include "../infrastructure/json_keys.hpp"
 #include "storage/file_storage.hpp"
 #include "user_repository.hpp"
 

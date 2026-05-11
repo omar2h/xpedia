@@ -18,7 +18,8 @@ target_include_directories(db
 
 target_link_libraries(db
     PUBLIC
-        model
+        domain
+        infrastructure
         util
 )
 

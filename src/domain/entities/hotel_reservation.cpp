@@ -1,6 +1,6 @@
 #include "hotel_reservation.hpp"
-#include "../factories/reservation_request_factory.hpp"
-#include "../dto/hotel_reservation_data.hpp"
+#include "../../application/factories/reservation_request_factory.hpp"
+#include "../../application/dto/hotel_reservation_data.hpp"
 #include "../visitors/reservation_visitor.hpp"
 
 #include <sstream>

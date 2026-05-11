@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../model/payment_card.hpp"
-#include "../model/itinerary_item.hpp"
-#include "../model/requests/reservation_request.hpp"
-#include "../model/user.hpp"
+#include "../domain/entities/payment_card.hpp"
+#include "../domain/entities/itinerary_item.hpp"
+#include "requests/reservation_request.hpp"
+#include "../domain/entities/user.hpp"
 #include <vector>
 #include <memory>
 

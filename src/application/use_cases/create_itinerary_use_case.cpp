@@ -1,10 +1,10 @@
 #include "create_itinerary_use_case.hpp"
 #include "../services/reservation_service.hpp"
-#include "../../model/itinerary.hpp"
-#include "../../model/itinerary_item.hpp"
-#include "../../model/requests/reservation_request.hpp"
-#include "../../model/factories/reservation_request_factory.hpp"
-#include "../../model/factories/reservation_factory.hpp"
+#include "../../domain/entities/itinerary.hpp"
+#include "../../domain/entities/itinerary_item.hpp"
+#include "../../application/requests/reservation_request.hpp"
+#include "../../application/factories/reservation_request_factory.hpp"
+#include "../../application/factories/reservation_factory.hpp"
 #include "../../util/id_generator.hpp"
 #include <memory>
 #include <vector>

@@ -17,7 +17,7 @@ target_include_directories(frontend
 target_link_libraries(frontend
     PUBLIC
         application
-        model
+        domain
 )
 
 target_compile_features(frontend PUBLIC cxx_std_17)

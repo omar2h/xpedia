@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../model/user.hpp"
+#include "../domain/entities/user.hpp"
 
 class AuthService;
 class IOutput;

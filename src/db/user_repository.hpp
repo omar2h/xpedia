@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../model/user.hpp"
+#include "../domain/entities/user.hpp"
 #include "../third_party/json.hpp"
 #include <unordered_set>
 #include <string>

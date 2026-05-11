@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../model/payment_card.hpp"
+#include "../../domain/entities/payment_card.hpp"
 enum class PaymentService
 {
     paypal,

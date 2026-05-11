@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../model/user.hpp"
-#include "../model/customer.hpp"
-#include "../model/itinerary.hpp"
+#include "../domain/entities/user.hpp"
+#include "../domain/entities/customer.hpp"
+#include "../domain/entities/itinerary.hpp"
 #include <string>
 #include <vector>
 

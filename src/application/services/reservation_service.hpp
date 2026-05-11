@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include <functional>
-#include "../../model/requests/reservation_request.hpp"
+#include "../requests/reservation_request.hpp"
 #include "../providers/reservation_provider.hpp"
 
 class ItineraryItem;

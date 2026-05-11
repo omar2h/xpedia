@@ -1,9 +1,9 @@
 #include "payment_service.hpp"
 #include "../database_interface.hpp"
 #include "../payments/payment_strategy.hpp"
-#include "../../model/payment_card.hpp"
-#include "../../model/customer.hpp"
-#include "../../model/itinerary.hpp"
+#include "../../domain/entities/payment_card.hpp"
+#include "../../domain/entities/customer.hpp"
+#include "../../domain/entities/itinerary.hpp"
 
 PaymentProcessor::PaymentProcessor(
     IDatabase &database,

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../reservation.hpp"
-#include "../requests/hotel_request.hpp"
-#include "../hotel_room.hpp"
+#include "reservation.hpp"
+#include "../../application/requests/hotel_request.hpp"
+#include "hotel_room.hpp"
 #include <memory>
 
 class HotelReservationData;
