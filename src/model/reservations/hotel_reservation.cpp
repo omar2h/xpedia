@@ -92,9 +92,9 @@ void HotelReservation::accept(ReservationVisitor &visitor) const
     visitor.visit(*this);
 }
 
-double HotelReservation::total_cost() const
+double HotelReservation::totalCost() const
 {
-    return item->total_cost() * request->getRooms();
+    return item->totalCost() * request->getRooms();
 }
 
 std::string HotelReservation::toString() const
@@ -104,7 +104,7 @@ std::string HotelReservation::toString() const
         << item->getRoomType() << "(" << request->getRooms() << ") "
         << ", From: " << item->getDateFrom() << " to: " << item->getDateTo() << "\n";
     oss << "Adults: " << request->getAdults() << ", children: " << request->getChildren() << "\n";
-    oss << "Total Cost:" << total_cost() << "\n";
+    oss << "Total Cost:" << totalCost() << "\n";
     return oss.str();
 }
 

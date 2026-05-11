@@ -26,7 +26,7 @@ class Reservation
 public:
     virtual std::unique_ptr<Reservation> clone() const = 0;
 
-    virtual double total_cost() const = 0;
+    virtual double totalCost() const = 0;
 
     virtual std::string toString() const = 0;
 

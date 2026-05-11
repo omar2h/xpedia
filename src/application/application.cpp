@@ -248,7 +248,7 @@ bool Application::withdrawMoney(
     const Itinerary &currItinerary)
 {
     auto paymentStrategy = PaymentFactory::getPaymentService(static_cast<PaymentService>(service - 1));
-    bool isPaid = paymentStrategy->pay(card, currItinerary.total_cost());
+    bool isPaid = paymentStrategy->pay(card, currItinerary.totalCost());
     return isPaid;
 }
 

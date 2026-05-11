@@ -34,7 +34,7 @@ public:
     std::string getDateTo() const { return dateTo; }
     void setDateTo(const std::string &dateTo_) { dateTo = dateTo_; }
 
-    double total_cost() const
+    double totalCost() const
     {
         return pricePerNight;
     }

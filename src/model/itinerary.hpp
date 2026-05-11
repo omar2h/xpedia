@@ -25,11 +25,11 @@ public:
     void clear();
     std::string toString() const;
     std::string toSummaryString() const;
-    double total_cost() const;
+    double totalCost() const;
     const std::vector<std::unique_ptr<Reservation>> &getReservations() const;
     void setReservations(std::vector<std::unique_ptr<Reservation>> reservations_);
 
     double getCost() const { return cost; }
-    void setCost() { cost = total_cost(); }
+    void setCost() { cost = totalCost(); }
     void setCost(double cost_) { cost = cost_; }
 };

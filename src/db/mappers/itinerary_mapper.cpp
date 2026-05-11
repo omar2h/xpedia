@@ -17,7 +17,7 @@ json ItineraryMapper::toJson(const Itinerary &itinerary)
 
     obj["reservations"] = reservations;
     obj["id"] = itinerary.getId();
-    obj["cost"] = itinerary.total_cost();
+    obj["cost"] = itinerary.totalCost();
 
     return obj;
 }

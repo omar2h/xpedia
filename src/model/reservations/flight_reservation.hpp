@@ -33,7 +33,7 @@ public:
 
     void accept(ReservationVisitor &) const override;
 
-    double total_cost() const override;
+    double totalCost() const override;
 
     std::string toString() const override;
 

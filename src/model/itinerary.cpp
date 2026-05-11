@@ -62,12 +62,12 @@ std::string Itinerary::toSummaryString() const
     return str;
 }
 
-double Itinerary::total_cost() const
+double Itinerary::totalCost() const
 {
     double cost{};
     for (const auto &res : reservations)
     {
-        cost += res->total_cost();
+        cost += res->totalCost();
     }
     return cost;
 }

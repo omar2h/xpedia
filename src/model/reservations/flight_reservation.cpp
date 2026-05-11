@@ -85,7 +85,7 @@ void FlightReservation::accept(ReservationVisitor &visitor) const
     visitor.visit(*this);
 }
 
-double FlightReservation::total_cost() const
+double FlightReservation::totalCost() const
 {
     return item->getTotalCost() * request->getAdults() +
            item->getTotalCost() * request->getChildren() * 0.5;
@@ -96,7 +96,7 @@ std::string FlightReservation::toString() const
     std::ostringstream oss;
     oss << "Airline: " << item->getAirline() << ": From " << request->getFromCity() << " to " << request->getToCity() << " on " << item->getDate() << "\n";
     oss << "Adults: " << request->getAdults() << ", children: " << request->getChildren() << "\n";
-    oss << "Total Cost:" << total_cost() << "\n";
+    oss << "Total Cost:" << totalCost() << "\n";
     return oss.str();
 }
 

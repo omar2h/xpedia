@@ -38,7 +38,7 @@ void ReservationSerializer::visit(const FlightReservation &flight)
     obj["adults"] = flight.getAdults();
     obj["children"] = flight.getChildren();
 
-    obj["cost"] = flight.total_cost();
+    obj["cost"] = flight.totalCost();
 }
 
 void ReservationSerializer::visit(const HotelReservation &hotel)
@@ -57,7 +57,7 @@ void ReservationSerializer::visit(const HotelReservation &hotel)
     obj["adults"] = hotel.getAdults();
     obj["children"] = hotel.getChildren();
 
-    obj["cost"] = hotel.total_cost();
+    obj["cost"] = hotel.totalCost();
 }
 
 std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json &obj)
