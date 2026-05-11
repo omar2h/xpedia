@@ -2,7 +2,7 @@
 #include "../application/application.hpp"
 #include <iostream>
 
-LoginHandler::LoginHandler(Application &backend) : m_backend(backend) {}
+LoginHandler::LoginHandler(Application &backend)     : m_application(backend) {}
 
 User LoginHandler::login()
 {
@@ -14,5 +14,5 @@ User LoginHandler::login()
     std::cout << "Enter Password: ";
     std::cin >> password;
 
-    return m_backend.user_login(email, password);
+    return m_application.user_login(email, password);
 }

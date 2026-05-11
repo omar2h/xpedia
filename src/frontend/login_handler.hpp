@@ -6,7 +6,7 @@ class Application;
 
 class LoginHandler
 {
-    Application &m_backend;
+    Application &m_application;
 
 public:
     explicit LoginHandler(Application &backend);

@@ -10,7 +10,7 @@ class SignupHandler;
 
 class ConsoleFrontend : public IFrontend
 {
-    Application &m_backend;
+    Application &m_application;
     LoginHandler &m_loginHandler;
     SignupHandler &m_signupHandler;
 

@@ -10,7 +10,7 @@
 #include <iostream>
 
 ConsoleFrontend::ConsoleFrontend(Application &backend, LoginHandler &loginHandler, SignupHandler &signupHandler)
-    : m_backend(backend), m_loginHandler(loginHandler), m_signupHandler(signupHandler) {}
+    : m_application(backend), m_loginHandler(loginHandler), m_signupHandler(signupHandler) {}
 
 int ConsoleFrontend::display_create_itinerary_menu()
 {

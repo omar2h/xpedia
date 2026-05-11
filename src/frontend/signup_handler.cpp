@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 
-SignupHandler::SignupHandler(Application &backend) : m_backend(backend) {}
+SignupHandler::SignupHandler(Application &backend) : m_application(backend) {}
 
 void SignupHandler::signup()
 {
@@ -28,5 +28,5 @@ void SignupHandler::signup()
 
     User usr(firstName, lastName, email, phone, password);
 
-    m_backend.save_user_in_db(usr);
+    m_application.save_user_in_db(usr);
 }

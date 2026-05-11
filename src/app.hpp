@@ -6,7 +6,7 @@ class Application;
 class App
 {
     IFrontend &m_frontend;
-    Application &m_backend;
+    Application &m_application;
 
 public:
     App(IFrontend &frontend, Application &backend);

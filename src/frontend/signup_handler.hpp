@@ -4,7 +4,7 @@ class Application;
 
 class SignupHandler
 {
-    Application &m_backend;
+    Application &m_application;
 
 public:
     explicit SignupHandler(Application &backend);

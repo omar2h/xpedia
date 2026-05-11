@@ -11,7 +11,7 @@
 #include <iostream>
 
 App::App(IFrontend &frontend, Application &backend)
-    : m_frontend(frontend), m_backend(backend) {}
+    : m_frontend(frontend), m_application(backend) {}
 
 void App::run()
 {
@@ -47,11 +47,11 @@ void App::run()
             }
             else if (choice == 2)
             {
-                m_backend.create_itinerary(user, m_frontend);
+                m_application.create_itinerary(user, m_frontend);
             }
             else if (choice == 3)
             {
-                m_backend.list_itineraries(user, m_frontend);
+                m_application.list_itineraries(user, m_frontend);
             }
             else if (choice == 4)
             {
