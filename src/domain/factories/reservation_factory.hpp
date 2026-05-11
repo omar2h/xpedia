@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "../entities/reservation.hpp"
-enum class RequestType;
 
 class ReservationFactory
 {

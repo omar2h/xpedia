@@ -1,10 +1,8 @@
 #include "reservation_serializer.hpp"
 #include "../json_keys.hpp"
-#include "../../application/requests/reservation_request.hpp"
+#include "../../domain/request_type.hpp"
 #include "../../domain/entities/flight_reservation.hpp"
 #include "../../domain/entities/hotel_reservation.hpp"
-#include "../../application/dto/flight_reservation_data.hpp"
-#include "../../application/dto/hotel_reservation_data.hpp"
 
 json ReservationSerializer::serialize(const Reservation &reservation)
 {
@@ -64,38 +62,34 @@ void ReservationSerializer::visit(const HotelReservation &hotel)
 std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json &obj)
 {
     RequestType requestType = obj[JsonKeys::requestType].get<RequestType>();
+    ReservationType resType = obj[JsonKeys::type].get<ReservationType>();
 
     if (requestType == RequestType::flight)
     {
-        FlightReservationData data;
-        data.airline = obj[JsonKeys::airline];
-        data.from = obj[JsonKeys::from];
-        data.to = obj[JsonKeys::to];
-
-        data.date = obj[JsonKeys::date];
-
-        data.adults = obj[JsonKeys::adults];
-        data.children = obj[JsonKeys::children];
-
-        data.cost = obj[JsonKeys::cost];
-        return std::make_unique<FlightReservation>(data);
+        auto reservation = std::make_unique<FlightReservation>();
+        reservation->setType(resType);
+        reservation->setRequestType(requestType);
+        reservation->setAirline(obj[JsonKeys::airline].get<std::string>());
+        reservation->setFrom(obj[JsonKeys::from].get<std::string>());
+        reservation->setTo(obj[JsonKeys::to].get<std::string>());
+        reservation->setDate(obj[JsonKeys::date].get<std::string>());
+        reservation->setAdults(obj[JsonKeys::adults].get<int>());
+        reservation->setChildren(obj[JsonKeys::children].get<int>());
+        reservation->setCost(obj[JsonKeys::cost].get<double>());
+        return reservation;
     }
 
-    HotelReservationData data;
-    data.hotelName = obj[JsonKeys::hotel];
-
-    data.fromDate = obj[JsonKeys::from];
-    data.toDate = obj[JsonKeys::to];
-
-    data.city = obj[JsonKeys::city];
-
-    data.roomType = obj[JsonKeys::roomType];
-
-    data.adults = obj[JsonKeys::adults];
-    data.children = obj[JsonKeys::children];
-    data.rooms = obj[JsonKeys::rooms];
-
-    data.cost = obj[JsonKeys::cost];
-
-    return std::make_unique<HotelReservation>(data);
+    auto reservation = std::make_unique<HotelReservation>();
+    reservation->setType(resType);
+    reservation->setRequestType(requestType);
+    reservation->setHotelName(obj[JsonKeys::hotel].get<std::string>());
+    reservation->setFromDate(obj[JsonKeys::from].get<std::string>());
+    reservation->setToDate(obj[JsonKeys::to].get<std::string>());
+    reservation->setCity(obj[JsonKeys::city].get<std::string>());
+    reservation->setRoomType(obj[JsonKeys::roomType].get<std::string>());
+    reservation->setAdults(obj[JsonKeys::adults].get<int>());
+    reservation->setChildren(obj[JsonKeys::children].get<int>());
+    reservation->setRooms(obj[JsonKeys::rooms].get<int>());
+    reservation->setCost(obj[JsonKeys::cost].get<double>());
+    return reservation;
 }

@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+#include "domain/request_type.hpp"
+
 class IFrontend;
 class User;
 class Itinerary;
@@ -13,7 +15,6 @@ class ReservationRequestFactory;
 class CreateItineraryUseCase;
 class PayItineraryUseCase;
 class ListItinerariesUseCase;
-enum class RequestType;
 
 class App
 {

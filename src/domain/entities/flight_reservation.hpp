@@ -2,15 +2,10 @@
 
 #include "reservation.hpp"
 #include "flight.hpp"
-#include "../../application/requests/flight_request.hpp"
 #include <memory>
-using json = nlohmann::json;
-
-class FlightReservationData;
 
 class FlightReservation : public Reservation
 {
-    std::unique_ptr<FlightRequest> request{};
     std::unique_ptr<Flight> item{};
     std::string airline{};
     std::string from{};
@@ -23,7 +18,6 @@ class FlightReservation : public Reservation
 public:
     FlightReservation() = default;
     FlightReservation(const FlightReservation &);
-    explicit FlightReservation(const FlightReservationData &data);
     FlightReservation &operator=(const FlightReservation &);
     FlightReservation(FlightReservation &&) noexcept = default;
     FlightReservation &operator=(FlightReservation &&) noexcept = default;
@@ -39,37 +33,21 @@ public:
 
     [[nodiscard]] std::string toSummaryString() const override;
 
-    void setRequest(std::unique_ptr<ReservationRequest>) override;
-
     void setItem(const ItineraryItem &) override;
 
-    std::string getAirline() const
-    {
-        return airline;
-    }
+    // Setters for domain state
+    void setFrom(const std::string &f) { from = f; }
+    void setTo(const std::string &t) { to = t; }
+    void setAdults(int a) { adults = a; }
+    void setChildren(int c) { children = c; }
+    void setAirline(const std::string &a) { airline = a; }
+    void setDate(const std::string &d) { date = d; }
+    void setCost(double c) { cost = c; }
 
-    std::string getFrom() const
-    {
-        return from;
-    }
-
-    std::string getTo() const
-    {
-        return to;
-    }
-
-    std::string getDate() const
-    {
-        return date;
-    }
-
-    int getAdults() const
-    {
-        return adults;
-    }
-
-    int getChildren() const
-    {
-        return children;
-    }
+    std::string getAirline() const { return airline; }
+    std::string getFrom() const { return from; }
+    std::string getTo() const { return to; }
+    std::string getDate() const { return date; }
+    int getAdults() const { return adults; }
+    int getChildren() const { return children; }
 };

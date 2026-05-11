@@ -3,8 +3,9 @@
 #include <string>
 #include <memory>
 
+#include "../request_type.hpp"
+
 enum class ReservationType;
-enum class RequestType;
 class ItineraryItem
 {
     ReservationType type;

@@ -1,11 +1,10 @@
 #include "flight_reservation.hpp"
-#include "../../application/factories/reservation_request_factory.hpp"
-#include "../../application/dto/flight_reservation_data.hpp"
 #include "../visitors/reservation_visitor.hpp"
 #include <sstream>
 
 FlightReservation::FlightReservation(const FlightReservation &other)
-    : airline(other.airline),
+    : Reservation(other),
+      airline(other.airline),
       from(other.from),
       to(other.to),
       date(other.date),
@@ -18,32 +17,14 @@ FlightReservation::FlightReservation(const FlightReservation &other)
     {
         item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(other.item->clone().release()));
     }
-    if (other.request)
-    {
-        request = std::make_unique<FlightRequest>(*other.request);
-    }
-}
-
-FlightReservation::FlightReservation(
-    const FlightReservationData &data)
-{
-    airline = data.airline;
-
-    from = data.from;
-    to = data.to;
-
-    date = data.date;
-
-    adults = data.adults;
-    children = data.children;
-
-    cost = data.cost;
 }
 
 FlightReservation &FlightReservation::operator=(const FlightReservation &other)
 {
     if (this == &other)
         return *this;
+
+    Reservation::operator=(other);
 
     airline = other.airline;
     from = other.from;
@@ -62,15 +43,6 @@ FlightReservation &FlightReservation::operator=(const FlightReservation &other)
         item.reset();
     }
 
-    if (other.request)
-    {
-        request = std::make_unique<FlightRequest>(*other.request);
-    }
-    else
-    {
-        request.reset();
-    }
-
     return *this;
 }
 
@@ -86,15 +58,19 @@ void FlightReservation::accept(ReservationVisitor &visitor) const
 
 double FlightReservation::totalCost() const
 {
-    return item->getTotalCost() * request->getAdults() +
-           item->getTotalCost() * request->getChildren() * 0.5;
+    if (item)
+    {
+        return item->getTotalCost() * adults +
+               item->getTotalCost() * children * 0.5;
+    }
+    return cost;
 }
 
 std::string FlightReservation::toString() const
 {
     std::ostringstream oss;
-    oss << "Airline: " << item->getAirline() << ": From " << request->getFromCity() << " to " << request->getToCity() << " on " << item->getDate() << "\n";
-    oss << "Adults: " << request->getAdults() << ", children: " << request->getChildren() << "\n";
+    oss << "Airline: " << airline << ": From " << from << " to " << to << " on " << date << "\n";
+    oss << "Adults: " << adults << ", children: " << children << "\n";
     oss << "Total Cost:" << totalCost() << "\n";
     return oss.str();
 }
@@ -104,15 +80,8 @@ std::string FlightReservation::toSummaryString() const
     std::ostringstream oss;
     oss << "Airline: " << airline << ", From " << from << " to " << to << " on " << date << "\n";
     oss << " Adults: " << adults << ", children: " << children << "\n";
-    oss << " Total Cost:" << cost << "\n";
+    oss << " Total Cost:" << totalCost() << "\n";
     return oss.str();
-}
-
-void FlightReservation::setRequest(std::unique_ptr<ReservationRequest> req)
-{
-    request.reset(dynamic_cast<FlightRequest *>(req.release()));
-    adults = request->getAdults();
-    children = request->getChildren();
 }
 
 void FlightReservation::setItem(const ItineraryItem &i)

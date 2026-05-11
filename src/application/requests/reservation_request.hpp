@@ -3,11 +3,7 @@
 #include <memory>
 #include <string>
 
-enum class RequestType
-{
-    flight,
-    hotel
-};
+#include "../../domain/request_type.hpp"
 
 class ReservationRequest
 {
