@@ -1,6 +1,6 @@
 #pragma once
 
-#include "flight_provider.hpp"
+#include "../../application/providers/flight_provider.hpp"
 
 class BritishAirwaysFlightProvider : public FlightProvider
 {

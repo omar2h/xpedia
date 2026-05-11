@@ -11,8 +11,6 @@
 #include "infrastructure/factories/hotel_provider_factory.hpp"
 #include "infrastructure/factories/reservation_provider_factory.hpp"
 #include "infrastructure/factories/payment_factory.hpp"
-#include "application/factories/reservation_provider_factory.hpp"
-#include "application/factories/payment_factory.hpp"
 #include "model/factories/reservation_request_factory.hpp"
 #include "model/factories/reservation_factory.hpp"
 #include <iostream>
@@ -75,10 +73,14 @@ int main()
     HotelProviderFactory hotelProviderFactory;
     RoutingReservationProviderFactory reservationProviderFactory;
     PaymentFactory paymentFactory;
+    auto getFlightProviders = [&]() { return flightProviderFactory.getProviders(); };
+    auto getHotelProviders = [&]() { return hotelProviderFactory.getProviders(); };
+    auto getReservationProvider = [&](ReservationType type) { return reservationProviderFactory.getProvider(type); };
+    auto getPaymentService = [&](PaymentService service) { return paymentFactory.getPaymentService(service); };
     ReservationRequestFactory requestFactory;
     ReservationFactory reservationFactory;
-    Application application{database, flightProviderFactory, hotelProviderFactory,
-                            reservationProviderFactory, paymentFactory,
+    Application application{database, getFlightProviders, getHotelProviders,
+                            getReservationProvider, getPaymentService,
                             requestFactory, reservationFactory};
     ConsoleOutput output;
     ConsoleInput input;

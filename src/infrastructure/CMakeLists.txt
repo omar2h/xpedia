@@ -6,6 +6,11 @@ target_sources(infrastructure
         factories/hotel_provider_factory.cpp
         factories/reservation_provider_factory.cpp
         factories/payment_factory.cpp
+
+        providers/air_france_flight_provider.cpp
+        providers/british_airways_flight_provider.cpp
+        providers/hilton_hotel_provider.cpp
+        providers/marriott_hotel_provider.cpp
 )
 
 target_include_directories(infrastructure

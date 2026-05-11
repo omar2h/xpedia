@@ -1,8 +1,8 @@
 #pragma once
 
-#include "hotel_provider.hpp"
+#include "../../application/providers/hotel_provider.hpp"
 
-class MarriottHotelProvider : public HotelProvider
+class HiltonHotelProvider : public HotelProvider
 {
 public:
     [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const override;
@@ -12,4 +12,6 @@ public:
     [[nodiscard]] std::string getName() const override;
 
     [[nodiscard]] std::unique_ptr<ReservationProvider> clone() const override;
+
+    ~HiltonHotelProvider() override = default;
 };

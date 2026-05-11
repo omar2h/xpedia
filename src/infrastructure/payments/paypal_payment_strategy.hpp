@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../apis/expedia_payments_api.hpp"
-#include "payment_strategy.hpp"
+#include "../../application/payments/payment_strategy.hpp"
 class PayPalPaymentStrategy : public PaymentStrategy
 {
     PayPalCreditCard paypalCard;

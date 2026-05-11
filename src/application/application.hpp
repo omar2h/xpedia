@@ -7,27 +7,26 @@
 #include "payments/payment_strategy.hpp"
 #include "frontend_interface.hpp"
 #include "database_interface.hpp"
-#include "factories/reservation_provider_factory.hpp"
-#include "factories/payment_factory.hpp"
+#include <functional>
 class ReservationRequestFactory;
 class ReservationFactory;
 
 class Application
 {
     IDatabase &m_database;
-    ReservationProviderFactory &m_flightProviderFactory;
-    ReservationProviderFactory &m_hotelProviderFactory;
-    ReservationProviderFactory &m_reservationProviderFactory;
-    IPaymentFactory &m_paymentFactory;
+    std::function<std::vector<std::unique_ptr<ReservationProvider>>()> m_getFlightProviders;
+    std::function<std::vector<std::unique_ptr<ReservationProvider>>()> m_getHotelProviders;
+    std::function<std::unique_ptr<ReservationProvider>(ReservationType)> m_getReservationProvider;
+    std::function<std::unique_ptr<PaymentStrategy>(PaymentService)> m_getPaymentService;
     ReservationRequestFactory &m_requestFactory;
     ReservationFactory &m_reservationFactory;
 
 public:
     Application(IDatabase &database,
-                ReservationProviderFactory &flightProviderFactory,
-                ReservationProviderFactory &hotelProviderFactory,
-                ReservationProviderFactory &reservationProviderFactory,
-                IPaymentFactory &paymentFactory,
+                std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getFlightProviders,
+                std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getHotelProviders,
+                std::function<std::unique_ptr<ReservationProvider>(ReservationType)> getReservationProvider,
+                std::function<std::unique_ptr<PaymentStrategy>(PaymentService)> getPaymentService,
                 ReservationRequestFactory &requestFactory,
                 ReservationFactory &reservationFactory);
 

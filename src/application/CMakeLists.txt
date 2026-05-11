@@ -3,11 +3,6 @@ add_library(application)
 target_sources(application
     PRIVATE
         application.cpp
-
-        providers/air_france_flight_provider.cpp
-        providers/british_airways_flight_provider.cpp
-        providers/hilton_hotel_provider.cpp
-        providers/marriott_hotel_provider.cpp
 )
 
 target_include_directories(application

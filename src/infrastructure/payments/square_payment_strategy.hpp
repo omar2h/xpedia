@@ -1,6 +1,6 @@
 #pragma once
 
-#include "payment_strategy.hpp"
+#include "../../application/payments/payment_strategy.hpp"
 #include "../../model/json_keys.hpp"
 #include "../../apis/expedia_payments_api.hpp"
 #include "../../third_party/json.hpp"

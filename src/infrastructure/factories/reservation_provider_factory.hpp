@@ -1,11 +1,15 @@
 #pragma once
 
-#include "../../application/factories/reservation_provider_factory.hpp"
+#include <memory>
+#include <vector>
 
-class RoutingReservationProviderFactory : public ReservationProviderFactory
+enum class ReservationType;
+class ReservationProvider;
+
+class RoutingReservationProviderFactory
 {
 public:
-    [[nodiscard]] std::unique_ptr<ReservationProvider> getProvider(ReservationType type) const override;
+    [[nodiscard]] std::unique_ptr<ReservationProvider> getProvider(ReservationType type) const;
 
-    [[nodiscard]] std::vector<std::unique_ptr<ReservationProvider>> getProviders() const override;
+    [[nodiscard]] std::vector<std::unique_ptr<ReservationProvider>> getProviders() const;
 };

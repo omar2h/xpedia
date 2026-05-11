@@ -1,6 +1,6 @@
 #pragma once
 
-#include "payment_strategy.hpp"
+#include "../../application/payments/payment_strategy.hpp"
 #include "../../apis/expedia_payments_api.hpp"
 
 class StripePaymentStrategy : public PaymentStrategy

@@ -11,17 +11,17 @@
 class ItineraryItem;
 
 Application::Application(IDatabase &database,
-                         ReservationProviderFactory &flightProviderFactory,
-                         ReservationProviderFactory &hotelProviderFactory,
-                         ReservationProviderFactory &reservationProviderFactory,
-                         IPaymentFactory &paymentFactory,
+                         std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getFlightProviders,
+                         std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getHotelProviders,
+                         std::function<std::unique_ptr<ReservationProvider>(ReservationType)> getReservationProvider,
+                         std::function<std::unique_ptr<PaymentStrategy>(PaymentService)> getPaymentService,
                          ReservationRequestFactory &requestFactory,
                          ReservationFactory &reservationFactory)
     : m_database(database),
-      m_flightProviderFactory(flightProviderFactory),
-      m_hotelProviderFactory(hotelProviderFactory),
-      m_reservationProviderFactory(reservationProviderFactory),
-      m_paymentFactory(paymentFactory),
+      m_getFlightProviders(std::move(getFlightProviders)),
+      m_getHotelProviders(std::move(getHotelProviders)),
+      m_getReservationProvider(std::move(getReservationProvider)),
+      m_getPaymentService(std::move(getPaymentService)),
       m_requestFactory(requestFactory),
       m_reservationFactory(reservationFactory) {}
 
@@ -202,7 +202,7 @@ std::vector<std::unique_ptr<ItineraryItem>> Application::getAvailableReservation
 
     if (requestType == RequestType::flight)
     {
-        providers = m_flightProviderFactory.getProviders();
+        providers = m_getFlightProviders();
 
         for (auto &provider : providers)
         {
@@ -217,7 +217,7 @@ std::vector<std::unique_ptr<ItineraryItem>> Application::getAvailableReservation
     }
     else if (requestType == RequestType::hotel)
     {
-        providers = m_hotelProviderFactory.getProviders();
+        providers = m_getHotelProviders();
 
         for (auto &provider : providers)
         {
@@ -261,7 +261,7 @@ bool Application::withdrawMoney(
     int service,
     const Itinerary &currItinerary)
 {
-    auto paymentStrategy = m_paymentFactory.getPaymentService(static_cast<PaymentService>(service - 1));
+    auto paymentStrategy = m_getPaymentService(static_cast<PaymentService>(service - 1));
     bool isPaid = paymentStrategy->pay(card, currItinerary.totalCost());
     return isPaid;
 }
@@ -274,7 +274,7 @@ bool Application::confirmReservations(Customer &customer, const Itinerary &currI
 
     for (const auto &res : reservations)
     {
-        provider = m_reservationProviderFactory.getProvider(res->getType());
+        provider = m_getReservationProvider(res->getType());
 
         if (!provider->reserve(res.get()))
         {
