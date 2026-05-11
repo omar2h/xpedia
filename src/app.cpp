@@ -8,51 +8,48 @@
 #include "db/database.hpp"
 #include <iostream>
 
-[[noreturn]] void App::run()
-{
-    Database database;
-    Backend backend{database};
-    LoginHandler loginHandler{backend};
-    SignupHandler signupHandler{backend};
-    ConsoleFrontend frontend{backend, loginHandler, signupHandler};
+App::App(IFrontend &frontend, Backend &backend)
+    : m_frontend(frontend), m_backend(backend) {}
 
+void App::run()
+{
     User user;
     while (true)
     {
         while (true)
         {
             std::cout << "\n\n";
-            int choice = frontend.show_start_menu();
+            int choice = m_frontend.show_start_menu();
 
             if (choice == 1)
             {
-                user = frontend.login();
-                frontend.display_welcome_message(user.getFirstName(), user.getLastName());
+                user = m_frontend.login();
+                m_frontend.display_welcome_message(user.getFirstName(), user.getLastName());
                 break;
             }
             else if (choice == 2)
             {
-                frontend.signup();
+                m_frontend.signup();
             }
             else if (choice == 3)
-                exit(0);
+                return;
         }
 
         while (true)
         {
-            int choice = frontend.display_main_menu();
+            int choice = m_frontend.display_main_menu();
 
             if (choice == 1)
             {
-                frontend.display_user_profile(user);
+                m_frontend.display_user_profile(user);
             }
             else if (choice == 2)
             {
-                backend.create_itinerary(user, frontend);
+                m_backend.create_itinerary(user, m_frontend);
             }
             else if (choice == 3)
             {
-                backend.list_itineraries(user, frontend);
+                m_backend.list_itineraries(user, m_frontend);
             }
             else if (choice == 4)
             {
@@ -64,6 +61,12 @@
 
 int main()
 {
-    App app;
+    Database database;
+    Backend backend{database};
+    LoginHandler loginHandler{backend};
+    SignupHandler signupHandler{backend};
+    ConsoleFrontend frontend{backend, loginHandler, signupHandler};
+
+    App app{frontend, backend};
     app.run();
 }
