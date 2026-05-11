@@ -1,16 +1,16 @@
 #pragma once
 
-class Application;
+class AuthService;
 class IOutput;
 class IInput;
 
 class SignupHandler
 {
-    Application &m_application;
+    AuthService &m_authService;
     IOutput &m_output;
     IInput &m_input;
 
 public:
-    SignupHandler(Application &backend, IOutput &output, IInput &input);
+    SignupHandler(AuthService &authService, IOutput &output, IInput &input);
     void signup();
 };

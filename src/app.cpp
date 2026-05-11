@@ -6,6 +6,7 @@
 #include "frontend/login_handler.hpp"
 #include "frontend/signup_handler.hpp"
 #include "application/application.hpp"
+#include "application/services/auth_service.hpp"
 #include "db/database.hpp"
 #include "infrastructure/factories/flight_provider_factory.hpp"
 #include "infrastructure/factories/hotel_provider_factory.hpp"
@@ -79,14 +80,15 @@ int main()
     auto getPaymentService = [&](PaymentService service) { return paymentFactory.getPaymentService(service); };
     ReservationRequestFactory requestFactory;
     ReservationFactory reservationFactory;
+    AuthService authService{database};
     Application application{database, getFlightProviders, getHotelProviders,
                             getReservationProvider, getPaymentService,
                             requestFactory, reservationFactory};
     ConsoleOutput output;
     ConsoleInput input;
-    LoginHandler loginHandler{application, output, input};
-    SignupHandler signupHandler{application, output, input};
-    ConsoleFrontend frontend{application, loginHandler, signupHandler, output, input};
+    LoginHandler loginHandler{authService, output, input};
+    SignupHandler signupHandler{authService, output, input};
+    ConsoleFrontend frontend{loginHandler, signupHandler, output, input};
 
     App app{frontend, application};
 

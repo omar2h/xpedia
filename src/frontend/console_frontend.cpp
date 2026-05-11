@@ -9,9 +9,9 @@
 #include "login_handler.hpp"
 #include "signup_handler.hpp"
 
-ConsoleFrontend::ConsoleFrontend(Application &backend, LoginHandler &loginHandler,
+ConsoleFrontend::ConsoleFrontend(LoginHandler &loginHandler,
                                  SignupHandler &signupHandler, IOutput &output, IInput &input)
-    : m_application(backend), m_loginHandler(loginHandler), m_signupHandler(signupHandler),
+    : m_loginHandler(loginHandler), m_signupHandler(signupHandler),
       m_output(output), m_input(input) {}
 
 static void printMenu(IOutput &out, const std::vector<std::string> &menu)

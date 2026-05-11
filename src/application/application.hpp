@@ -30,8 +30,6 @@ public:
                 ReservationRequestFactory &requestFactory,
                 ReservationFactory &reservationFactory);
 
-    void saveUserInDb(User &);
-    [[nodiscard]] User userLogin(const std::string &, const std::string &);
     void createItinerary(User &, IFrontend &);
     void addNewItem(RequestType, Itinerary &, IFrontend &);
     [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> getAvailableReservations(ReservationRequest *, RequestType);

@@ -2,10 +2,10 @@
 #include "output.hpp"
 #include "input.hpp"
 #include "../model/user.hpp"
-#include "../application/application.hpp"
+#include "../application/services/auth_service.hpp"
 
-SignupHandler::SignupHandler(Application &backend, IOutput &output, IInput &input)
-    : m_application(backend), m_output(output), m_input(input) {}
+SignupHandler::SignupHandler(AuthService &authService, IOutput &output, IInput &input)
+    : m_authService(authService), m_output(output), m_input(input) {}
 
 void SignupHandler::signup()
 {
@@ -22,5 +22,5 @@ void SignupHandler::signup()
 
     User usr(firstName, lastName, email, phone, password);
 
-    m_application.saveUserInDb(usr);
+    m_authService.signup(usr);
 }

@@ -4,7 +4,6 @@
 
 class FlightRequest;
 class HotelRequest;
-class Application;
 class LoginHandler;
 class SignupHandler;
 class IOutput;
@@ -12,14 +11,13 @@ class IInput;
 
 class ConsoleFrontend : public IFrontend
 {
-    Application &m_application;
     LoginHandler &m_loginHandler;
     SignupHandler &m_signupHandler;
     IOutput &m_output;
     IInput &m_input;
 
 public:
-    ConsoleFrontend(Application &backend, LoginHandler &loginHandler,
+    ConsoleFrontend(LoginHandler &loginHandler,
                     SignupHandler &signupHandler, IOutput &output, IInput &input);
 
     [[nodiscard]] int displayCreateItineraryMenu() override;

@@ -3,6 +3,7 @@ add_library(application)
 target_sources(application
     PRIVATE
         application.cpp
+        services/auth_service.cpp
 )
 
 target_include_directories(application
