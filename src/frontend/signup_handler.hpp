@@ -1,12 +1,12 @@
 #pragma once
 
-class Backend;
+class Application;
 
 class SignupHandler
 {
-    Backend &m_backend;
+    Application &m_backend;
 
 public:
-    explicit SignupHandler(Backend &backend);
+    explicit SignupHandler(Application &backend);
     void signup();
 };

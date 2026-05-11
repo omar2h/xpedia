@@ -4,7 +4,7 @@ target_sources(frontend
     PRIVATE
         console_frontend.cpp
         flight_request_data_reader.cpp
-        frontend.cpp
+        # frontend.cpp
         hotel_request_data_reader.cpp
         input_handler.cpp
         login_handler.cpp
@@ -21,7 +21,7 @@ target_include_directories(frontend
 
 target_link_libraries(frontend
     PUBLIC
-        backend
+        application
         model
 )
 

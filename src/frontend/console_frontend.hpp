@@ -4,18 +4,18 @@
 
 class FlightRequest;
 class HotelRequest;
-class Backend;
+class Application;
 class LoginHandler;
 class SignupHandler;
 
 class ConsoleFrontend : public IFrontend
 {
-    Backend &m_backend;
+    Application &m_backend;
     LoginHandler &m_loginHandler;
     SignupHandler &m_signupHandler;
 
 public:
-    ConsoleFrontend(Backend &backend, LoginHandler &loginHandler, SignupHandler &signupHandler);
+    ConsoleFrontend(Application &backend, LoginHandler &loginHandler, SignupHandler &signupHandler);
 
     int display_create_itinerary_menu() override;
     void read_request_data(ReservationRequest &, RequestType) override;

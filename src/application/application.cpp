@@ -1,4 +1,4 @@
-#include "backend.hpp"
+#include "application.hpp"
 #include "../db/database.hpp"
 #include "../model/requests/flight_request.hpp"
 #include "../frontend/frontend_interface.hpp"
@@ -13,14 +13,14 @@
 #include <typeinfo>
 class ItineraryItem;
 
-Backend::Backend(Database &database) : m_database(database) {}
+Application::Application(Database &database) : m_database(database) {}
 
-void Backend::save_user_in_db(User &user)
+void Application::save_user_in_db(User &user)
 {
     m_database.save_user(user);
 }
 
-User Backend::user_login(const std::string &email, const std::string &password)
+User Application::user_login(const std::string &email, const std::string &password)
 {
     std::vector<User> users = m_database.get_users("users.json");
 
@@ -33,7 +33,7 @@ User Backend::user_login(const std::string &email, const std::string &password)
     throw std::runtime_error("Invalid email/password");
 }
 
-void Backend::add_card(Customer &customer, IFrontend &frontend)
+void Application::add_card(Customer &customer, IFrontend &frontend)
 {
     PaymentCard card = frontend.read_card();
     customer.addCard(card);
@@ -41,7 +41,7 @@ void Backend::add_card(Customer &customer, IFrontend &frontend)
     m_database.update_customer_info(customer);
 }
 
-int Backend::make_reservations(Customer &customer, const Itinerary &currItinerary, IFrontend &frontend)
+int Application::make_reservations(Customer &customer, const Itinerary &currItinerary, IFrontend &frontend)
 {
     int choice = select_card(customer, frontend);
 
@@ -68,7 +68,7 @@ int Backend::make_reservations(Customer &customer, const Itinerary &currItinerar
     return confirm_reservations(customer, currItinerary);
 }
 
-void Backend::payItinerary(const Itinerary &currItinerary, const User &user, IFrontend &frontend)
+void Application::payItinerary(const Itinerary &currItinerary, const User &user, IFrontend &frontend)
 {
     if (currItinerary.getReservations().empty())
         throw std::runtime_error("No Reservations to Pay");
@@ -94,7 +94,7 @@ void Backend::payItinerary(const Itinerary &currItinerary, const User &user, IFr
         frontend.show_error("Reservation Failed, Itinerary Cancelled");
 }
 
-void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IFrontend &frontend)
+void Application::add_new_item(RequestType requestType, Itinerary &currItinerary, IFrontend &frontend)
 {
     auto request = ReservationRequestFactory::getRequest(requestType);
 
@@ -115,7 +115,7 @@ void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IF
     currItinerary.add_item(std::move(reservation));
 }
 
-void Backend::list_itineraries(const User &user, IFrontend &frontend)
+void Application::list_itineraries(const User &user, IFrontend &frontend)
 {
     bool isCustomer = m_database.check_user_is_customer(user);
 
@@ -138,7 +138,7 @@ void Backend::list_itineraries(const User &user, IFrontend &frontend)
     frontend.display_itineraries(customerItineraries);
 }
 
-void Backend::create_itinerary(User &user, IFrontend &frontend)
+void Application::create_itinerary(User &user, IFrontend &frontend)
 {
     std::unordered_set<std::string> ids{};
     Itinerary currItinerary;
@@ -174,7 +174,7 @@ void Backend::create_itinerary(User &user, IFrontend &frontend)
     }
 }
 
-std::vector<std::unique_ptr<ItineraryItem>> Backend::get_available_reservations(ReservationRequest *request, RequestType requestType)
+std::vector<std::unique_ptr<ItineraryItem>> Application::get_available_reservations(ReservationRequest *request, RequestType requestType)
 {
     std::vector<std::unique_ptr<ItineraryItem>> items;
     std::vector<std::unique_ptr<ItineraryManager>> managers;
@@ -214,7 +214,7 @@ std::vector<std::unique_ptr<ItineraryItem>> Backend::get_available_reservations(
     return items;
 }
 
-int Backend::select_card(Customer &customer, IFrontend &frontend)
+int Application::select_card(Customer &customer, IFrontend &frontend)
 {
     int choice{};
 
@@ -235,7 +235,7 @@ int Backend::select_card(Customer &customer, IFrontend &frontend)
     return choice;
 }
 
-bool Backend::withdraw_money(
+bool Application::withdraw_money(
     const PaymentCard &card,
     int service,
     const Itinerary &currItinerary)
@@ -245,7 +245,7 @@ bool Backend::withdraw_money(
     return isPaid;
 }
 
-bool Backend::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
+bool Application::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
 {
     ItineraryManagerFactory factory;
 

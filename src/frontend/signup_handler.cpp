@@ -1,10 +1,10 @@
 #include "signup_handler.hpp"
 #include "../model/user.hpp"
-#include "../backend/backend.hpp"
+#include "../application/application.hpp"
 #include <string>
 #include <iostream>
 
-SignupHandler::SignupHandler(Backend &backend) : m_backend(backend) {}
+SignupHandler::SignupHandler(Application &backend) : m_backend(backend) {}
 
 void SignupHandler::signup()
 {

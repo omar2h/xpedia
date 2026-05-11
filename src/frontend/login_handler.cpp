@@ -1,8 +1,8 @@
 #include "login_handler.hpp"
-#include "../backend/backend.hpp"
+#include "../application/application.hpp"
 #include <iostream>
 
-LoginHandler::LoginHandler(Backend &backend) : m_backend(backend) {}
+LoginHandler::LoginHandler(Application &backend) : m_backend(backend) {}
 
 User LoginHandler::login()
 {

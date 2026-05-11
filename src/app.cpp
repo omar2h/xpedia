@@ -4,11 +4,11 @@
 #include "model/user.hpp"
 #include "frontend/login_handler.hpp"
 #include "frontend/signup_handler.hpp"
-#include "backend/backend.hpp"
+#include "application/application.hpp"
 #include "db/database.hpp"
 #include <iostream>
 
-App::App(IFrontend &frontend, Backend &backend)
+App::App(IFrontend &frontend, Application &backend)
     : m_frontend(frontend), m_backend(backend) {}
 
 void App::run()
@@ -62,11 +62,11 @@ void App::run()
 int main()
 {
     Database database;
-    Backend backend{database};
-    LoginHandler loginHandler{backend};
-    SignupHandler signupHandler{backend};
-    ConsoleFrontend frontend{backend, loginHandler, signupHandler};
+    Application application{database};
+    LoginHandler loginHandler{application};
+    SignupHandler signupHandler{application};
+    ConsoleFrontend frontend{application, loginHandler, signupHandler};
 
-    App app{frontend, backend};
+    App app{frontend, application};
     app.run();
 }

@@ -22,7 +22,8 @@ option(ENABLE_WARNINGS "Enable compiler warnings" ON)
 
 add_subdirectory(model)
 add_subdirectory(db)
-add_subdirectory(backend)
+add_subdirectory(application)
+add_subdirectory(infrastructure)
 add_subdirectory(frontend)
 
 # ---- Main executable ----
@@ -32,7 +33,8 @@ add_executable(travel_app app.cpp error.cpp)
 target_link_libraries(travel_app
     PRIVATE
         frontend
-        backend
+        application
+        infrastructure
         db
         model
 )

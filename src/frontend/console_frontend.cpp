@@ -9,7 +9,7 @@
 #include "signup_handler.hpp"
 #include <iostream>
 
-ConsoleFrontend::ConsoleFrontend(Backend &backend, LoginHandler &loginHandler, SignupHandler &signupHandler)
+ConsoleFrontend::ConsoleFrontend(Application &backend, LoginHandler &loginHandler, SignupHandler &signupHandler)
     : m_backend(backend), m_loginHandler(loginHandler), m_signupHandler(signupHandler) {}
 
 int ConsoleFrontend::display_create_itinerary_menu()

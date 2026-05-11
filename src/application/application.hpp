@@ -9,12 +9,12 @@
 
 class Database;
 
-class Backend
+class Application
 {
     Database &m_database;
 
 public:
-    explicit Backend(Database &database);
+    explicit Application(Database &database);
 
     void save_user_in_db(User &);
     User user_login(const std::string &, const std::string &);

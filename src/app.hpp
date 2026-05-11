@@ -1,14 +1,14 @@
 #pragma once
 
 class IFrontend;
-class Backend;
+class Application;
 
 class App
 {
     IFrontend &m_frontend;
-    Backend &m_backend;
+    Application &m_backend;
 
 public:
-    App(IFrontend &frontend, Backend &backend);
+    App(IFrontend &frontend, Application &backend);
     void run();
 };

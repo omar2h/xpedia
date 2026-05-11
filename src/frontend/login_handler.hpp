@@ -2,13 +2,13 @@
 
 #include "../model/user.hpp"
 
-class Backend;
+class Application;
 
 class LoginHandler
 {
-    Backend &m_backend;
+    Application &m_backend;
 
 public:
-    explicit LoginHandler(Backend &backend);
+    explicit LoginHandler(Application &backend);
     User login();
 };

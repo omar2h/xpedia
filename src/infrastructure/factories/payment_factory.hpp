@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../payments/payment_strategy.hpp"
+#include "payments/payment_strategy.hpp"
 #include <string>
 #include <memory>
 

@@ -1,13 +1,8 @@
-add_library(backend)
+add_library(application)
 
-target_sources(backend
+target_sources(application
     PRIVATE
-        backend.cpp
-
-        factories/flights_manager_factory.cpp
-        factories/hotels_manager_factory.cpp
-        factories/itinerary_manager_factory.cpp
-        factories/payment_factory.cpp
+        application.cpp
 
         managers/air_france_flights_manager.cpp
         managers/british_airways_flights_manager.cpp
@@ -15,17 +10,19 @@ target_sources(backend
         managers/marriott_hotels_manager.cpp
 )
 
-target_include_directories(backend
+target_include_directories(application
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${PROJECT_SOURCE_DIR}/apis
         ${PROJECT_SOURCE_DIR}/frontend
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/infrastructure
 )
 
-target_link_libraries(backend
+target_link_libraries(application
     PUBLIC
         model
         db
 )
 
-target_compile_features(backend PUBLIC cxx_std_17)
+target_compile_features(application PUBLIC cxx_std_17)
