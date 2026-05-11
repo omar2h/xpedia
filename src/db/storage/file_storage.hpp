@@ -7,6 +7,8 @@ using json = nlohmann::json;
 class FileStorage
 {
 public:
+    [[nodiscard]] json readAll(const std::string &path) const;
+
     void writeJsonToFile(const std::string &path, const json &obj, bool append) const;
 
     [[nodiscard]] std::vector<std::string> readJsonAttributeFromFile(const std::string &path,

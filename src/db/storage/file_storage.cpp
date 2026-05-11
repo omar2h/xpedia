@@ -2,6 +2,22 @@
 
 #include <fstream>
 
+json FileStorage::readAll(const std::string &path) const
+{
+    std::fstream file_handler(path.c_str());
+
+    if (file_handler.fail())
+    {
+        throw std::runtime_error("Failed to open file");
+    }
+
+    json arr;
+
+    file_handler >> arr;
+
+    return arr;
+}
+
 void FileStorage::writeJsonToFile(const std::string &path, const json &obj, bool append) const
 {
     std::fstream file_handler(path.c_str());

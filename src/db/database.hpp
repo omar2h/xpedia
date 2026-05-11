@@ -20,17 +20,10 @@ public:
     Database();
 
     void saveUser(User &);
-    [[nodiscard]] json getObjectsFromFile(const std::string &) const;
-    [[nodiscard]] json getObjectWithId(const std::string &, const std::string &) const;
-    [[nodiscard]] std::vector<std::string> readJsonAttributeFromFile(const std::string &, const std::string &) const;
-    void writeJsonToFile(const std::string &, json, bool);
     [[nodiscard]] std::vector<User> getUsers(const std::string &) const;
     [[nodiscard]] Customer getCustomer(const User &);
     void updateCustomerInfo(const Customer &);
-    void writeJsonArrayToFile(const std::string &, json, bool);
-    void deleteObjectWithId(const std::string &path, const std::string &id);
     void saveItinerary(const std::string &, const Itinerary &);
     [[nodiscard]] bool checkUserIsCustomer(const User &);
     [[nodiscard]] std::vector<Itinerary> getCustomerItineraries(const std::string &);
-    [[nodiscard]] json getObjectsWithAttribute(const std::string &, const std::string &, const std::string &);
 };
