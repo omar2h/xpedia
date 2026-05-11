@@ -16,6 +16,6 @@ public:
 
     void delete_object_with_id(const std::string &path, const std::string &id) const;
 
-    json get_arr_objects_with_att(const std::string &path, const std::string &attribute,
-                                  const std::string &value) const;
+    json getObjectsWithAttribute(const std::string &path, const std::string &attribute,
+                                 const std::string &value) const;
 };

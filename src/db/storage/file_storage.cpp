@@ -113,8 +113,8 @@ void FileStorage::delete_object_with_id(const std::string &path, const std::stri
     out << updated.dump(4);
 }
 
-json FileStorage::get_arr_objects_with_att(const std::string &path, const std::string &attribute,
-                                           const std::string &value) const
+json FileStorage::getObjectsWithAttribute(const std::string &path, const std::string &attribute,
+                                          const std::string &value) const
 {
     std::fstream file_handler(path.c_str());
 

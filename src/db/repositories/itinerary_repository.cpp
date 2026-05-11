@@ -17,7 +17,7 @@ void ItineraryRepository::save(const std::string &customerId, const Itinerary &i
 
 std::vector<Itinerary> ItineraryRepository::findByCustomerId(const std::string &customerId) const
 {
-    json arr = storage.get_arr_objects_with_att("itineraries.json", "customer_id", customerId);
+    json arr = storage.getObjectsWithAttribute("itineraries.json", "customer_id", customerId);
 
     std::vector<Itinerary> itineraries;
 

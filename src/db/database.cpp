@@ -83,7 +83,7 @@ std::vector<Itinerary> Database::getCustomerItineraries(const std::string &custo
     return itineraryRepository.findByCustomerId(customerId);
 }
 
-json Database::get_arr_objects_with_att(const std::string &path, const std::string &jsonAtt, const std::string &att)
+json Database::getObjectsWithAttribute(const std::string &path, const std::string &jsonAtt, const std::string &att)
 {
     std::fstream file_handler(path.c_str());
     if (file_handler.fail())
