@@ -16,7 +16,7 @@ public:
 
     std::string getName() const override = 0;
 
-    ReservationProvider *clone() override = 0;
+    std::unique_ptr<ReservationProvider> clone() const override = 0;
 
     virtual ~FlightProvider()
     {

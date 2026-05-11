@@ -35,7 +35,7 @@ std::string MarriottHotelProvider::getName() const
     return "Marriott";
 }
 
-ReservationProvider *MarriottHotelProvider::clone()
+std::unique_ptr<ReservationProvider> MarriottHotelProvider::clone() const
 {
-    return new MarriottHotelProvider(*this);
+    return std::make_unique<MarriottHotelProvider>(*this);
 }

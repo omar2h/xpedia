@@ -14,7 +14,7 @@ public:
 
     bool reserve(Reservation *reservation) const override;
 
-    ReservationProvider *clone() override { return new AirFranceFlightProvider(*this); };
+    std::unique_ptr<ReservationProvider> clone() const override { return std::make_unique<AirFranceFlightProvider>(*this); }
 
     ~AirFranceFlightProvider() override = default;
 };

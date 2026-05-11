@@ -11,5 +11,5 @@ public:
 
     std::string getName() const override;
 
-    ReservationProvider *clone() override;
+    std::unique_ptr<ReservationProvider> clone() const override;
 };

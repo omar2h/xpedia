@@ -14,7 +14,7 @@ public:
 
     bool reserve(Reservation *reservation) const override;
 
-    ReservationProvider *clone() override { return new BritishAirwaysFlightProvider(*this); };
+    std::unique_ptr<ReservationProvider> clone() const override { return std::make_unique<BritishAirwaysFlightProvider>(*this); }
 
     ~BritishAirwaysFlightProvider() override = default;
 };

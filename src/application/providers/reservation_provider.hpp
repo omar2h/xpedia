@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+class ItineraryItem;
 
 class ReservationRequest;
 class Reservation;
@@ -36,7 +37,7 @@ public:
         return request ? request->clone() : nullptr;
     }
 
-    virtual ReservationProvider *clone() = 0;
+    virtual std::unique_ptr<ReservationProvider> clone() const = 0;
 
     virtual ~ReservationProvider() = default;
 };
