@@ -5,7 +5,7 @@
 
 #include "../reservation.hpp"
 #include "../visitors/reservation_visitor.hpp"
-#include "../../include/json.hpp"
+#include "../../third_party/json.hpp"
 using json = nlohmann::json;
 
 class ReservationSerializer : public ReservationVisitor

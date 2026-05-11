@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../model/customer.hpp"
-#include "../include/json.hpp"
+#include "../third_party/json.hpp"
 using json = nlohmann::json;
 
 class FileStorage;

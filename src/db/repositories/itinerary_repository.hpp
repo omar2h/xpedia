@@ -3,7 +3,7 @@
 #include "../../model/itinerary.hpp"
 #include "../storage/file_storage.hpp"
 
-#include "../../include/json.hpp"
+#include "../../third_party/json.hpp"
 
 using json = nlohmann::json;
 

@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-#include "../include/json.hpp"
+#include "../third_party/json.hpp"
 using json = nlohmann::json;
 
 #include "itinerary_item.hpp"
