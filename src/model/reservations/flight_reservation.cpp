@@ -108,9 +108,11 @@ std::string FlightReservation::toSummaryString() const
     return oss.str();
 }
 
-void FlightReservation::setRequest(std::unique_ptr<ReservationRequest> request)
+void FlightReservation::setRequest(std::unique_ptr<ReservationRequest> req)
 {
-    this->request.reset(dynamic_cast<FlightRequest *>(request.release()));
+    request.reset(dynamic_cast<FlightRequest *>(req.release()));
+    adults = request->getAdults();
+    children = request->getChildren();
 }
 
 void FlightReservation::setItem(const ItineraryItem &i)
@@ -118,4 +120,6 @@ void FlightReservation::setItem(const ItineraryItem &i)
     item = std::unique_ptr<Flight>(dynamic_cast<Flight *>(i.clone().release()));
     setType(&i);
     setRequestType(&i);
+    airline = item->getAirline();
+    date = item->getDate();
 }

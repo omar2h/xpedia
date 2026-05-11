@@ -130,9 +130,13 @@ std::string HotelReservation::toSummaryString() const
     return oss.str();
 }
 
-void HotelReservation::setRequest(std::unique_ptr<ReservationRequest> request)
+void HotelReservation::setRequest(std::unique_ptr<ReservationRequest> req)
 {
-    this->request.reset(dynamic_cast<HotelRequest *>(request.release()));
+    request.reset(dynamic_cast<HotelRequest *>(req.release()));
+    adults = request->getAdults();
+    children = request->getChildren();
+    rooms = request->getRooms();
+    city = request->getCity();
 }
 
 void HotelReservation::setItem(const ItineraryItem &i)
@@ -140,4 +144,8 @@ void HotelReservation::setItem(const ItineraryItem &i)
     item.reset(dynamic_cast<HotelRoom *>(i.clone().release()));
     setType(&i);
     setRequestType(&i);
+    hotelName = item->getHotelName();
+    fromDate = item->getDateFrom();
+    toDate = item->getDateTo();
+    roomType = item->getRoomType();
 }
