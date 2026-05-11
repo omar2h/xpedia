@@ -9,6 +9,9 @@
 #include "signup_handler.hpp"
 #include <iostream>
 
+ConsoleFrontend::ConsoleFrontend(Backend &backend, LoginHandler &loginHandler, SignupHandler &signupHandler)
+    : m_backend(backend), m_loginHandler(loginHandler), m_signupHandler(signupHandler) {}
+
 int ConsoleFrontend::display_create_itinerary_menu()
 {
     std::vector<std::string> menu{
@@ -291,7 +294,7 @@ User ConsoleFrontend::login()
     {
         try
         {
-            return LoginHandler::login();
+            return m_loginHandler.login();
         }
         catch (const std::exception &e)
         {
@@ -306,7 +309,7 @@ void ConsoleFrontend::signup()
     {
         try
         {
-            SignupHandler::signup();
+            m_signupHandler.signup();
             return;
         }
         catch (const std::exception &e)

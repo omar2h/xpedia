@@ -6,21 +6,26 @@
 #include "../model/customer.hpp"
 #include "payments/payment_strategy.hpp"
 #include "../frontend/frontend_interface.hpp"
+
+class Database;
+
 class Backend
 {
+    Database &m_database;
 
 public:
-    static void save_user_in_db(User &);
-    static User user_login(const std::string &, const std::string &);
-    static void create_itinerary(User &, IFrontend &);
-    static void add_new_item(RequestType, Itinerary &, IFrontend &);
-    static std::vector<std::unique_ptr<ItineraryItem>> get_available_reservations(ReservationRequest *, RequestType);
-    static int make_reservations(Customer &, const Itinerary &, IFrontend &);
-    static bool confirm_reservations(Customer &customer, const Itinerary &currItinerary);
-    static bool withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary);
-    static int select_card(Customer &customer, IFrontend &);
-    static void payItinerary(const Itinerary &, const User &, IFrontend &);
-    static void add_card(Customer &, IFrontend &);
-    static void list_itineraries(const User &, IFrontend &);
-    // static std::vector<Flight> get_available_flights(const FlightRequest &request);
+    explicit Backend(Database &database);
+
+    void save_user_in_db(User &);
+    User user_login(const std::string &, const std::string &);
+    void create_itinerary(User &, IFrontend &);
+    void add_new_item(RequestType, Itinerary &, IFrontend &);
+    std::vector<std::unique_ptr<ItineraryItem>> get_available_reservations(ReservationRequest *, RequestType);
+    int make_reservations(Customer &, const Itinerary &, IFrontend &);
+    bool confirm_reservations(Customer &customer, const Itinerary &currItinerary);
+    bool withdraw_money(const PaymentCard &card, int service, const Itinerary &currItinerary);
+    int select_card(Customer &customer, IFrontend &);
+    void payItinerary(const Itinerary &, const User &, IFrontend &);
+    void add_card(Customer &, IFrontend &);
+    void list_itineraries(const User &, IFrontend &);
 };

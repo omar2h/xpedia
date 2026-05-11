@@ -5,14 +5,9 @@
 #include <iostream>
 #include <stdio.h>
 
-Database::Database() : itineraryRepository(storage)
+Database::Database()
+    : usersManager(storage), customersManager(storage), itineraryRepository(storage)
 {
-}
-
-Database *Database::get_database()
-{
-    static Database databaseInstance{};
-    return &databaseInstance;
 }
 
 json Database::get_objects_from_file(const std::string &path) const
@@ -166,7 +161,7 @@ json Database::get_object_with_id(const std::string &path, const std::string &id
     return obj;
 }
 
-void Database::write_json_to_file(const std::string &path, json obj, bool append = true) const
+void Database::write_json_to_file(const std::string &path, json obj, bool append = true)
 {
     auto status = std::ios::in | std::ios::out | std::ios::app;
 
@@ -243,11 +238,11 @@ std::vector<std::string> Database::read_json_attribute_from_file(const std::stri
     return data;
 }
 
-void Database::save_user(User &user) const
+void Database::save_user(User &user)
 {
-    UsersManager::validate_user_sign_in(user);
+    usersManager.validate_user_sign_in(user);
     std::string newId = UsersManager::generate_user_id();
     user.setId(newId);
-    json obj = usersManager.convert_user_to_json(user);
-    write_json_to_file(USERS_JSON, obj);
+    json obj = UsersManager::convert_user_to_json(user);
+    write_json_to_file("users.json", obj);
 }

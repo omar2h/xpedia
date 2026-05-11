@@ -1,7 +1,8 @@
 #include "login_handler.hpp"
 #include "../backend/backend.hpp"
-#include "../error.hpp"
 #include <iostream>
+
+LoginHandler::LoginHandler(Backend &backend) : m_backend(backend) {}
 
 User LoginHandler::login()
 {
@@ -13,5 +14,5 @@ User LoginHandler::login()
     std::cout << "Enter Password: ";
     std::cin >> password;
 
-    return Backend::user_login(email, password);
+    return m_backend.user_login(email, password);
 }

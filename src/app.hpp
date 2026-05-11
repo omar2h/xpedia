@@ -3,5 +3,5 @@
 class App
 {
 public:
-    [[noreturn]] void run() const;
+    [[noreturn]] void run();
 };

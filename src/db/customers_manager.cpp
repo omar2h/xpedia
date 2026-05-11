@@ -1,13 +1,16 @@
 #include "customers_manager.hpp"
-#include "database.hpp"
+#include "storage/file_storage.hpp"
+#include "users_manager.hpp"
 #include <iostream>
+
+CustomersManager::CustomersManager(FileStorage &storage) : m_storage(storage) {}
 
 Customer CustomersManager::getCustomer(const User &user) const
 {
     Customer customer{user};
 
     std::vector<std::string> customersIds =
-        Database::get_database()->read_json_attribute_from_file(CUSTOMERS_JSON, "id");
+        m_storage.read_json_attribute_from_file("customers.json", "id");
 
     std::cout << "line 8\n";
 
@@ -16,7 +19,7 @@ Customer CustomersManager::getCustomer(const User &user) const
     if (it != customersIds.end())
     {
         json jsonCustomer =
-            Database::get_database()->get_object_with_id(CUSTOMERS_JSON, customer.getId());
+            m_storage.get_object_with_id("customers.json", customer.getId());
 
         nlohmann::json cardsArr = jsonCustomer["cards"];
 
@@ -41,14 +44,12 @@ Customer CustomersManager::getCustomer(const User &user) const
     }
     else
     {
-        UsersManager manager;
-
-        json obj = manager.convert_user_to_json(user);
+        json obj = UsersManager::convert_user_to_json(user);
 
         obj["cards"] = json::array();
         obj["itineraries"] = json::array();
 
-        Database::get_database()->write_json_to_file(CUSTOMERS_JSON, obj, true);
+        m_storage.write_json_to_file("customers.json", obj, true);
     }
 
     return customer;
@@ -68,9 +69,7 @@ json CustomersManager::convert_card_to_json(const PaymentCard &card) const
 
 json CustomersManager::convert_customer_to_json(const Customer &customer) const
 {
-    UsersManager manager;
-
-    json obj = manager.convert_user_to_json(customer);
+    json obj = UsersManager::convert_user_to_json(customer);
 
     obj["cards"] = json::array();
     obj["itineraries"] = json::array();
@@ -99,7 +98,7 @@ json CustomersManager::convert_customer_to_json(const Customer &customer) const
 bool CustomersManager::check_if_customer_exists(const std::string &uId) const
 {
     json obj =
-        Database::get_database()->get_object_with_id(CUSTOMERS_JSON, uId);
+        m_storage.get_object_with_id("customers.json", uId);
 
     return !obj.empty();
 }
@@ -108,7 +107,7 @@ void CustomersManager::update_customer(const Customer &customer) const
 {
     json obj = convert_customer_to_json(customer);
 
-    Database::get_database()->delete_object_with_id(CUSTOMERS_JSON, customer.getId());
+    m_storage.delete_object_with_id("customers.json", customer.getId());
 
-    Database::get_database()->write_json_to_file(CUSTOMERS_JSON, obj, true);
+    m_storage.write_json_to_file("customers.json", obj, true);
 }

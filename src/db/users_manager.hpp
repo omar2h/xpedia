@@ -6,13 +6,18 @@
 #include <string>
 using json = nlohmann::json;
 
+class FileStorage;
+
 class UsersManager
 {
+    FileStorage &m_storage;
     static std::unordered_set<std::string> usersIds;
 
 public:
-    static void validate_user_sign_in(const User &);
+    explicit UsersManager(FileStorage &storage);
+
+    void validate_user_sign_in(const User &);
     static std::string generate_user_id();
-    json convert_user_to_json(const User &) const;
+    static json convert_user_to_json(const User &);
     static std::vector<User> get_users_from_objects(json);
 };

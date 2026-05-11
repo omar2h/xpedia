@@ -1,7 +1,12 @@
 #pragma once
 
+class Backend;
+
 class SignupHandler
 {
+    Backend &m_backend;
+
 public:
-    static void signup();
+    explicit SignupHandler(Backend &backend);
+    void signup();
 };

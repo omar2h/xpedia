@@ -5,12 +5,17 @@
 #include "frontend/login_handler.hpp"
 #include "frontend/signup_handler.hpp"
 #include "backend/backend.hpp"
-#include "error.hpp"
+#include "db/database.hpp"
 #include <iostream>
 
-[[noreturn]] void App::run() const
+[[noreturn]] void App::run()
 {
-    ConsoleFrontend frontend;
+    Database database;
+    Backend backend{database};
+    LoginHandler loginHandler{backend};
+    SignupHandler signupHandler{backend};
+    ConsoleFrontend frontend{backend, loginHandler, signupHandler};
+
     User user;
     while (true)
     {
@@ -43,11 +48,11 @@
             }
             else if (choice == 2)
             {
-                Backend::create_itinerary(user, frontend);
+                backend.create_itinerary(user, frontend);
             }
             else if (choice == 3)
             {
-                Backend::list_itineraries(user, frontend);
+                backend.list_itineraries(user, frontend);
             }
             else if (choice == 4)
             {

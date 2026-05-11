@@ -1,16 +1,18 @@
 #include "users_manager.hpp"
 #include "id_generator.hpp"
-#include "database.hpp"
+#include "storage/file_storage.hpp"
 #include <iostream>
 std::unordered_set<std::string> UsersManager::usersIds{};
+
+UsersManager::UsersManager(FileStorage &storage) : m_storage(storage) {}
 
 void UsersManager::validate_user_sign_in(const User &u)
 {
     std::vector<std::string> emails{};
     std::vector<std::string> phones{};
 
-    emails = Database::get_database()->read_json_attribute_from_file(USERS_JSON, "email");
-    phones = Database::get_database()->read_json_attribute_from_file(USERS_JSON, "phone");
+    emails = m_storage.read_json_attribute_from_file("users.json", "email");
+    phones = m_storage.read_json_attribute_from_file("users.json", "phone");
 
     auto it1 = find(emails.begin(), emails.end(), u.getEmail());
     auto it2 = find(phones.begin(), phones.end(), u.getPhone());
@@ -28,7 +30,7 @@ std::string UsersManager::generate_user_id()
     return newId;
 }
 
-json UsersManager::convert_user_to_json(const User &user) const
+json UsersManager::convert_user_to_json(const User &user)
 {
     json obj;
     obj["id"] = user.getId();

@@ -4,9 +4,15 @@
 #include "../include/json.hpp"
 using json = nlohmann::json;
 
+class FileStorage;
+
 class CustomersManager
 {
+    FileStorage &m_storage;
+
 public:
+    explicit CustomersManager(FileStorage &storage);
+
     Customer getCustomer(const User &) const;
 
     void update_customer(const Customer &) const;

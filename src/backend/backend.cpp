@@ -13,14 +13,16 @@
 #include <typeinfo>
 class ItineraryItem;
 
+Backend::Backend(Database &database) : m_database(database) {}
+
 void Backend::save_user_in_db(User &user)
 {
-    Database::get_database()->save_user(user);
+    m_database.save_user(user);
 }
 
 User Backend::user_login(const std::string &email, const std::string &password)
 {
-    std::vector<User> users = Database::get_database()->get_users(USERS_JSON);
+    std::vector<User> users = m_database.get_users("users.json");
 
     for (const auto &usr : users)
     {
@@ -36,7 +38,7 @@ void Backend::add_card(Customer &customer, IFrontend &frontend)
     PaymentCard card = frontend.read_card();
     customer.addCard(card);
 
-    Database::get_database()->update_customer_info(customer);
+    m_database.update_customer_info(customer);
 }
 
 int Backend::make_reservations(Customer &customer, const Itinerary &currItinerary, IFrontend &frontend)
@@ -71,7 +73,7 @@ void Backend::payItinerary(const Itinerary &currItinerary, const User &user, IFr
     if (currItinerary.getReservations().empty())
         throw std::runtime_error("No Reservations to Pay");
 
-    Customer customer = Database::get_database()->getCustomer(user);
+    Customer customer = m_database.getCustomer(user);
 
     int isConfirmed = make_reservations(customer, currItinerary, frontend);
 
@@ -79,11 +81,11 @@ void Backend::payItinerary(const Itinerary &currItinerary, const User &user, IFr
     {
         frontend.show_message("Reservation is Confirmed");
 
-        Database::get_database()->save_itinerary(customer.getId(), currItinerary);
+        m_database.save_itinerary(customer.getId(), currItinerary);
 
         customer.addItineraryId(currItinerary.getId());
 
-        Database::get_database()->update_customer_info(customer);
+        m_database.update_customer_info(customer);
 
         return;
     }
@@ -115,7 +117,7 @@ void Backend::add_new_item(RequestType requestType, Itinerary &currItinerary, IF
 
 void Backend::list_itineraries(const User &user, IFrontend &frontend)
 {
-    bool isCustomer = Database::get_database()->check_user_is_customer(user);
+    bool isCustomer = m_database.check_user_is_customer(user);
 
     if (!isCustomer)
     {
@@ -123,7 +125,7 @@ void Backend::list_itineraries(const User &user, IFrontend &frontend)
         return;
     }
 
-    Customer customer = Database::get_database()->getCustomer(user);
+    Customer customer = m_database.getCustomer(user);
 
     if (customer.getItinerariesIds().empty())
     {
@@ -131,7 +133,7 @@ void Backend::list_itineraries(const User &user, IFrontend &frontend)
         return;
     }
 
-    std::vector<Itinerary> customerItineraries = Database::get_database()->getCustomerItineraries(customer.getId());
+    std::vector<Itinerary> customerItineraries = m_database.getCustomerItineraries(customer.getId());
 
     frontend.display_itineraries(customerItineraries);
 }

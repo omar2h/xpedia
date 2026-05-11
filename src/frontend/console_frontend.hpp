@@ -4,9 +4,19 @@
 
 class FlightRequest;
 class HotelRequest;
+class Backend;
+class LoginHandler;
+class SignupHandler;
+
 class ConsoleFrontend : public IFrontend
 {
+    Backend &m_backend;
+    LoginHandler &m_loginHandler;
+    SignupHandler &m_signupHandler;
+
 public:
+    ConsoleFrontend(Backend &backend, LoginHandler &loginHandler, SignupHandler &signupHandler);
+
     int display_create_itinerary_menu() override;
     void read_request_data(ReservationRequest &, RequestType) override;
     int read_reservation_choice(const std::vector<std::unique_ptr<ItineraryItem>> &) override;
