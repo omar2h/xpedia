@@ -6,6 +6,7 @@
 #include "../model/itinerary.hpp"
 #include "itineraries_manager.hpp"
 #include "repositories/itinerary_repository.hpp"
+#include "storage/file_storage.hpp"
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -15,13 +16,14 @@
 #define ITINERARIES_JSON "itineraries.json"
 class Database
 {
-    Database() = default;
     Database(const Database &) = delete;
     Database &operator=(const Database &) = delete;
 
     UsersManager usersManager{};
     CustomersManager customersManager{};
-    ItineraryRepository itineraryRepository{};
+    FileStorage storage{};
+    ItineraryRepository itineraryRepository;
+    Database();
 
 public:
     static Database *get_database();

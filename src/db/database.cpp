@@ -5,6 +5,10 @@
 #include <iostream>
 #include <stdio.h>
 
+Database::Database() : itineraryRepository(storage)
+{
+}
+
 Database *Database::get_database()
 {
     static Database databaseInstance{};

@@ -2,6 +2,11 @@
 
 #include "../database.hpp"
 
+ItineraryRepository::ItineraryRepository(FileStorage &storage_)
+    : storage(storage_)
+{
+}
+
 json ItineraryRepository::to_json(const Itinerary &itinerary) const
 {
     json objects = json::array();
@@ -20,7 +25,6 @@ json ItineraryRepository::to_json(const Itinerary &itinerary) const
 
 void ItineraryRepository::save(const std::string &customerId, const Itinerary &itinerary) const
 {
-    FileStorage storage;
     json obj;
 
     obj["reservations"] = to_json(itinerary);
@@ -28,10 +32,7 @@ void ItineraryRepository::save(const std::string &customerId, const Itinerary &i
     obj["id"] = itinerary.getId();
     obj["cost"] = itinerary.total_cost();
 
-    storage.write_json_to_file(
-        ITINERARIES_JSON,
-        obj,
-        true);
+    storage.write_json_to_file(ITINERARIES_JSON, obj, true);
 }
 
 Itinerary ItineraryRepository::from_json(const json &obj) const
@@ -54,11 +55,7 @@ Itinerary ItineraryRepository::from_json(const json &obj) const
 
 std::vector<Itinerary> ItineraryRepository::findByCustomerId(const std::string &customerId) const
 {
-    FileStorage storage;
-    json arr = storage.get_arr_objects_with_att(
-        ITINERARIES_JSON,
-        "customer_id",
-        customerId);
+    json arr = storage.get_arr_objects_with_att(ITINERARIES_JSON, "customer_id", customerId);
 
     std::vector<Itinerary> itineraries;
 
