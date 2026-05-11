@@ -9,6 +9,9 @@
 #include "application/services/auth_service.hpp"
 #include "application/services/reservation_service.hpp"
 #include "application/services/payment_service.hpp"
+#include "application/use_cases/create_itinerary_use_case.hpp"
+#include "application/use_cases/pay_itinerary_use_case.hpp"
+#include "application/use_cases/list_itineraries_use_case.hpp"
 #include "db/database.hpp"
 #include "infrastructure/factories/flight_provider_factory.hpp"
 #include "infrastructure/factories/hotel_provider_factory.hpp"
@@ -86,8 +89,11 @@ int main()
     ReservationService reservationService{getFlightProviders, getHotelProviders, getReservationProvider};
     auto confirmReservations = [&](const Itinerary &itin) { return reservationService.confirmReservations(itin); };
     PaymentProcessor paymentProcessor{database, getPaymentService, confirmReservations};
-    Application application{database, reservationService, paymentProcessor,
-                            requestFactory, reservationFactory};
+    PayItineraryUseCase payItineraryUseCase{database, paymentProcessor};
+    ListItinerariesUseCase listItinerariesUseCase{database};
+    CreateItineraryUseCase createItineraryUseCase{requestFactory, reservationFactory,
+                                                  reservationService, payItineraryUseCase};
+    Application application{createItineraryUseCase, listItinerariesUseCase};
     ConsoleOutput output;
     ConsoleInput input;
     LoginHandler loginHandler{authService, output, input};
