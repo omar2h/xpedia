@@ -1,11 +1,11 @@
 #pragma once
 
-#include "payments/payment_strategy.hpp"
+#include "../../application/factories/payment_factory.hpp"
 #include <string>
 #include <memory>
 
-class PaymentFactory
+class PaymentFactory : public IPaymentFactory
 {
 public:
-    static std::unique_ptr<PaymentStrategy> getPaymentService(PaymentService);
+    [[nodiscard]] std::unique_ptr<PaymentStrategy> getPaymentService(PaymentService service) const override;
 };

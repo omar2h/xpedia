@@ -4,7 +4,6 @@
 #include "../frontend/frontend_interface.hpp"
 #include "../model/factories/reservation_request_factory.hpp"
 #include "../model/factories/reservation_factory.hpp"
-#include "../infrastructure/factories/payment_factory.hpp"
 #include "../db/id_generator.hpp"
 #include <iostream>
 #include <typeinfo>
@@ -13,11 +12,13 @@ class ItineraryItem;
 Application::Application(Database &database,
                          ReservationProviderFactory &flightProviderFactory,
                          ReservationProviderFactory &hotelProviderFactory,
-                         ReservationProviderFactory &reservationProviderFactory)
+                         ReservationProviderFactory &reservationProviderFactory,
+                         IPaymentFactory &paymentFactory)
     : m_database(database),
       m_flightProviderFactory(flightProviderFactory),
       m_hotelProviderFactory(hotelProviderFactory),
-      m_reservationProviderFactory(reservationProviderFactory) {}
+      m_reservationProviderFactory(reservationProviderFactory),
+      m_paymentFactory(paymentFactory) {}
 
 void Application::saveUserInDb(User &user)
 {
@@ -244,7 +245,7 @@ bool Application::withdrawMoney(
     int service,
     const Itinerary &currItinerary)
 {
-    auto paymentStrategy = PaymentFactory::getPaymentService(static_cast<PaymentService>(service - 1));
+    auto paymentStrategy = m_paymentFactory.getPaymentService(static_cast<PaymentService>(service - 1));
     bool isPaid = paymentStrategy->pay(card, currItinerary.totalCost());
     return isPaid;
 }

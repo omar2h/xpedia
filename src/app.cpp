@@ -8,7 +8,9 @@
 #include "infrastructure/factories/flight_provider_factory.hpp"
 #include "infrastructure/factories/hotel_provider_factory.hpp"
 #include "infrastructure/factories/reservation_provider_factory.hpp"
+#include "infrastructure/factories/payment_factory.hpp"
 #include "application/factories/reservation_provider_factory.hpp"
+#include "application/factories/payment_factory.hpp"
 #include <iostream>
 
 App::App(IFrontend &frontend, Application &backend)
@@ -68,7 +70,8 @@ int main()
     FlightProviderFactory flightProviderFactory;
     HotelProviderFactory hotelProviderFactory;
     RoutingReservationProviderFactory reservationProviderFactory;
-    Application application{database, flightProviderFactory, hotelProviderFactory, reservationProviderFactory};
+    PaymentFactory paymentFactory;
+    Application application{database, flightProviderFactory, hotelProviderFactory, reservationProviderFactory, paymentFactory};
     LoginHandler loginHandler{application};
     SignupHandler signupHandler{application};
     ConsoleFrontend frontend{application, loginHandler, signupHandler};

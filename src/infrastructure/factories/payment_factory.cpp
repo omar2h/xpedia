@@ -3,7 +3,7 @@
 #include "payments/stripe_payment_strategy.hpp"
 #include "payments/square_payment_strategy.hpp"
 
-std::unique_ptr<PaymentStrategy> PaymentFactory::getPaymentService(PaymentService service)
+std::unique_ptr<PaymentStrategy> PaymentFactory::getPaymentService(PaymentService service) const
 {
     switch (service)
     {

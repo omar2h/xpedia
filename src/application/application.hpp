@@ -7,6 +7,7 @@
 #include "payments/payment_strategy.hpp"
 #include "../frontend/frontend_interface.hpp"
 #include "factories/reservation_provider_factory.hpp"
+#include "factories/payment_factory.hpp"
 
 class Database;
 
@@ -16,12 +17,14 @@ class Application
     ReservationProviderFactory &m_flightProviderFactory;
     ReservationProviderFactory &m_hotelProviderFactory;
     ReservationProviderFactory &m_reservationProviderFactory;
+    IPaymentFactory &m_paymentFactory;
 
 public:
     Application(Database &database,
                 ReservationProviderFactory &flightProviderFactory,
                 ReservationProviderFactory &hotelProviderFactory,
-                ReservationProviderFactory &reservationProviderFactory);
+                ReservationProviderFactory &reservationProviderFactory,
+                IPaymentFactory &paymentFactory);
 
     void saveUserInDb(User &);
     [[nodiscard]] User userLogin(const std::string &, const std::string &);
