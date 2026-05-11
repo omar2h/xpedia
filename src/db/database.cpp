@@ -1,5 +1,4 @@
 #include "database.hpp"
-#include "../error.hpp"
 #include <fstream>
 #include <vector>
 #include <iostream>

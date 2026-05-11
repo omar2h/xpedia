@@ -1,24 +1,27 @@
 #include "error.hpp"
 #include <iostream>
 
-void Error::display_error(int errorCode)
+void Error::display(ErrorCode code)
 {
-    if (errorCode == 1)
+    switch (code)
     {
+    case ErrorCode::invalid_choice:
         std::cout << "\nInvalid Choice\n\n";
-    }
-    else if (errorCode == 2)
-    {
+        break;
+    case ErrorCode::email_phone_in_use:
         std::cout << "\nEmail/Phone already in use\n\n";
-    }
-    else if (errorCode == 3)
-    {
+        break;
+    case ErrorCode::cant_open_file:
         std::cout << "\nCan't open file\n\n";
-    }
-    else if (errorCode == 4)
+        break;
+    case ErrorCode::invalid_email_password_empty:
         std::cout << "\nInvalid email/password(empty)\n\n";
-    else if (errorCode == 5)
+        break;
+    case ErrorCode::invalid_email_password:
         std::cout << "\nInvalid email/password\n\n";
-    else if (errorCode == 6)
+        break;
+    case ErrorCode::no_reservations_to_pay:
         std::cout << "\nNo Reservations to Pay\n\n";
+        break;
+    }
 }
