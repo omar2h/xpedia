@@ -3,14 +3,10 @@ add_library(frontend)
 target_sources(frontend
     PRIVATE
         console_frontend.cpp
-        flight_request_data_reader.cpp
-        # frontend.cpp
-        hotel_request_data_reader.cpp
         input_handler.cpp
         login_handler.cpp
         menu_printer.cpp
         printer.cpp
-        request_data_reader.cpp
         signup_handler.cpp
 )
 
