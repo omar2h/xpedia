@@ -6,16 +6,15 @@
 #include "../model/customer.hpp"
 #include "payments/payment_strategy.hpp"
 #include "frontend_interface.hpp"
+#include "database_interface.hpp"
 #include "factories/reservation_provider_factory.hpp"
 #include "factories/payment_factory.hpp"
-
-class Database;
 class ReservationRequestFactory;
 class ReservationFactory;
 
 class Application
 {
-    Database &m_database;
+    IDatabase &m_database;
     ReservationProviderFactory &m_flightProviderFactory;
     ReservationProviderFactory &m_hotelProviderFactory;
     ReservationProviderFactory &m_reservationProviderFactory;
@@ -24,7 +23,7 @@ class Application
     ReservationFactory &m_reservationFactory;
 
 public:
-    Application(Database &database,
+    Application(IDatabase &database,
                 ReservationProviderFactory &flightProviderFactory,
                 ReservationProviderFactory &hotelProviderFactory,
                 ReservationProviderFactory &reservationProviderFactory,

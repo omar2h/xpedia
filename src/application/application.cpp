@@ -1,6 +1,6 @@
 #include "application.hpp"
 #include "../exception.hpp"
-#include "../db/database.hpp"
+#include "database_interface.hpp"
 #include "../model/requests/flight_request.hpp"
 #include "frontend_interface.hpp"
 #include "../model/factories/reservation_request_factory.hpp"
@@ -10,7 +10,7 @@
 #include <typeinfo>
 class ItineraryItem;
 
-Application::Application(Database &database,
+Application::Application(IDatabase &database,
                          ReservationProviderFactory &flightProviderFactory,
                          ReservationProviderFactory &hotelProviderFactory,
                          ReservationProviderFactory &reservationProviderFactory,
