@@ -13,7 +13,14 @@
 #include <typeinfo>
 class ItineraryItem;
 
-Application::Application(Database &database) : m_database(database) {}
+Application::Application(Database &database,
+                         FlightProviderFactory &flightProviderFactory,
+                         HotelProviderFactory &hotelProviderFactory,
+                         ReservationProviderFactory &reservationProviderFactory)
+    : m_database(database),
+      m_flightProviderFactory(flightProviderFactory),
+      m_hotelProviderFactory(hotelProviderFactory),
+      m_reservationProviderFactory(reservationProviderFactory) {}
 
 void Application::save_user_in_db(User &user)
 {
@@ -181,7 +188,7 @@ std::vector<std::unique_ptr<ItineraryItem>> Application::get_available_reservati
 
     if (requestType == RequestType::flight)
     {
-        providers = FlightProviderFactory::getProviders();
+        providers = m_flightProviderFactory.getProviders();
 
         for (auto &provider : providers)
         {
@@ -196,7 +203,7 @@ std::vector<std::unique_ptr<ItineraryItem>> Application::get_available_reservati
     }
     else if (requestType == RequestType::hotel)
     {
-        providers = HotelProviderFactory::getProviders();
+        providers = m_hotelProviderFactory.getProviders();
 
         for (auto &provider : providers)
         {
@@ -247,15 +254,13 @@ bool Application::withdraw_money(
 
 bool Application::confirm_reservations(Customer &customer, const Itinerary &currItinerary)
 {
-    ReservationProviderFactory factory;
-
     std::unique_ptr<ReservationProvider> provider{};
 
     const auto &reservations = currItinerary.getReservations();
 
     for (const auto &res : reservations)
     {
-        provider = factory.getProvider(res->getType());
+        provider = m_reservationProviderFactory.getProvider(res->getType());
 
         if (!provider->reserve(res.get()))
         {

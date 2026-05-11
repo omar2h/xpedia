@@ -7,5 +7,5 @@ class HotelProviderFactory : public ReservationProviderFactory
 {
 public:
     std::unique_ptr<ReservationProvider> getProvider(ReservationType);
-    static std::vector<std::unique_ptr<ReservationProvider>> getProviders();
+    std::vector<std::unique_ptr<ReservationProvider>> getProviders();
 };

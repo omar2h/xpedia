@@ -10,4 +10,6 @@ std::unique_ptr<ReservationProvider> ReservationProviderFactory::getProvider(Res
         return flightsFactory.getProvider(type);
     else if (type == ReservationType::marriott || type == ReservationType::hilton)
         return hotelsFactory.getProvider(type);
+
+    return nullptr;
 }

@@ -8,13 +8,22 @@
 #include "../frontend/frontend_interface.hpp"
 
 class Database;
+class FlightProviderFactory;
+class HotelProviderFactory;
+class ReservationProviderFactory;
 
 class Application
 {
     Database &m_database;
+    FlightProviderFactory &m_flightProviderFactory;
+    HotelProviderFactory &m_hotelProviderFactory;
+    ReservationProviderFactory &m_reservationProviderFactory;
 
 public:
-    explicit Application(Database &database);
+    Application(Database &database,
+                FlightProviderFactory &flightProviderFactory,
+                HotelProviderFactory &hotelProviderFactory,
+                ReservationProviderFactory &reservationProviderFactory);
 
     void save_user_in_db(User &);
     User user_login(const std::string &, const std::string &);

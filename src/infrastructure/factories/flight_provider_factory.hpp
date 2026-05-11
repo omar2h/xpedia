@@ -9,5 +9,5 @@ class FlightProviderFactory : public ReservationProviderFactory
 {
 public:
     std::unique_ptr<ReservationProvider> getProvider(ReservationType) override;
-    static std::vector<std::unique_ptr<ReservationProvider>> getProviders();
+    std::vector<std::unique_ptr<ReservationProvider>> getProviders();
 };

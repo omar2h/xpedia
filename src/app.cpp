@@ -6,6 +6,9 @@
 #include "frontend/signup_handler.hpp"
 #include "application/application.hpp"
 #include "db/database.hpp"
+#include "infrastructure/factories/flight_provider_factory.hpp"
+#include "infrastructure/factories/hotel_provider_factory.hpp"
+#include "infrastructure/factories/reservation_provider_factory.hpp"
 #include <iostream>
 
 App::App(IFrontend &frontend, Application &backend)
@@ -62,7 +65,10 @@ void App::run()
 int main()
 {
     Database database;
-    Application application{database};
+    FlightProviderFactory flightProviderFactory;
+    HotelProviderFactory hotelProviderFactory;
+    ReservationProviderFactory reservationProviderFactory;
+    Application application{database, flightProviderFactory, hotelProviderFactory, reservationProviderFactory};
     LoginHandler loginHandler{application};
     SignupHandler signupHandler{application};
     ConsoleFrontend frontend{application, loginHandler, signupHandler};
