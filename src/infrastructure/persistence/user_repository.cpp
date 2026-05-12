@@ -1,7 +1,7 @@
 #include "user_repository.hpp"
-#include "../exception.hpp"
-#include "../infrastructure/json_keys.hpp"
-#include "id_generator.hpp"
+#include "../../exception.hpp"
+#include "../json_keys.hpp"
+#include "../../util/id_generator.hpp"
 #include "storage/file_storage.hpp"
 
 UserRepository::UserRepository(FileStorage &storage) : m_storage(storage) {}

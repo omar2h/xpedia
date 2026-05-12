@@ -22,7 +22,7 @@ option(ENABLE_WARNINGS "Enable compiler warnings" ON)
 
 add_subdirectory(domain)
 add_subdirectory(util)
-add_subdirectory(db)
+add_subdirectory(infrastructure/persistence)
 add_subdirectory(application)
 add_subdirectory(infrastructure)
 add_subdirectory(frontend)

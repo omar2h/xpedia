@@ -18,7 +18,7 @@
 #include "application/use_cases/list_itineraries_use_case.hpp"
 #include "application/results/pay_itinerary_result.hpp"
 #include "application/results/list_itineraries_result.hpp"
-#include "db/database.hpp"
+#include "infrastructure/persistence/database.hpp"
 #include "infrastructure/factories/flight_provider_factory.hpp"
 #include "infrastructure/factories/hotel_provider_factory.hpp"
 #include "infrastructure/factories/reservation_provider_factory.hpp"
@@ -174,15 +174,20 @@ int main()
     HotelProviderFactory hotelProviderFactory;
     RoutingReservationProviderFactory reservationProviderFactory;
     PaymentFactory paymentFactory;
-    auto getFlightProviders = [&]() { return flightProviderFactory.getProviders(); };
-    auto getHotelProviders = [&]() { return hotelProviderFactory.getProviders(); };
-    auto getReservationProvider = [&](ReservationType type) { return reservationProviderFactory.getProvider(type); };
-    auto getPaymentService = [&](PaymentService service) { return paymentFactory.getPaymentService(service); };
+    auto getFlightProviders = [&]()
+    { return flightProviderFactory.getProviders(); };
+    auto getHotelProviders = [&]()
+    { return hotelProviderFactory.getProviders(); };
+    auto getReservationProvider = [&](ReservationType type)
+    { return reservationProviderFactory.getProvider(type); };
+    auto getPaymentService = [&](PaymentService service)
+    { return paymentFactory.getPaymentService(service); };
     ReservationRequestFactory requestFactory;
     ReservationFactory reservationFactory;
     AuthService authService{database};
     ReservationService reservationService{getFlightProviders, getHotelProviders, getReservationProvider};
-    auto confirmReservations = [&](const Itinerary &itin) { return reservationService.confirmReservations(itin); };
+    auto confirmReservations = [&](const Itinerary &itin)
+    { return reservationService.confirmReservations(itin); };
     PaymentProcessor paymentProcessor{database, getPaymentService, confirmReservations};
     PayItineraryUseCase payItineraryUseCase{database, paymentProcessor};
     ListItinerariesUseCase listItinerariesUseCase{database};

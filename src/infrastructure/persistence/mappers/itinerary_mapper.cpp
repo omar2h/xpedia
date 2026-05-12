@@ -1,7 +1,7 @@
 #include "itinerary_mapper.hpp"
 
-#include "../../infrastructure/json_keys.hpp"
-#include "../../infrastructure/serialization/reservation_serializer.hpp"
+#include "../../json_keys.hpp"
+#include "../../serialization/reservation_serializer.hpp"
 
 json ItineraryMapper::toJson(const Itinerary &itinerary)
 {
