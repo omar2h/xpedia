@@ -17,6 +17,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # ---- Options ----
 
 option(ENABLE_WARNINGS "Enable compiler warnings" ON)
+option(BUILD_TESTS "Build unit tests" ON)
+
+# ---- Google Test ----
+
+if(BUILD_TESTS)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+    add_subdirectory(third_party/googletest ${CMAKE_BINARY_DIR}/gtest EXCLUDE_FROM_ALL)
+    enable_testing()
+endif()
 
 # ---- Subdirectories ----
 
@@ -26,6 +36,10 @@ add_subdirectory(infrastructure/persistence)
 add_subdirectory(application)
 add_subdirectory(infrastructure)
 add_subdirectory(frontend)
+
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
 
 # ---- Main executable ----
 

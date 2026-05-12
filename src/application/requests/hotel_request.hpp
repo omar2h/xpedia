@@ -8,7 +8,7 @@ class HotelRequest : public ReservationRequest
     std::string fromDate{};
     std::string toDate{};
     std::string city{};
-    int rooms;
+    int rooms{};
     int adults{};
     int children{};
 

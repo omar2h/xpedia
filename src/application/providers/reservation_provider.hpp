@@ -2,9 +2,11 @@
 
 #include <memory>
 #include <vector>
+
+#include "../../application/requests/reservation_request.hpp"
+
 class ItineraryItem;
 
-class ReservationRequest;
 class Reservation;
 
 class ReservationProvider
