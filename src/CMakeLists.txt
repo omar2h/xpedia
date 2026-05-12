@@ -19,12 +19,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(ENABLE_WARNINGS "Enable compiler warnings" ON)
 option(BUILD_TESTS "Build unit tests" ON)
 
-# ---- Google Test ----
+# ---- Google Test (fetched at configure time) ----
 
 if(BUILD_TESTS)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
-    add_subdirectory(third_party/googletest ${CMAKE_BINARY_DIR}/gtest EXCLUDE_FROM_ALL)
+    include(FetchContent)
+    FetchContent_Declare(googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.14.0)
+    FetchContent_MakeAvailable(googletest)
     enable_testing()
 endif()
 
