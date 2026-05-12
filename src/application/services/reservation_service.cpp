@@ -1,13 +1,13 @@
 #include "reservation_service.hpp"
+#include "../../application/requests/reservation_request.hpp"
 #include "../providers/reservation_provider.hpp"
 #include "../../domain/entities/itinerary.hpp"
 #include "../../domain/entities/reservation.hpp"
-#include "../../application/requests/reservation_request.hpp"
 
 ReservationService::ReservationService(
     std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getFlightProviders,
     std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getHotelProviders,
-    std::function<std::unique_ptr<ReservationProvider>(ReservationType)> getReservationProvider)
+    std::function<std::unique_ptr<ReservationProvider>(ReservationCategory, const std::string &)> getReservationProvider)
     : m_getFlightProviders(std::move(getFlightProviders)),
       m_getHotelProviders(std::move(getHotelProviders)),
       m_getReservationProvider(std::move(getReservationProvider)) {}
@@ -60,7 +60,7 @@ bool ReservationService::confirmReservations(const Itinerary &currItinerary)
 
     for (const auto &res : reservations)
     {
-        provider = m_getReservationProvider(res->getType());
+        provider = m_getReservationProvider(res->getCategory(), res->getProviderId());
 
         if (!provider->reserve(res.get()))
         {

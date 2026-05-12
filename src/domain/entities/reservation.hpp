@@ -9,17 +9,12 @@ using json = nlohmann::json;
 #include "itinerary_item.hpp"
 #include "../visitors/reservation_visitor.hpp"
 #include "../request_type.hpp"
+#include "reservation_category.hpp"
 
-enum class ReservationType
-{
-    britishAirways,
-    airFrance,
-    marriott,
-    hilton
-};
 class Reservation
 {
-    ReservationType type;
+    ReservationCategory category;
+    std::string providerId;
     RequestType requestType;
 
 public:
@@ -31,9 +26,13 @@ public:
 
     virtual void setItem(const ItineraryItem &) = 0;
 
-    ReservationType getType() const { return type; }
-    void setType(ItineraryItem const *item) { type = item->getType(); }
-    void setType(ReservationType t) { type = t; }
+    ReservationCategory getCategory() const { return category; }
+    void setCategory(ReservationCategory c) { category = c; }
+    void setCategory(const ItineraryItem *item) { category = item->getCategory(); }
+
+    const std::string &getProviderId() const { return providerId; }
+    void setProviderId(const std::string &id) { providerId = id; }
+    void copyProviderFrom(const ItineraryItem *item) { providerId = item->getProviderId(); }
 
     virtual ~Reservation() = default;
 

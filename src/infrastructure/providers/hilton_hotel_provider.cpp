@@ -15,7 +15,8 @@ std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelProvider::searchReservati
         hRoom.setDateFrom(room.date_from);
         hRoom.setDateTo(room.date_to);
         hRoom.setRequestType(RequestType::hotel);
-        hRoom.setType(ReservationType::hilton);
+        hRoom.setCategory(ReservationCategory::hotel);
+        hRoom.setProviderId("hilton");
         hRoom.setAvailableRooms(room.available);
         hRoom.setPricePerNight(room.price_per_night);
         hRoom.setRoomType(room.room_type);

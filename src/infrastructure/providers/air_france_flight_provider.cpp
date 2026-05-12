@@ -17,7 +17,8 @@ std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightProvider::searchReser
     for (const auto &flight_ : airFranceFlights)
     {
         Flight flight;
-        flight.setType(ReservationType::airFrance);
+        flight.setCategory(ReservationCategory::flight);
+        flight.setProviderId("air_france");
         flight.setRequestType(RequestType::flight);
         flight.setAirline(getName());
         flight.setDate(flight_.date);

@@ -2,14 +2,14 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 
-enum class ReservationType;
 class ReservationProvider;
 
 class HotelProviderFactory
 {
 public:
-    [[nodiscard]] std::unique_ptr<ReservationProvider> getProvider(ReservationType) const;
+    [[nodiscard]] std::unique_ptr<ReservationProvider> getProvider(const std::string &providerId) const;
 
     [[nodiscard]] std::vector<std::unique_ptr<ReservationProvider>> getProviders() const;
 };

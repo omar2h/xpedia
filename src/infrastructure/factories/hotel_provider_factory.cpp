@@ -1,11 +1,12 @@
 #include "hotel_provider_factory.hpp"
 #include "providers/marriott_hotel_provider.hpp"
 #include "providers/hilton_hotel_provider.hpp"
-std::unique_ptr<ReservationProvider> HotelProviderFactory::getProvider(ReservationType type) const
+
+std::unique_ptr<ReservationProvider> HotelProviderFactory::getProvider(const std::string &providerId) const
 {
-    if (type == ReservationType::marriott)
+    if (providerId == "marriott")
         return std::make_unique<MarriottHotelProvider>();
-    else if (type == ReservationType::hilton)
+    else if (providerId == "hilton")
         return std::make_unique<HiltonHotelProvider>();
 
     return nullptr;

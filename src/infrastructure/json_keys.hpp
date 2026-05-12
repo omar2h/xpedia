@@ -26,8 +26,9 @@ inline constexpr auto customerId = "customer_id";
 inline constexpr auto reservations = "reservations";
 inline constexpr auto cost = "cost";
 
-// Reservation fields (flight)
-inline constexpr auto type = "type";
+// Reservation fields
+inline constexpr auto category = "category";
+inline constexpr auto providerId = "providerId";
 inline constexpr auto requestType = "requestType";
 inline constexpr auto airline = "airline";
 inline constexpr auto from = "from";

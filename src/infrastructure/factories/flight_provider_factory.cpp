@@ -3,14 +3,14 @@
 #include "providers/british_airways_flight_provider.hpp"
 #include "providers/air_france_flight_provider.hpp"
 
-#include "../../domain/entities/reservation.hpp"
+#include <string>
 
-std::unique_ptr<ReservationProvider> FlightProviderFactory::getProvider(ReservationType type) const
+std::unique_ptr<ReservationProvider> FlightProviderFactory::getProvider(const std::string &providerId) const
 {
-    if (type == ReservationType::britishAirways)
+    if (providerId == "british_airways")
         return std::make_unique<BritishAirwaysFlightProvider>();
 
-    else if (type == ReservationType::airFrance)
+    else if (providerId == "air_france")
         return std::make_unique<AirFranceFlightProvider>();
 
     return nullptr;
@@ -24,4 +24,3 @@ std::vector<std::unique_ptr<ReservationProvider>> FlightProviderFactory::getProv
 
     return providers;
 }
-

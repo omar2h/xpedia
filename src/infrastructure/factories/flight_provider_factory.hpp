@@ -6,7 +6,7 @@
 class FlightProviderFactory
 {
 public:
-    [[nodiscard]] std::unique_ptr<ReservationProvider> getProvider(ReservationType) const;
+    [[nodiscard]] std::unique_ptr<ReservationProvider> getProvider(const std::string &providerId) const;
 
     [[nodiscard]] std::vector<std::unique_ptr<ReservationProvider>> getProviders() const;
 };

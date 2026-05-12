@@ -178,8 +178,8 @@ int main()
     { return flightProviderFactory.getProviders(); };
     auto getHotelProviders = [&]()
     { return hotelProviderFactory.getProviders(); };
-    auto getReservationProvider = [&](ReservationType type)
-    { return reservationProviderFactory.getProvider(type); };
+    auto getReservationProvider = [&](ReservationCategory category, const std::string &providerId)
+    { return reservationProviderFactory.getProvider(category, providerId); };
     auto getPaymentService = [&](PaymentService service)
     { return paymentFactory.getPaymentService(service); };
     ReservationRequestFactory requestFactory;

@@ -16,7 +16,8 @@ std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::search
     for (auto &flight_ : flightsBritishAirways)
     {
         Flight flight;
-        flight.setType(ReservationType::britishAirways);
+        flight.setCategory(ReservationCategory::flight);
+        flight.setProviderId("british_airways");
         flight.setRequestType(RequestType::flight);
         flight.setAirline(getName());
         flight.setDate(flight_.date);

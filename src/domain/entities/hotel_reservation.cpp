@@ -85,7 +85,8 @@ void HotelReservation::setItem(const ItineraryItem &i)
 {
     assert(dynamic_cast<const HotelRoom *>(&i) != nullptr && "Item must be a HotelRoom");
     item = std::make_unique<HotelRoom>(static_cast<const HotelRoom &>(i));
-    setType(&i);
+    setCategory(&i);
+    copyProviderFrom(&i);
     setRequestType(&i);
     hotelName = item->getHotelName();
     fromDate = item->getDateFrom();

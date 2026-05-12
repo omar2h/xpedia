@@ -19,7 +19,9 @@ json ReservationSerializer::toJson(const Reservation &reservation)
 
     reservation.accept(*this);
 
-    obj[JsonKeys::type] = reservation.getType();
+    std::string catStr = reservation.getCategory() == ReservationCategory::flight ? "flight" : "hotel";
+    obj[JsonKeys::category] = catStr;
+    obj[JsonKeys::providerId] = reservation.getProviderId();
     obj[JsonKeys::requestType] = reservation.getRequestType();
 
     return obj;
@@ -62,12 +64,15 @@ void ReservationSerializer::visit(const HotelReservation &hotel)
 std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json &obj)
 {
     RequestType requestType = obj[JsonKeys::requestType].get<RequestType>();
-    ReservationType resType = obj[JsonKeys::type].get<ReservationType>();
+    std::string catStr = obj[JsonKeys::category].get<std::string>();
+    std::string providerId = obj[JsonKeys::providerId].get<std::string>();
+    ReservationCategory category = catStr == "flight" ? ReservationCategory::flight : ReservationCategory::hotel;
 
-    if (requestType == RequestType::flight)
+    if (category == ReservationCategory::flight)
     {
         auto reservation = std::make_unique<FlightReservation>();
-        reservation->setType(resType);
+        reservation->setCategory(category);
+        reservation->setProviderId(providerId);
         reservation->setRequestType(requestType);
         reservation->setAirline(obj[JsonKeys::airline].get<std::string>());
         reservation->setFrom(obj[JsonKeys::from].get<std::string>());
@@ -80,7 +85,8 @@ std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json &obj)
     }
 
     auto reservation = std::make_unique<HotelReservation>();
-    reservation->setType(resType);
+    reservation->setCategory(category);
+    reservation->setProviderId(providerId);
     reservation->setRequestType(requestType);
     reservation->setHotelName(obj[JsonKeys::hotel].get<std::string>());
     reservation->setFromDate(obj[JsonKeys::from].get<std::string>());

@@ -15,7 +15,8 @@ std::vector<std::unique_ptr<ItineraryItem>> MarriottHotelProvider::searchReserva
         hRoom.setDateFrom(room.date_from);
         hRoom.setDateTo(room.date_to);
         hRoom.setRequestType(RequestType::hotel);
-        hRoom.setType(ReservationType::marriott);
+        hRoom.setCategory(ReservationCategory::hotel);
+        hRoom.setProviderId("marriott");
         hRoom.setAvailableRooms(room.available);
         hRoom.setPricePerNight(room.price_per_night);
         hRoom.setRoomType(room.room_type);

@@ -67,7 +67,8 @@ void FlightReservation::setItem(const ItineraryItem &i)
 {
     assert(dynamic_cast<const Flight *>(&i) != nullptr && "Item must be a Flight");
     item = std::make_unique<Flight>(static_cast<const Flight &>(i));
-    setType(&i);
+    setCategory(&i);
+    copyProviderFrom(&i);
     setRequestType(&i);
     airline = item->getAirline();
     date = item->getDate();

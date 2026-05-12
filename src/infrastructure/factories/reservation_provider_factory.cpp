@@ -2,16 +2,14 @@
 #include "flight_provider_factory.hpp"
 #include "hotel_provider_factory.hpp"
 
-std::unique_ptr<ReservationProvider> RoutingReservationProviderFactory::getProvider(ReservationType type) const
+std::unique_ptr<ReservationProvider> RoutingReservationProviderFactory::getProvider(ReservationCategory category, const std::string &providerId) const
 {
     FlightProviderFactory flightsFactory;
     HotelProviderFactory hotelsFactory;
-    if (type == ReservationType::britishAirways || type == ReservationType::airFrance)
-        return flightsFactory.getProvider(type);
-    else if (type == ReservationType::marriott || type == ReservationType::hilton)
-        return hotelsFactory.getProvider(type);
-
-    return nullptr;
+    if (category == ReservationCategory::flight)
+        return flightsFactory.getProvider(providerId);
+    else
+        return hotelsFactory.getProvider(providerId);
 }
 
 std::vector<std::unique_ptr<ReservationProvider>> RoutingReservationProviderFactory::getProviders() const
