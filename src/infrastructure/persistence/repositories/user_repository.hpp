@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../domain/entities/user.hpp"
-#include "../../third_party/json.hpp"
+#include "../../../domain/entities/user.hpp"
+#include "../../../third_party/json.hpp"
 #include <unordered_set>
 #include <string>
 using json = nlohmann::json;

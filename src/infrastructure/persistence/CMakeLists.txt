@@ -2,9 +2,9 @@ add_library(db)
 
 target_sources(db
     PRIVATE
-        customer_repository.cpp
         database.cpp
-        user_repository.cpp
+        repositories/customer_repository.cpp
+        repositories/user_repository.cpp
         repositories/itinerary_repository.cpp
         storage/file_storage.cpp
         mappers/itinerary_mapper.cpp

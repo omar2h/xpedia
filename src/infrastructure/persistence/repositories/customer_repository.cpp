@@ -1,6 +1,6 @@
 #include "customer_repository.hpp"
-#include "../json_keys.hpp"
-#include "storage/file_storage.hpp"
+#include "../../json_keys.hpp"
+#include "../storage/file_storage.hpp"
 #include "user_repository.hpp"
 
 CustomerRepository::CustomerRepository(FileStorage &storage) : m_storage(storage) {}

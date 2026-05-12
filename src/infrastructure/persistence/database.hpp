@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../../application/database_interface.hpp"
-#include "user_repository.hpp"
-#include "customer_repository.hpp"
+#include "repositories/user_repository.hpp"
+#include "repositories/customer_repository.hpp"
 #include "repositories/itinerary_repository.hpp"
 #include "storage/file_storage.hpp"
 
