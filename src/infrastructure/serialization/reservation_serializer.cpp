@@ -3,6 +3,7 @@
 #include "../../domain/request_type.hpp"
 #include "../../domain/entities/flight_reservation.hpp"
 #include "../../domain/entities/hotel_reservation.hpp"
+#include "../../exception.hpp"
 
 json ReservationSerializer::serialize(const Reservation &reservation)
 {
@@ -66,7 +67,13 @@ std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json &obj)
     RequestType requestType = obj[JsonKeys::requestType].get<RequestType>();
     std::string catStr = obj[JsonKeys::category].get<std::string>();
     std::string providerId = obj[JsonKeys::providerId].get<std::string>();
-    ReservationCategory category = catStr == "flight" ? ReservationCategory::flight : ReservationCategory::hotel;
+    ReservationCategory category;
+    if (catStr == "flight")
+        category = ReservationCategory::flight;
+    else if (catStr == "hotel")
+        category = ReservationCategory::hotel;
+    else
+        throw ValidationException("Unknown reservation category: " + catStr);
 
     if (category == ReservationCategory::flight)
     {

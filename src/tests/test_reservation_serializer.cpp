@@ -4,6 +4,7 @@
 #include "domain/entities/hotel_reservation.hpp"
 #include "domain/entities/reservation_category.hpp"
 #include "domain/request_type.hpp"
+#include "exception.hpp"
 
 TEST(ReservationSerializerTest, FlightRoundTrip)
 {
@@ -71,6 +72,16 @@ TEST(ReservationSerializerTest, HotelRoundTrip)
     EXPECT_DOUBLE_EQ(hotel->totalCost(), 1200.0);
     EXPECT_EQ(hotel->getCategory(), ReservationCategory::hotel);
     EXPECT_EQ(hotel->getProviderId(), "test_hotel");
+}
+
+TEST(ReservationSerializerTest, UnknownCategoryThrows)
+{
+    json j;
+    j["category"] = "car";
+    j["providerId"] = "test";
+    j["requestType"] = static_cast<int>(RequestType::hotel);
+
+    EXPECT_THROW(ReservationSerializer::fromJson(j), ValidationException);
 }
 
 TEST(ReservationSerializerTest, SerializePreservesType)

@@ -2,6 +2,7 @@
 #include "../exception.hpp"
 #include "output.hpp"
 #include "input.hpp"
+#include <sstream>
 #include "../application/requests/flight_request.hpp"
 #include "../application/requests/hotel_request.hpp"
 #include "../domain/entities/itinerary_item.hpp"
