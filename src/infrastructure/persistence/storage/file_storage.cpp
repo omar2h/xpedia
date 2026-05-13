@@ -22,10 +22,13 @@ void FileStorage::writeToFileAtomically(const std::string &path, const json &dat
 
 json FileStorage::readAll(const std::string &path) const
 {
-    std::fstream file_handler(path.c_str());
+    std::ifstream file_handler(path.c_str());
 
     if (file_handler.fail())
-        throw PersistenceException("Failed to open file");
+        return json::array();
+
+    if (file_handler.peek() == std::ifstream::traits_type::eof())
+        return json::array();
 
     json arr;
     file_handler >> arr;
@@ -56,10 +59,10 @@ void FileStorage::writeJsonToFile(const std::string &path, const json &obj, bool
 std::vector<std::string> FileStorage::readJsonAttributeFromFile(const std::string &path,
                                                                 const std::string &attribute) const
 {
-    std::fstream file_handler(path.c_str());
+    std::ifstream file_handler(path.c_str());
 
-    if (file_handler.fail())
-        throw PersistenceException("Failed to open file");
+    if (file_handler.fail() || file_handler.peek() == std::ifstream::traits_type::eof())
+        return {};
 
     json arr;
     file_handler >> arr;
@@ -74,10 +77,10 @@ std::vector<std::string> FileStorage::readJsonAttributeFromFile(const std::strin
 
 json FileStorage::getObjectWithId(const std::string &path, const std::string &id) const
 {
-    std::fstream file_handler(path.c_str());
+    std::ifstream file_handler(path.c_str());
 
-    if (file_handler.fail())
-        throw PersistenceException("Failed to open file");
+    if (file_handler.fail() || file_handler.peek() == std::ifstream::traits_type::eof())
+        return json{};
 
     json arr;
     file_handler >> arr;
@@ -118,10 +121,10 @@ void FileStorage::deleteObjectWithId(const std::string &path, const std::string 
 json FileStorage::getObjectsWithAttribute(const std::string &path, const std::string &attribute,
                                           const std::string &value) const
 {
-    std::fstream file_handler(path.c_str());
+    std::ifstream file_handler(path.c_str());
 
-    if (file_handler.fail())
-        throw PersistenceException("Failed to open file");
+    if (file_handler.fail() || file_handler.peek() == std::ifstream::traits_type::eof())
+        return json::array();
 
     json arr;
     file_handler >> arr;
