@@ -8,10 +8,10 @@ class Flight : public ItineraryItem
     double totalCost{};
 
 public:
-    std::string getAirline() const { return airline; }
+    const std::string &getAirline() const { return airline; }
     void setAirline(const std::string &airline_) { airline = airline_; }
 
-    std::string getDate() const { return date; }
+    const std::string &getDate() const { return date; }
     void setDate(const std::string &date_) { date = date_; }
 
     [[nodiscard]] double getTotalCost() const { return totalCost; }

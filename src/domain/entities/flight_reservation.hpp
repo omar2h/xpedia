@@ -40,10 +40,10 @@ public:
     void setDate(const std::string &d) { date = d; }
     void setCost(double c) { cost = c; }
 
-    std::string getAirline() const { return airline; }
-    std::string getFrom() const { return from; }
-    std::string getTo() const { return to; }
-    std::string getDate() const { return date; }
+    const std::string &getAirline() const { return airline; }
+    const std::string &getFrom() const { return from; }
+    const std::string &getTo() const { return to; }
+    const std::string &getDate() const { return date; }
     int getAdults() const { return adults; }
     int getChildren() const { return children; }
 };

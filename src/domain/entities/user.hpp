@@ -18,21 +18,21 @@ public:
     User(const std::string &, const std::string &, const std::string &, const std::string &,
          const std::string &, const std::string &);
 
-    std::string getId() const { return id; }
+    const std::string &getId() const { return id; }
     void setId(const std::string &id_) { id = id_; }
 
-    std::string getFirstName() const { return firstName; }
+    const std::string &getFirstName() const { return firstName; }
     void setFirstName(const std::string &firstName_) { firstName = firstName_; }
 
-    std::string getLastName() const { return lastName; }
+    const std::string &getLastName() const { return lastName; }
     void setLastName(const std::string &lastName_) { lastName = lastName_; }
 
-    std::string getEmail() const { return email; }
+    const std::string &getEmail() const { return email; }
     void setEmail(const std::string &email_) { email = email_; }
 
-    std::string getPhone() const { return phone; }
+    const std::string &getPhone() const { return phone; }
     void setPhone(const std::string &phone_) { phone = phone_; }
 
-    std::string getPassword() const { return password; }
+    const std::string &getPassword() const { return password; }
     void setPassword(const std::string &password_) { password = password_; }
 };

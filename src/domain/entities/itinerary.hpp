@@ -19,7 +19,7 @@ public:
     Itinerary(Itinerary &&) noexcept = default;
     Itinerary &operator=(Itinerary &&) noexcept = default;
 
-    std::string getId() const { return id; }
+    const std::string &getId() const { return id; }
     void setId(std::string id_) { id = id_; }
     void addItem(std::unique_ptr<Reservation>);
     void clear();

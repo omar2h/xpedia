@@ -44,11 +44,11 @@ public:
     void setRooms(int r) { rooms = r; }
     void setCost(double c) { cost = c; }
 
-    std::string getHotelName() const { return hotelName; }
-    std::string getFromDate() const { return fromDate; }
-    std::string getToDate() const { return toDate; }
-    std::string getCity() const { return city; }
-    std::string getRoomType() const { return roomType; }
+    const std::string &getHotelName() const { return hotelName; }
+    const std::string &getFromDate() const { return fromDate; }
+    const std::string &getToDate() const { return toDate; }
+    const std::string &getCity() const { return city; }
+    const std::string &getRoomType() const { return roomType; }
     int getRooms() const { return rooms; }
     int getAdults() const { return adults; }
     int getChildren() const { return children; }
