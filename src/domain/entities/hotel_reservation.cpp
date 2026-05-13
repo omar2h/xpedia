@@ -3,7 +3,6 @@
 
 #include <sstream>
 #include <string>
-#include <cassert>
 
 HotelReservation::HotelReservation(const HotelReservation &other)
     : Reservation(other),

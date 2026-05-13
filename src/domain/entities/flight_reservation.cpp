@@ -1,7 +1,6 @@
 #include "flight_reservation.hpp"
 #include "../visitors/reservation_visitor.hpp"
 #include <sstream>
-#include <cassert>
 
 FlightReservation::FlightReservation(const FlightReservation &other)
     : Reservation(other),

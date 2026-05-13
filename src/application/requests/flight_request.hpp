@@ -16,24 +16,24 @@ public:
     FlightRequest() = default;
     FlightRequest(const std::string &, const std::string &, const std::string &, int, int);
 
-    std::unique_ptr<ReservationRequest> clone() override;
+    [[nodiscard]] std::unique_ptr<ReservationRequest> clone() override;
 
-    int getAdults() const { return adults; }
+    [[nodiscard]] int getAdults() const { return adults; }
     void setAdults(int adults_) { adults = adults_; }
 
-    int getChildren() const { return children; }
+    [[nodiscard]] int getChildren() const { return children; }
     void setChildren(int children_) { children = children_; }
 
-    std::string getFromCity() const { return fromCity; }
+    [[nodiscard]] std::string getFromCity() const { return fromCity; }
     void setFromCity(const std::string &fromCity_) { fromCity = fromCity_; }
 
-    std::string getToCity() const { return toCity; }
+    [[nodiscard]] std::string getToCity() const { return toCity; }
     void setToCity(const std::string &toCity_) { toCity = toCity_; }
 
-    std::string getDate() const { return date; }
+    [[nodiscard]] std::string getDate() const { return date; }
     void setDate(const std::string &date_) { date = date_; }
 
-    std::string toString() const override;
+    [[nodiscard]] std::string toString() const override;
 
     ~FlightRequest() override = default;
 };

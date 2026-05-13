@@ -9,7 +9,7 @@ class ReservationRequest
 {
 public:
     [[nodiscard]] virtual std::unique_ptr<ReservationRequest> clone() = 0;
-    virtual std::string toString() const = 0;
+    [[nodiscard]] virtual std::string toString() const = 0;
     virtual ~ReservationRequest() = 0;
 };
 

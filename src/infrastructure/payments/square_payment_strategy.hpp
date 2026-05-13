@@ -11,7 +11,7 @@ class SquarePaymentStrategy : public PaymentStrategy
 {
 
 public:
-    string getJsonQuery(const PaymentCard &card, double amount)
+    [[nodiscard]] string getJsonQuery(const PaymentCard &card, double amount)
     {
         json obj;
         obj[JsonKeys::userInfo] = json::array({card.getOwner(), "cairo"});
@@ -23,7 +23,7 @@ public:
         oss << obj;
         return oss.str();
     }
-    bool pay(const PaymentCard &card, double amount)
+    [[nodiscard]] bool pay(const PaymentCard &card, double amount)
     {
         return SquarePaymentAPI::WithDrawMoney(getJsonQuery(card, amount));
     }

@@ -8,7 +8,7 @@ class PayPalPaymentStrategy : public PaymentStrategy
     PayPalOnlinePaymentAPI paypalApi{};
 
 public:
-    bool pay(const PaymentCard &card, double amount)
+    [[nodiscard]] bool pay(const PaymentCard &card, double amount)
     {
         paypalCard.id = "1";
         paypalCard.name = card.getOwner();

@@ -15,22 +15,22 @@ public:
     [[nodiscard]] std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<HotelRoom>(*this); }
     virtual ~HotelRoom() = default;
 
-    const std::string &getHotelName() const { return hotelName; }
+    [[nodiscard]] const std::string &getHotelName() const { return hotelName; }
     void setHotelName(const std::string &hotelName_) { hotelName = hotelName_; }
 
-    const std::string &getRoomType() const { return roomType; }
+    [[nodiscard]] const std::string &getRoomType() const { return roomType; }
     void setRoomType(const std::string &roomType_) { roomType = roomType_; }
 
-    int getAvailableRooms() const { return availableRooms; }
+    [[nodiscard]] int getAvailableRooms() const { return availableRooms; }
     void setAvailableRooms(int availableRooms_) { availableRooms = availableRooms_; }
 
-    double getPricePerNight() const { return pricePerNight; }
+    [[nodiscard]] double getPricePerNight() const { return pricePerNight; }
     void setPricePerNight(double pricePerNight_) { pricePerNight = pricePerNight_; }
 
-    const std::string &getDateFrom() const { return dateFrom; }
+    [[nodiscard]] const std::string &getDateFrom() const { return dateFrom; }
     void setDateFrom(const std::string &dateFrom_) { dateFrom = dateFrom_; }
 
-    const std::string &getDateTo() const { return dateTo; }
+    [[nodiscard]] const std::string &getDateTo() const { return dateTo; }
     void setDateTo(const std::string &dateTo_) { dateTo = dateTo_; }
 
     [[nodiscard]] double totalCost() const

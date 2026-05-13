@@ -13,15 +13,15 @@ public:
     PaymentCard() = default;
     PaymentCard(const std::string &number, const std::string &owner, const std::string &date, const std::string &ccv) : number{number}, owner{owner}, expiryDate{date}, ccv{ccv} {}
 
-    const std::string &getOwner() const { return owner; }
+    [[nodiscard]] const std::string &getOwner() const { return owner; }
     void setOwner(const std::string &owner_) { owner = owner_; }
 
-    const std::string &getNumber() const { return number; }
+    [[nodiscard]] const std::string &getNumber() const { return number; }
     void setNumber(const std::string &number_) { number = number_; }
 
-    const std::string &getExpiryDate() const { return expiryDate; }
+    [[nodiscard]] const std::string &getExpiryDate() const { return expiryDate; }
     void setExpiryDate(const std::string &expiryDate_) { expiryDate = expiryDate_; }
 
-    const std::string &getCcv() const { return ccv; }
+    [[nodiscard]] const std::string &getCcv() const { return ccv; }
     void setCcv(const std::string &ccv_) { ccv = ccv_; }
 };

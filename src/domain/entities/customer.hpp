@@ -13,7 +13,7 @@ public:
     Customer(const User &);
     void addCard(const PaymentCard &);
     void addItineraryId(const std::string &);
-    const std::vector<PaymentCard> &getCards() const { return cards; }
+    [[nodiscard]] const std::vector<PaymentCard> &getCards() const { return cards; }
     void setCards(const std::vector<PaymentCard> &cards_) { cards = cards_; }
-    const std::vector<std::string> &getItinerariesIds() const { return itineraryIds; }
+    [[nodiscard]] const std::vector<std::string> &getItinerariesIds() const { return itineraryIds; }
 };

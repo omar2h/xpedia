@@ -26,17 +26,17 @@ public:
 
     virtual void setItem(const ItineraryItem &) = 0;
 
-    ReservationCategory getCategory() const { return category; }
+    [[nodiscard]] ReservationCategory getCategory() const { return category; }
     void setCategory(ReservationCategory c) { category = c; }
     void setCategory(const ItineraryItem *item) { category = item->getCategory(); }
 
-    const std::string &getProviderId() const { return providerId; }
+    [[nodiscard]] const std::string &getProviderId() const { return providerId; }
     void setProviderId(const std::string &id) { providerId = id; }
     void copyProviderFrom(const ItineraryItem *item) { providerId = item->getProviderId(); }
 
     virtual ~Reservation() = default;
 
-    RequestType getRequestType() const { return requestType; }
+    [[nodiscard]] RequestType getRequestType() const { return requestType; }
     void setRequestType(ItineraryItem const *item) { requestType = item->getRequestType(); }
     void setRequestType(RequestType rt) { requestType = rt; }
 };

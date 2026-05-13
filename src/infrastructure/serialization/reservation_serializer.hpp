@@ -13,10 +13,10 @@ class ReservationSerializer : public ReservationVisitor
     json obj;
 
 public:
-    json toJson(const Reservation &);
-    static std::unique_ptr<Reservation> fromJson(const json &);
+    [[nodiscard]] json toJson(const Reservation &);
+    [[nodiscard]] static std::unique_ptr<Reservation> fromJson(const json &);
 
-    json serialize(const Reservation &);
+    [[nodiscard]] json serialize(const Reservation &);
 
     void visit(const FlightReservation &) override;
 

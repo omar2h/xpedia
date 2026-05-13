@@ -10,7 +10,7 @@ class StripePaymentStrategy : public PaymentStrategy
     StripePaymentAPI stripeAPI;
 
 public:
-    bool pay(const PaymentCard &card, double amount)
+    [[nodiscard]] bool pay(const PaymentCard &card, double amount)
     {
         userInfo.name = card.getOwner();
         userInfo.address = "cairo";

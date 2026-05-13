@@ -11,6 +11,6 @@ enum class PaymentService
 class PaymentStrategy
 {
 public:
-    virtual bool pay(const PaymentCard &, double) = 0;
+    [[nodiscard]] virtual bool pay(const PaymentCard &, double) = 0;
     virtual ~PaymentStrategy() = default;
 };

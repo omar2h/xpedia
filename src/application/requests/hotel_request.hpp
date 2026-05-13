@@ -15,25 +15,25 @@ class HotelRequest : public ReservationRequest
 public:
     HotelRequest() = default;
     HotelRequest(const std::string &, const std::string &, const std::string &, int, int);
-    std::unique_ptr<ReservationRequest> clone() override;
-    std::string toString() const override;
+    [[nodiscard]] std::unique_ptr<ReservationRequest> clone() override;
+    [[nodiscard]] std::string toString() const override;
 
-    std::string getFromDate() const { return fromDate; }
+    [[nodiscard]] std::string getFromDate() const { return fromDate; }
     void setFromDate(const std::string &fromDate_) { fromDate = fromDate_; }
 
-    std::string getToDate() const { return toDate; }
+    [[nodiscard]] std::string getToDate() const { return toDate; }
     void setToDate(const std::string &toDate_) { toDate = toDate_; }
 
-    std::string getCity() const { return city; }
+    [[nodiscard]] std::string getCity() const { return city; }
     void setCity(const std::string &city_) { city = city_; }
 
-    int getAdults() const { return adults; }
+    [[nodiscard]] int getAdults() const { return adults; }
     void setAdults(int adults_) { adults = adults_; }
 
-    int getChildren() const { return children; }
+    [[nodiscard]] int getChildren() const { return children; }
     void setChildren(int children_) { children = children_; }
 
-    int getRooms() const { return rooms; }
+    [[nodiscard]] int getRooms() const { return rooms; }
     void setRooms(int rooms_) { rooms = rooms_; }
 
     ~HotelRequest() override = default;
