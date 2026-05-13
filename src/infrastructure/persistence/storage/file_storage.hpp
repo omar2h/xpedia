@@ -1,11 +1,15 @@
 #pragma once
 
+#include <string>
+
 #include "../../../third_party/json.hpp"
 
 using json = nlohmann::json;
 
 class FileStorage
 {
+    void writeToFileAtomically(const std::string &path, const json &data) const;
+
 public:
     [[nodiscard]] json readAll(const std::string &path) const;
 

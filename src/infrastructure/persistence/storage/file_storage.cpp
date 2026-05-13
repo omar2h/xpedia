@@ -2,54 +2,55 @@
 #include "../../json_keys.hpp"
 #include "../../../exception.hpp"
 
+#include <cstdio>
 #include <fstream>
+
+void FileStorage::writeToFileAtomically(const std::string &path, const json &data) const
+{
+    std::string tmpPath = path + ".tmp";
+
+    {
+        std::ofstream out(tmpPath);
+        if (out.fail())
+            throw PersistenceException("Failed to write temp file");
+        out << data.dump(4);
+    }
+
+    if (std::rename(tmpPath.c_str(), path.c_str()) != 0)
+        throw PersistenceException("Failed to rename temp file");
+}
 
 json FileStorage::readAll(const std::string &path) const
 {
     std::fstream file_handler(path.c_str());
 
     if (file_handler.fail())
-    {
         throw PersistenceException("Failed to open file");
-    }
 
     json arr;
-
     file_handler >> arr;
-
     return arr;
 }
 
 void FileStorage::writeJsonToFile(const std::string &path, const json &obj, bool append) const
 {
-    std::fstream file_handler(path.c_str());
-
-    if (file_handler.fail())
-    {
-        throw PersistenceException("Failed to open file");
-    }
-
     json arr;
 
-    file_handler.seekg(0, std::ios::beg);
-
-    if (file_handler.peek() != std::ifstream::traits_type::eof())
     {
-        file_handler >> arr;
+        std::ifstream in(path);
+        if (in)
+            in >> arr;
     }
-
-    file_handler.close();
 
     if (!append)
-    {
         arr.clear();
-    }
+
+    if (!arr.is_array())
+        arr = json::array();
 
     arr.push_back(obj);
 
-    std::ofstream out(path.c_str());
-
-    out << arr.dump(4);
+    writeToFileAtomically(path, arr);
 }
 
 std::vector<std::string> FileStorage::readJsonAttributeFromFile(const std::string &path,
@@ -58,21 +59,15 @@ std::vector<std::string> FileStorage::readJsonAttributeFromFile(const std::strin
     std::fstream file_handler(path.c_str());
 
     if (file_handler.fail())
-    {
         throw PersistenceException("Failed to open file");
-    }
 
     json arr;
-
     file_handler >> arr;
 
     std::vector<std::string> attributes;
 
     for (const auto &obj : arr)
-    {
-        attributes.push_back(
-            obj.value(attribute, ""));
-    }
+        attributes.push_back(obj.value(attribute, ""));
 
     return attributes;
 }
@@ -82,20 +77,15 @@ json FileStorage::getObjectWithId(const std::string &path, const std::string &id
     std::fstream file_handler(path.c_str());
 
     if (file_handler.fail())
-    {
         throw PersistenceException("Failed to open file");
-    }
 
     json arr;
-
     file_handler >> arr;
 
     for (const auto &obj : arr)
     {
         if (obj.value(JsonKeys::id, "") == id)
-        {
             return obj;
-        }
     }
 
     return json{};
@@ -103,32 +93,26 @@ json FileStorage::getObjectWithId(const std::string &path, const std::string &id
 
 void FileStorage::deleteObjectWithId(const std::string &path, const std::string &id) const
 {
-    std::fstream file_handler(path.c_str());
-
-    if (file_handler.fail())
-    {
-        throw PersistenceException("Failed to open file");
-    }
-
     json arr;
 
-    file_handler >> arr;
+    {
+        std::ifstream in(path);
+        if (in)
+            in >> arr;
+    }
 
-    file_handler.close();
+    if (!arr.is_array())
+        return;
 
     json updated = json::array();
 
     for (const auto &obj : arr)
     {
         if (obj.value("id", "") != id)
-        {
             updated.push_back(obj);
-        }
     }
 
-    std::ofstream out(path.c_str());
-
-    out << updated.dump(4);
+    writeToFileAtomically(path, updated);
 }
 
 json FileStorage::getObjectsWithAttribute(const std::string &path, const std::string &attribute,
@@ -137,12 +121,9 @@ json FileStorage::getObjectsWithAttribute(const std::string &path, const std::st
     std::fstream file_handler(path.c_str());
 
     if (file_handler.fail())
-    {
         throw PersistenceException("Failed to open file");
-    }
 
     json arr;
-
     file_handler >> arr;
 
     json result = json::array();
@@ -150,9 +131,7 @@ json FileStorage::getObjectsWithAttribute(const std::string &path, const std::st
     for (const auto &obj : arr)
     {
         if (obj.value(attribute, "") == value)
-        {
             result.push_back(obj);
-        }
     }
 
     return result;
