@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../application/providers/flight_provider.hpp"
+#include "../../application/providers/reservation_provider.hpp"
 
-class BritishAirwaysFlightProvider : public FlightProvider
+class BritishAirwaysFlightProvider : public ReservationProvider
 {
 public:
     [[nodiscard]] std::string getName() const override
@@ -14,7 +14,5 @@ public:
 
     [[nodiscard]] bool reserve(Reservation *reservation) const override;
 
-    [[nodiscard]] std::unique_ptr<ReservationProvider> clone() const override { return std::make_unique<BritishAirwaysFlightProvider>(*this); }
-
-    ~BritishAirwaysFlightProvider() override = default;
+    [[nodiscard]] std::string getCategory() const override { return "flight"; }
 };

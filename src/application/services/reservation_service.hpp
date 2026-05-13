@@ -15,14 +15,12 @@ enum class RequestType;
 
 class ReservationService
 {
-    std::function<std::vector<std::unique_ptr<ReservationProvider>>()> m_getFlightProviders;
-    std::function<std::vector<std::unique_ptr<ReservationProvider>>()> m_getHotelProviders;
+    std::function<std::vector<std::unique_ptr<ReservationProvider>>(ReservationCategory)> m_getProviders;
     std::function<std::unique_ptr<ReservationProvider>(ReservationCategory, const std::string &)> m_getReservationProvider;
 
 public:
     ReservationService(
-        std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getFlightProviders,
-        std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getHotelProviders,
+        std::function<std::vector<std::unique_ptr<ReservationProvider>>(ReservationCategory)> getProviders,
         std::function<std::unique_ptr<ReservationProvider>(ReservationCategory, const std::string &)> getReservationProvider);
 
     [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> getAvailableReservations(

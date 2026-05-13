@@ -2,8 +2,6 @@ add_library(infrastructure)
 
 target_sources(infrastructure
     PRIVATE
-        factories/flight_provider_factory.cpp
-        factories/hotel_provider_factory.cpp
         factories/reservation_provider_factory.cpp
         factories/payment_factory.cpp
 

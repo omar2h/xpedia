@@ -1,5 +1,7 @@
 #include "air_france_flight_provider.hpp"
 #include "../../apis/expedia_flights_api.hpp"
+#include "../../domain/entities/flight.hpp"
+#include "../../application/requests/flight_request.hpp"
 
 std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightProvider::searchReservations() const
 {

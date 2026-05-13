@@ -19,9 +19,11 @@
 #include "application/results/pay_itinerary_result.hpp"
 #include "application/results/list_itineraries_result.hpp"
 #include "infrastructure/persistence/database.hpp"
-#include "infrastructure/factories/flight_provider_factory.hpp"
-#include "infrastructure/factories/hotel_provider_factory.hpp"
 #include "infrastructure/factories/reservation_provider_factory.hpp"
+#include "infrastructure/providers/british_airways_flight_provider.hpp"
+#include "infrastructure/providers/air_france_flight_provider.hpp"
+#include "infrastructure/providers/marriott_hotel_provider.hpp"
+#include "infrastructure/providers/hilton_hotel_provider.hpp"
 #include "infrastructure/factories/payment_factory.hpp"
 #include <iostream>
 
@@ -170,22 +172,26 @@ bool App::handlePayment(User &user, const Itinerary &itinerary)
 int main()
 {
     Database database;
-    FlightProviderFactory flightProviderFactory;
-    HotelProviderFactory hotelProviderFactory;
-    RoutingReservationProviderFactory reservationProviderFactory;
+    ReservationProviderFactory providerFactory;
+    providerFactory.registerProvider(ReservationCategory::flight, "british_airways", "British Airways",
+                                     [] { return std::make_unique<BritishAirwaysFlightProvider>(); });
+    providerFactory.registerProvider(ReservationCategory::flight, "air_france", "Air France",
+                                     [] { return std::make_unique<AirFranceFlightProvider>(); });
+    providerFactory.registerProvider(ReservationCategory::hotel, "marriott", "Marriott",
+                                     [] { return std::make_unique<MarriottHotelProvider>(); });
+    providerFactory.registerProvider(ReservationCategory::hotel, "hilton", "Hilton",
+                                     [] { return std::make_unique<HiltonHotelProvider>(); });
     PaymentFactory paymentFactory;
-    auto getFlightProviders = [&]()
-    { return flightProviderFactory.getProviders(); };
-    auto getHotelProviders = [&]()
-    { return hotelProviderFactory.getProviders(); };
+    auto getProviders = [&](ReservationCategory category)
+    { return providerFactory.createAll(category); };
     auto getReservationProvider = [&](ReservationCategory category, const std::string &providerId)
-    { return reservationProviderFactory.getProvider(category, providerId); };
+    { return providerFactory.create(category, providerId); };
     auto getPaymentService = [&](PaymentService service)
     { return paymentFactory.getPaymentService(service); };
     ReservationRequestFactory requestFactory;
     ReservationFactory reservationFactory;
     AuthService authService{database};
-    ReservationService reservationService{getFlightProviders, getHotelProviders, getReservationProvider};
+    ReservationService reservationService{getProviders, getReservationProvider};
     auto confirmReservations = [&](const Itinerary &itin)
     { return reservationService.confirmReservations(itin); };
     PaymentProcessor paymentProcessor{database, getPaymentService, confirmReservations};

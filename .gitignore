@@ -12,7 +12,7 @@
 
 # Build directories
 obj/
-build/
+build*/
 bin/
 
 # =========================

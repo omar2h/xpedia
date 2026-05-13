@@ -29,10 +29,7 @@ namespace
 
         bool reserve(Reservation *) const override { return true; }
         std::string getName() const override { return "MockFlight"; }
-        std::unique_ptr<ReservationProvider> clone() const override
-        {
-            return std::make_unique<MockFlightProvider>(*this);
-        }
+        std::string getCategory() const override { return "flight"; }
     };
 
     class MockHotelProvider : public ReservationProvider
@@ -50,31 +47,26 @@ namespace
 
         bool reserve(Reservation *) const override { return true; }
         std::string getName() const override { return "MockHotel"; }
-        std::unique_ptr<ReservationProvider> clone() const override
-        {
-            return std::make_unique<MockHotelProvider>(*this);
-        }
+        std::string getCategory() const override { return "hotel"; }
     };
 }
 
 TEST(ReservationServiceTest, GetFlightReservationsReturnsProviderItems)
 {
-    auto getFlights = []() -> std::vector<std::unique_ptr<ReservationProvider>>
+    auto getProviders = [](ReservationCategory cat) -> std::vector<std::unique_ptr<ReservationProvider>>
     {
+        if (cat != ReservationCategory::flight)
+            return {};
         std::vector<std::unique_ptr<ReservationProvider>> providers;
         providers.push_back(std::make_unique<MockFlightProvider>());
         return providers;
-    };
-    auto getHotels = []() -> std::vector<std::unique_ptr<ReservationProvider>>
-    {
-        return {};
     };
     auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         return nullptr;
     };
 
-    ReservationService service(getFlights, getHotels, getProvider);
+    ReservationService service(getProviders, getProvider);
     FlightRequest request("NYC", "LAX", "2026-06-01", 1, 0);
     auto items = service.getAvailableReservations(&request, RequestType::flight);
 
@@ -87,12 +79,10 @@ TEST(ReservationServiceTest, GetFlightReservationsReturnsProviderItems)
 
 TEST(ReservationServiceTest, GetHotelReservationsReturnsProviderItems)
 {
-    auto getFlights = []() -> std::vector<std::unique_ptr<ReservationProvider>>
+    auto getProviders = [](ReservationCategory cat) -> std::vector<std::unique_ptr<ReservationProvider>>
     {
-        return {};
-    };
-    auto getHotels = []() -> std::vector<std::unique_ptr<ReservationProvider>>
-    {
+        if (cat != ReservationCategory::hotel)
+            return {};
         std::vector<std::unique_ptr<ReservationProvider>> providers;
         providers.push_back(std::make_unique<MockHotelProvider>());
         return providers;
@@ -102,7 +92,7 @@ TEST(ReservationServiceTest, GetHotelReservationsReturnsProviderItems)
         return nullptr;
     };
 
-    ReservationService service(getFlights, getHotels, getProvider);
+    ReservationService service(getProviders, getProvider);
     HotelRequest request("2026-07-01", "2026-07-05", "Paris", 2, 0);
     auto items = service.getAvailableReservations(&request, RequestType::hotel);
 
@@ -116,15 +106,14 @@ TEST(ReservationServiceTest, GetHotelReservationsReturnsProviderItems)
 TEST(ReservationServiceTest, ConfirmReservationsCallsProvider)
 {
     bool providerCalled = false;
-    auto getFlights = []() { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
-    auto getHotels = []() { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
+    auto getProviders = [](ReservationCategory) { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
     auto getProvider = [&](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         providerCalled = true;
         return std::make_unique<MockFlightProvider>();
     };
 
-    ReservationService service(getFlights, getHotels, getProvider);
+    ReservationService service(getProviders, getProvider);
     Itinerary itinerary;
     itinerary.setId("test123");
     FlightReservation res;

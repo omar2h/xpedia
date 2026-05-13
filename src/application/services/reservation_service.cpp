@@ -5,48 +5,31 @@
 #include "../../domain/entities/reservation.hpp"
 
 ReservationService::ReservationService(
-    std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getFlightProviders,
-    std::function<std::vector<std::unique_ptr<ReservationProvider>>()> getHotelProviders,
+    std::function<std::vector<std::unique_ptr<ReservationProvider>>(ReservationCategory)> getProviders,
     std::function<std::unique_ptr<ReservationProvider>(ReservationCategory, const std::string &)> getReservationProvider)
-    : m_getFlightProviders(std::move(getFlightProviders)),
-      m_getHotelProviders(std::move(getHotelProviders)),
+    : m_getProviders(std::move(getProviders)),
       m_getReservationProvider(std::move(getReservationProvider)) {}
 
 std::vector<std::unique_ptr<ItineraryItem>> ReservationService::getAvailableReservations(
     ReservationRequest *request, RequestType requestType)
 {
     std::vector<std::unique_ptr<ItineraryItem>> items;
-    std::vector<std::unique_ptr<ReservationProvider>> providers;
 
-    if (requestType == RequestType::flight)
+    ReservationCategory cat = requestType == RequestType::flight
+                                 ? ReservationCategory::flight
+                                 : ReservationCategory::hotel;
+
+    auto providers = m_getProviders(cat);
+
+    for (auto &provider : providers)
     {
-        providers = m_getFlightProviders();
+        provider->setRequest(request);
 
-        for (auto &provider : providers)
-        {
-            provider->setRequest(request);
+        std::vector<std::unique_ptr<ItineraryItem>> results = provider->searchReservations();
 
-            std::vector<std::unique_ptr<ItineraryItem>> results = provider->searchReservations();
-
-            items.insert(items.end(),
-                         std::make_move_iterator(results.begin()),
-                         std::make_move_iterator(results.end()));
-        }
-    }
-    else if (requestType == RequestType::hotel)
-    {
-        providers = m_getHotelProviders();
-
-        for (auto &provider : providers)
-        {
-            provider->setRequest(request);
-
-            std::vector<std::unique_ptr<ItineraryItem>> results = provider->searchReservations();
-
-            items.insert(items.end(),
-                         std::make_move_iterator(results.begin()),
-                         std::make_move_iterator(results.end()));
-        }
+        items.insert(items.end(),
+                     std::make_move_iterator(results.begin()),
+                     std::make_move_iterator(results.end()));
     }
 
     return items;

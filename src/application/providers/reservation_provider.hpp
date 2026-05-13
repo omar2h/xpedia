@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "../../application/requests/reservation_request.hpp"
@@ -39,7 +40,7 @@ public:
         return request ? request->clone() : nullptr;
     }
 
-    [[nodiscard]] virtual std::unique_ptr<ReservationProvider> clone() const = 0;
+    [[nodiscard]] virtual std::string getCategory() const = 0;
 
     virtual ~ReservationProvider() = default;
 };

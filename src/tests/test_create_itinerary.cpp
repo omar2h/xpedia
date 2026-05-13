@@ -25,10 +25,7 @@ namespace
 
         bool reserve(Reservation *) const override { return true; }
         std::string getName() const override { return "Stub"; }
-        std::unique_ptr<ReservationProvider> clone() const override
-        {
-            return std::make_unique<StubFlightProvider>(*this);
-        }
+        std::string getCategory() const override { return "flight"; }
     };
 
     std::unique_ptr<Flight> makeFlight(const std::string &airline, const std::string &date, double cost)
@@ -61,13 +58,12 @@ TEST(CreateItineraryTest, CreateItineraryGeneratesId)
 {
     ReservationRequestFactory reqFactory;
     ReservationFactory resFactory;
-    auto getFlights = []() { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
-    auto getHotels = []() { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
+    auto getProviders = [](ReservationCategory) { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
     auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         return nullptr;
     };
-    ReservationService service(getFlights, getHotels, getProvider);
+    ReservationService service(getProviders, getProvider);
     CreateItineraryUseCase useCase(reqFactory, resFactory, service);
 
     Itinerary itinerary = useCase.createItinerary();
@@ -79,13 +75,12 @@ TEST(CreateItineraryTest, AddFlightItemToItinerary)
 {
     ReservationRequestFactory reqFactory;
     ReservationFactory resFactory;
-    auto getFlights = []() { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
-    auto getHotels = []() { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
+    auto getProviders = [](ReservationCategory) { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
     auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         return nullptr;
     };
-    ReservationService service(getFlights, getHotels, getProvider);
+    ReservationService service(getProviders, getProvider);
     CreateItineraryUseCase useCase(reqFactory, resFactory, service);
 
     Itinerary itinerary = useCase.createItinerary();
@@ -111,13 +106,12 @@ TEST(CreateItineraryTest, AddHotelItemToItinerary)
 {
     ReservationRequestFactory reqFactory;
     ReservationFactory resFactory;
-    auto getFlights = []() { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
-    auto getHotels = []() { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
+    auto getProviders = [](ReservationCategory) { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
     auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         return nullptr;
     };
-    ReservationService service(getFlights, getHotels, getProvider);
+    ReservationService service(getProviders, getProvider);
     CreateItineraryUseCase useCase(reqFactory, resFactory, service);
 
     Itinerary itinerary = useCase.createItinerary();

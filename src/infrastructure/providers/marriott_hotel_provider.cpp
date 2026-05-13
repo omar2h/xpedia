@@ -1,6 +1,7 @@
 #include "marriott_hotel_provider.hpp"
 #include "../../apis/expedia_hotels_api.hpp"
 #include "../../application/factories/reservation_request_factory.hpp"
+#include "../../application/requests/hotel_request.hpp"
 #include "../../domain/entities/hotel_room.hpp"
 
 std::vector<std::unique_ptr<ItineraryItem>> MarriottHotelProvider::searchReservations() const
@@ -36,7 +37,4 @@ std::string MarriottHotelProvider::getName() const
     return "Marriott";
 }
 
-std::unique_ptr<ReservationProvider> MarriottHotelProvider::clone() const
-{
-    return std::make_unique<MarriottHotelProvider>(*this);
-}
+
