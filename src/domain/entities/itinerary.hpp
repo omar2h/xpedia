@@ -28,6 +28,6 @@ public:
     void setReservations(std::vector<std::unique_ptr<Reservation>> reservations_);
 
     double getCost() const { return cost; }
-    void setCost() { cost = totalCost(); }
+    void recalculateCost() { cost = totalCost(); }
     void setCost(double cost_) { cost = cost_; }
 };
