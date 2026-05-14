@@ -14,48 +14,64 @@
 #include "../domain/entities/payment_card.hpp"
 #include "login_handler.hpp"
 #include "signup_handler.hpp"
+#include "../domain/visitors/reservation_visitor.hpp"
+#include "../domain/visitors/itinerary_item_visitor.hpp"
 
 // Formatters (presentation layer - moved out of domain)
 namespace
 {
+    class FormattingVisitor : public ReservationVisitor, public ItineraryItemVisitor
+    {
+    public:
+        std::string result;
+
+        void visit(const Flight &f) override
+        {
+            std::ostringstream oss;
+            oss << "Airline: " << f.getAirline() << ", Cost: " << f.getTotalCost() << ", Date: " << f.getDate();
+            result = oss.str();
+        }
+
+        void visit(const HotelRoom &h) override
+        {
+            std::ostringstream oss;
+            oss << "Hotel: " << h.getHotelName() << ", " << h.getRoomType() << " (" << h.getAvailableRooms() << " available), "
+                << "Price/night: " << h.getPricePerNight() << ", From: " << h.getDateFrom() << " To: " << h.getDateTo();
+            result = oss.str();
+        }
+
+        void visit(const FlightReservation &fr) override
+        {
+            std::ostringstream oss;
+            oss << "Flight: " << fr.getAirline() << ", From " << fr.getFrom() << " to " << fr.getTo()
+                << " on " << fr.getDate() << ", Adults: " << fr.getAdults()
+                << ", Children: " << fr.getChildren() << ", Total Cost: " << fr.totalCost() << "\n";
+            result = oss.str();
+        }
+
+        void visit(const HotelReservation &hr) override
+        {
+            std::ostringstream oss;
+            oss << "Hotel: " << hr.getHotelName() << ", " << hr.getCity() << ", Room: " << hr.getRoomType()
+                << " (" << hr.getRooms() << " rooms), From " << hr.getFromDate() << " to " << hr.getToDate()
+                << ", Adults: " << hr.getAdults() << ", Children: " << hr.getChildren()
+                << ", Total Cost: " << hr.totalCost() << "\n";
+            result = oss.str();
+        }
+    };
+
     std::string formatItineraryItem(const ItineraryItem &item)
     {
-        if (const Flight *flight = dynamic_cast<const Flight *>(&item))
-        {
-            std::ostringstream oss;
-            oss << "Airline: " << flight->getAirline() << ", Cost: " << flight->getTotalCost() << ", Date: " << flight->getDate();
-            return oss.str();
-        }
-        else if (const HotelRoom *hotel = dynamic_cast<const HotelRoom *>(&item))
-        {
-            std::ostringstream oss;
-            oss << "Hotel: " << hotel->getHotelName() << ", " << hotel->getRoomType() << " (" << hotel->getAvailableRooms() << " available), "
-                << "Price/night: " << hotel->getPricePerNight() << ", From: " << hotel->getDateFrom() << " To: " << hotel->getDateTo();
-            return oss.str();
-        }
-        return "Unknown item";
+        FormattingVisitor visitor;
+        item.accept(visitor);
+        return visitor.result;
     }
 
     std::string formatReservationSummary(const Reservation &res)
     {
-        if (const FlightReservation *flight = dynamic_cast<const FlightReservation *>(&res))
-        {
-            std::ostringstream oss;
-            oss << "Flight: " << flight->getAirline() << ", From " << flight->getFrom() << " to " << flight->getTo()
-                << " on " << flight->getDate() << ", Adults: " << flight->getAdults()
-                << ", Children: " << flight->getChildren() << ", Total Cost: " << flight->totalCost() << "\n";
-            return oss.str();
-        }
-        else if (const HotelReservation *hotel = dynamic_cast<const HotelReservation *>(&res))
-        {
-            std::ostringstream oss;
-            oss << "Hotel: " << hotel->getHotelName() << ", " << hotel->getCity() << ", Room: " << hotel->getRoomType()
-                << " (" << hotel->getRooms() << " rooms), From " << hotel->getFromDate() << " to " << hotel->getToDate()
-                << ", Adults: " << hotel->getAdults() << ", Children: " << hotel->getChildren()
-                << ", Total Cost: " << hotel->totalCost() << "\n";
-            return oss.str();
-        }
-        return "Unknown reservation";
+        FormattingVisitor visitor;
+        res.accept(visitor);
+        return visitor.result;
     }
 
     std::string formatItinerarySummary(const Itinerary &itinerary)
@@ -74,7 +90,9 @@ namespace
     std::string formatPaymentCard(const PaymentCard &card)
     {
         std::ostringstream oss;
-        oss << "Card: " << card.getNumber() << ", Owner: " << card.getOwner() << ", Expiry: " << card.getExpiryDate();
+        auto num = card.getNumber();
+        std::string masked = num.size() > 4 ? "****-****-****-" + num.substr(num.size() - 4) : num;
+        oss << "Card: " << masked << ", Owner: " << card.getOwner() << ", Expiry: " << card.getExpiryDate();
         return oss.str();
     }
 } // namespace
@@ -133,16 +151,28 @@ void ConsoleFrontend::readRequestData(ReservationRequest &request, RequestType t
 {
     if (type == RequestType::flight)
     {
-        readFlightRequestData(dynamic_cast<FlightRequest &>(request));
+        auto *flightReq = dynamic_cast<FlightRequest *>(&request);
+        if (!flightReq)
+            throw ValidationException("readRequestData: expected FlightRequest");
+        readFlightRequestData(*flightReq);
     }
     else if (type == RequestType::hotel)
     {
-        readHotelRequestData(dynamic_cast<HotelRequest &>(request));
+        auto *hotelReq = dynamic_cast<HotelRequest *>(&request);
+        if (!hotelReq)
+            throw ValidationException("readRequestData: expected HotelRequest");
+        readHotelRequestData(*hotelReq);
     }
 }
 
 int ConsoleFrontend::readReservationChoice(const std::vector<std::unique_ptr<ItineraryItem>> &items)
 {
+    if (items.empty())
+    {
+        m_output.writeLine("No reservations found");
+        return -1;
+    }
+
     std::vector<std::string> options{};
 
     for (const auto &item : items)
@@ -160,7 +190,7 @@ int ConsoleFrontend::readReservationChoice(const std::vector<std::unique_ptr<Iti
 
         try
         {
-            return m_input.readInt(1, itemsCount);
+            return m_input.readInt(1, itemsCount, true);
         }
         catch (const AppException &e)
         {
@@ -182,13 +212,20 @@ int ConsoleFrontend::displayPaymentOptions(const std::vector<PaymentCard> &cards
 
     while (true)
     {
+        if (cards.empty())
+        {
+            m_output.writeLine("No saved cards");
+        }
+        // Always show the "0: Add card" option for clarity
+        m_output.writeLine("0: Add card");
+
         printOptions(m_output, options);
 
         m_output.write("Enter choice(0 to add card, -1 to cancel): ");
 
         try
         {
-            return m_input.readInt(0, cardsCount);
+            return m_input.readInt(0, cardsCount, true);
         }
         catch (const AppException &e)
         {
@@ -228,7 +265,7 @@ int ConsoleFrontend::displayPaymentServices()
 
         try
         {
-            return m_input.readInt(1, count);
+            return m_input.readInt(1, count, true);
         }
         catch (const AppException &e)
         {
@@ -251,9 +288,6 @@ void ConsoleFrontend::displayItineraries(const std::vector<Itinerary> &itinerari
 
 void ConsoleFrontend::displayItinerary(const Itinerary &itinerary)
 {
-    const auto &reservations = itinerary.getReservations();
-    int count{(int)reservations.size()};
-    m_output.writeLine("Itinerary of " + std::to_string(count) + " reservations");
     m_output.writeLine(formatItinerarySummary(itinerary));
 }
 
