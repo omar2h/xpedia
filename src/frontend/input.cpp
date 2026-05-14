@@ -20,18 +20,18 @@ int ConsoleInput::readInt()
 
 int ConsoleInput::readInt(int low, int high)
 {
-    int choice{};
-    std::cin >> choice;
+    return readInt(low, high, false);
+}
 
-    if (std::cin.fail())
-    {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        throw ValidationException("Invalid input");
-    }
+int ConsoleInput::readInt(int low, int high, bool allowCancel)
+{
+    int choice = readInt();
 
-    if ((choice >= low && choice <= high) || choice == -1)
+    if (choice >= low && choice <= high)
         return choice;
+
+    if (allowCancel && choice == -1)
+        return -1;
 
     throw ValidationException("Invalid Choice");
 }
@@ -39,6 +39,11 @@ int ConsoleInput::readInt(int low, int high)
 std::string ConsoleInput::readString()
 {
     std::string input;
-    std::cin >> input;
+    // Discard any leftover characters from previous extraction (e.g., after >>)
+    if (std::cin.rdbuf()->in_avail() > 0)
+    {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    std::getline(std::cin, input);
     return input;
 }
