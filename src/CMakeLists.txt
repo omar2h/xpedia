@@ -48,7 +48,7 @@ endif()
 
 # ---- Main executable ----
 
-add_executable(travel_app app.cpp)
+add_executable(travel_app app.cpp main.cpp)
 
 target_link_libraries(travel_app
     PRIVATE

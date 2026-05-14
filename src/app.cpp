@@ -1,42 +1,23 @@
 #include "app.hpp"
-#include "frontend/console_frontend.hpp"
-#include "frontend/output.hpp"
-#include "frontend/input.hpp"
+#include "application/frontend_interface.hpp"
 #include "domain/entities/user.hpp"
 #include "domain/entities/payment_card.hpp"
 #include "domain/entities/itinerary.hpp"
 #include "domain/entities/itinerary_item.hpp"
-#include "application/factories/reservation_request_factory.hpp"
-#include "domain/factories/reservation_factory.hpp"
-#include "frontend/login_handler.hpp"
-#include "frontend/signup_handler.hpp"
-#include "application/services/auth_service.hpp"
-#include "application/services/reservation_service.hpp"
-#include "application/services/payment_service.hpp"
+#include "domain/requests/reservation_request.hpp"
 #include "application/use_cases/create_itinerary_use_case.hpp"
 #include "application/use_cases/pay_itinerary_use_case.hpp"
 #include "application/use_cases/list_itineraries_use_case.hpp"
 #include "application/results/pay_itinerary_result.hpp"
 #include "application/results/list_itineraries_result.hpp"
-#include "infrastructure/persistence/sql/sql_database.hpp"
-#include "infrastructure/factories/reservation_provider_factory.hpp"
-#include "infrastructure/providers/british_airways_flight_provider.hpp"
-#include "infrastructure/providers/air_france_flight_provider.hpp"
-#include "infrastructure/providers/marriott_hotel_provider.hpp"
-#include "infrastructure/providers/hilton_hotel_provider.hpp"
-#include "infrastructure/factories/payment_factory.hpp"
-#include <iostream>
-
 App::App(IFrontend &frontend,
          CreateItineraryUseCase &createItineraryUseCase,
          PayItineraryUseCase &payItineraryUseCase,
-         ListItinerariesUseCase &listItinerariesUseCase,
-         ReservationRequestFactory &requestFactory)
+         ListItinerariesUseCase &listItinerariesUseCase)
     : m_frontend(frontend),
       m_createItineraryUseCase(createItineraryUseCase),
       m_payItineraryUseCase(payItineraryUseCase),
-      m_listItinerariesUseCase(listItinerariesUseCase),
-      m_requestFactory(requestFactory) {}
+      m_listItinerariesUseCase(listItinerariesUseCase) {}
 
 void App::run()
 {
@@ -46,44 +27,55 @@ void App::run()
         while (true)
         {
             m_frontend.showMessage("\n");
-            int choice = m_frontend.showStartMenu();
+            auto choice = static_cast<StartMenuChoice>(m_frontend.showStartMenu());
 
-            if (choice == 1)
+            switch (choice)
             {
+            case StartMenuChoice::Login:
                 user = m_frontend.login();
                 m_frontend.displayWelcomeMessage(user.getFirstName(), user.getLastName());
                 break;
-            }
-            else if (choice == 2)
-            {
+            case StartMenuChoice::SignUp:
                 m_frontend.signup();
-            }
-            else if (choice == 3)
+                break;
+            case StartMenuChoice::Exit:
                 return;
+            default:
+                m_frontend.showError("Invalid choice");
+                break;
+            }
+
+            if (choice == StartMenuChoice::Login)
+                break;
         }
 
-        while (true)
+        bool loggedIn = true;
+        while (loggedIn)
         {
-            int choice = m_frontend.displayMainMenu();
+            auto choice = static_cast<MainMenuChoice>(m_frontend.displayMainMenu());
 
-            if (choice == 1)
+            switch (choice)
             {
+            case MainMenuChoice::ViewProfile:
                 m_frontend.displayUserProfile(user);
-            }
-            else if (choice == 2)
-            {
+                break;
+            case MainMenuChoice::CreateItinerary:
                 handleCreateItinerary(user);
-            }
-            else if (choice == 3)
+                break;
+            case MainMenuChoice::ListItineraries:
             {
                 auto result = m_listItinerariesUseCase.execute(user);
                 if (result.success)
                     m_frontend.displayItineraries(result.itineraries);
                 else
                     m_frontend.showMessage(result.message);
+                break;
             }
-            else if (choice == 4)
-            {
+            case MainMenuChoice::Logout:
+                loggedIn = false;
+                break;
+            default:
+                m_frontend.showError("Invalid choice");
                 break;
             }
         }
@@ -96,39 +88,55 @@ void App::handleCreateItinerary(User &user)
 
     while (true)
     {
-        int choice = m_frontend.displayCreateItineraryMenu();
+        auto choice = static_cast<CreateItineraryMenuChoice>(m_frontend.displayCreateItineraryMenu());
 
-        if (choice == 1)
+        switch (choice)
         {
+        case CreateItineraryMenuChoice::AddFlight:
             addItemToItinerary(itinerary, RequestType::flight);
-        }
-        else if (choice == 2)
-        {
+            break;
+        case CreateItineraryMenuChoice::AddHotel:
             addItemToItinerary(itinerary, RequestType::hotel);
-        }
-        else if (choice == 3)
+            break;
+        case CreateItineraryMenuChoice::CheckOut:
         {
+            if (itinerary.getReservations().empty())
+            {
+                m_frontend.showMessage("Cannot checkout: itinerary is empty");
+                break;
+            }
             m_frontend.displayItinerary(itinerary);
             handlePayment(user, itinerary);
             return;
         }
-        else if (choice == 4)
-        {
+        case CreateItineraryMenuChoice::Cancel:
             return;
+        default:
+            m_frontend.showError("Invalid choice");
+            break;
         }
     }
 }
 
 void App::addItemToItinerary(Itinerary &itinerary, RequestType type)
 {
-    auto request = m_requestFactory.getRequest(type);
+    auto request = m_createItineraryUseCase.makeRequest(type);
+    if (!request)
+    {
+        m_frontend.showError("Unsupported reservation type");
+        return;
+    }
+
     m_frontend.readRequestData(*request, type);
 
     auto items = m_createItineraryUseCase.searchItems(type, *request);
     int sel = m_frontend.readReservationChoice(items);
 
-    if (sel != -1)
-        m_createItineraryUseCase.addItemToItinerary(itinerary, type, std::move(request), *items[sel - 1]);
+    if (sel != -1 &&
+        !m_createItineraryUseCase.addItemToItinerary(itinerary, type, std::move(request), *items[sel - 1]))
+    {
+        m_frontend.showError("Failed to add item to itinerary");
+    }
 }
 
 bool App::handlePayment(User &user, const Itinerary &itinerary)
@@ -166,53 +174,5 @@ bool App::handlePayment(User &user, const Itinerary &itinerary)
 
         m_frontend.showError(result.message);
         return false;
-    }
-}
-
-int main()
-{
-    SqlDatabase database;
-    ReservationProviderFactory providerFactory;
-    providerFactory.registerProvider(ReservationCategory::flight, "british_airways", "British Airways",
-                                     [] { return std::make_unique<BritishAirwaysFlightProvider>(); });
-    providerFactory.registerProvider(ReservationCategory::flight, "air_france", "Air France",
-                                     [] { return std::make_unique<AirFranceFlightProvider>(); });
-    providerFactory.registerProvider(ReservationCategory::hotel, "marriott", "Marriott",
-                                     [] { return std::make_unique<MarriottHotelProvider>(); });
-    providerFactory.registerProvider(ReservationCategory::hotel, "hilton", "Hilton",
-                                     [] { return std::make_unique<HiltonHotelProvider>(); });
-    PaymentFactory paymentFactory;
-    auto getProviders = [&](ReservationCategory category)
-    { return providerFactory.createAll(category); };
-    auto getReservationProvider = [&](ReservationCategory category, const std::string &providerId)
-    { return providerFactory.create(category, providerId); };
-    auto getPaymentService = [&](PaymentService service)
-    { return paymentFactory.getPaymentService(service); };
-    ReservationRequestFactory requestFactory;
-    ReservationFactory reservationFactory;
-    AuthService authService{database};
-    ReservationService reservationService{getProviders, getReservationProvider};
-    auto confirmReservations = [&](const Itinerary &itin)
-    { return reservationService.confirmReservations(itin); };
-    PaymentProcessor paymentProcessor{database, getPaymentService, confirmReservations};
-    PayItineraryUseCase payItineraryUseCase{database, paymentProcessor};
-    ListItinerariesUseCase listItinerariesUseCase{database};
-    CreateItineraryUseCase createItineraryUseCase{requestFactory, reservationFactory, reservationService};
-    ConsoleOutput output;
-    ConsoleInput input;
-    LoginHandler loginHandler{authService, output, input};
-    SignupHandler signupHandler{authService, output, input};
-    ConsoleFrontend frontend{loginHandler, signupHandler, output, input};
-
-    App app{frontend, createItineraryUseCase, payItineraryUseCase,
-            listItinerariesUseCase, requestFactory};
-
-    try
-    {
-        app.run();
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Fatal error: " << e.what() << "\n";
     }
 }

@@ -27,10 +27,12 @@ public:
 
     [[nodiscard]] Itinerary createItinerary();
 
+    [[nodiscard]] std::unique_ptr<ReservationRequest> makeRequest(RequestType type);
+
     [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> searchItems(
         RequestType type, ReservationRequest &request);
 
-    void addItemToItinerary(Itinerary &itinerary, RequestType type,
-                            std::unique_ptr<ReservationRequest> request,
-                            const ItineraryItem &selectedItem);
+    [[nodiscard]] bool addItemToItinerary(Itinerary &itinerary, RequestType type,
+                                          std::unique_ptr<ReservationRequest> request,
+                                          const ItineraryItem &selectedItem);
 };

@@ -24,18 +24,26 @@ Itinerary CreateItineraryUseCase::createItinerary()
     return itinerary;
 }
 
+std::unique_ptr<ReservationRequest> CreateItineraryUseCase::makeRequest(RequestType type)
+{
+    return m_requestFactory.getRequest(type);
+}
+
 std::vector<std::unique_ptr<ItineraryItem>> CreateItineraryUseCase::searchItems(
     RequestType type, ReservationRequest &request)
 {
     return m_reservationService.getAvailableReservations(&request, type);
 }
 
-void CreateItineraryUseCase::addItemToItinerary(Itinerary &itinerary, RequestType type,
+bool CreateItineraryUseCase::addItemToItinerary(Itinerary &itinerary, RequestType type,
                                                 std::unique_ptr<ReservationRequest> request,
                                                 const ItineraryItem &selectedItem)
 {
     auto reservation = m_reservationFactory.getReservation(type);
+    if (!reservation)
+        return false;
     reservation->setItem(selectedItem);
     reservation->applyRequest(*request);
     itinerary.addItem(std::move(reservation));
+    return true;
 }

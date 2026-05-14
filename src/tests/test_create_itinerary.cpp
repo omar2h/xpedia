@@ -88,7 +88,7 @@ TEST(CreateItineraryTest, AddFlightItemToItinerary)
     auto flightReq = std::make_unique<FlightRequest>("JFK", "LHR", "2026-08-01", 1, 0);
     auto selectedFlight = makeFlight("BA", "2026-08-01", 800);
 
-    useCase.addItemToItinerary(itinerary, RequestType::flight, std::move(flightReq), *selectedFlight);
+    ASSERT_TRUE(useCase.addItemToItinerary(itinerary, RequestType::flight, std::move(flightReq), *selectedFlight));
 
     const auto &reservations = itinerary.getReservations();
     ASSERT_EQ(reservations.size(), 1);
@@ -120,7 +120,7 @@ TEST(CreateItineraryTest, AddHotelItemToItinerary)
     hotelReq->setRooms(1);
     auto selectedRoom = makeHotelRoom("TokoyoInn", "2026-09-01", "2026-09-05", 200);
 
-    useCase.addItemToItinerary(itinerary, RequestType::hotel, std::move(hotelReq), *selectedRoom);
+    ASSERT_TRUE(useCase.addItemToItinerary(itinerary, RequestType::hotel, std::move(hotelReq), *selectedRoom));
 
     const auto &reservations = itinerary.getReservations();
     ASSERT_EQ(reservations.size(), 1);
