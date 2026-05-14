@@ -13,6 +13,8 @@ class FlightReservation : public Reservation
     int children{};
     double cost{};
 
+    void recalculateCost();
+
 public:
     FlightReservation() = default;
     FlightReservation(const FlightReservation &) = default;

@@ -13,6 +13,8 @@ class HotelReservation : public Reservation
     int rooms{};
     double cost{};
 
+    void recalculateCost();
+
 public:
     HotelReservation() = default;
     HotelReservation(const HotelReservation &) = default;
