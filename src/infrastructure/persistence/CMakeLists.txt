@@ -16,6 +16,8 @@ target_include_directories(db
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+add_subdirectory(sql)
+
 target_link_libraries(db
     PUBLIC
         domain

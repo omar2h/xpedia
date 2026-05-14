@@ -18,7 +18,7 @@
 #include "application/use_cases/list_itineraries_use_case.hpp"
 #include "application/results/pay_itinerary_result.hpp"
 #include "application/results/list_itineraries_result.hpp"
-#include "infrastructure/persistence/database.hpp"
+#include "infrastructure/persistence/sql/sql_database.hpp"
 #include "infrastructure/factories/reservation_provider_factory.hpp"
 #include "infrastructure/providers/british_airways_flight_provider.hpp"
 #include "infrastructure/providers/air_france_flight_provider.hpp"
@@ -171,7 +171,7 @@ bool App::handlePayment(User &user, const Itinerary &itinerary)
 
 int main()
 {
-    Database database;
+    SqlDatabase database;
     ReservationProviderFactory providerFactory;
     providerFactory.registerProvider(ReservationCategory::flight, "british_airways", "British Airways",
                                      [] { return std::make_unique<BritishAirwaysFlightProvider>(); });

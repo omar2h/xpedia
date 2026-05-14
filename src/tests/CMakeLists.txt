@@ -4,14 +4,18 @@ add_executable(run_tests
     test_reservation_service.cpp
     test_payment_processor.cpp
     test_create_itinerary.cpp
+    test_integration.cpp
 )
 
 target_link_libraries(run_tests
     PRIVATE
         application
         infrastructure
+        db
+        db_sql
         domain
         util
+        sqlite3
         GTest::gtest
         GTest::gtest_main
 )

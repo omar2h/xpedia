@@ -16,6 +16,8 @@ void FileStorage::writeToFileAtomically(const std::string &path, const json &dat
         out << data.dump(4);
     }
 
+    std::remove(path.c_str());
+
     if (std::rename(tmpPath.c_str(), path.c_str()) != 0)
         throw PersistenceException("Failed to rename temp file");
 }

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 project(
     TravelBookingSystem
     VERSION 1.0.0
-    LANGUAGES CXX
+    LANGUAGES C CXX
 )
 
 # ---- Global settings ----
@@ -34,6 +34,7 @@ endif()
 
 # ---- Subdirectories ----
 
+add_subdirectory(third_party)
 add_subdirectory(domain)
 add_subdirectory(util)
 add_subdirectory(infrastructure/persistence)
@@ -55,8 +56,10 @@ target_link_libraries(travel_app
         application
         infrastructure
         db
+        db_sql
         domain
         util
+        sqlite3
 )
 
 target_include_directories(travel_app
