@@ -1,6 +1,8 @@
 #pragma once
 
 #include "itinerary_item.hpp"
+#include "../visitors/itinerary_item_visitor.hpp"
+
 class Flight : public ItineraryItem
 {
     std::string airline{};
@@ -18,6 +20,8 @@ public:
     void setTotalCost(double totalCost_) { totalCost = totalCost_; }
 
     [[nodiscard]] std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<Flight>(*this); }
+
+    void accept(ItineraryItemVisitor &visitor) const override { visitor.visit(*this); }
 
     ~Flight() override = default;
 };

@@ -6,6 +6,9 @@
 #include "../request_type.hpp"
 #include "reservation_category.hpp"
 
+// Forward declaration of visitor
+class ItineraryItemVisitor;
+
 class ItineraryItem
 {
     ReservationCategory category;
@@ -24,4 +27,7 @@ public:
 
     [[nodiscard]] RequestType getRequestType() const;
     void setRequestType(const RequestType &requestType_);
+
+    // Accept method for visitor pattern
+    virtual void accept(ItineraryItemVisitor &visitor) const = 0;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "itinerary_item.hpp"
+#include "../visitors/itinerary_item_visitor.hpp"
 
 class HotelRoom : public ItineraryItem
 {
@@ -13,6 +14,7 @@ class HotelRoom : public ItineraryItem
 
 public:
     [[nodiscard]] std::unique_ptr<ItineraryItem> clone() const override { return std::make_unique<HotelRoom>(*this); }
+    void accept(ItineraryItemVisitor &visitor) const override { visitor.visit(*this); }
     virtual ~HotelRoom() = default;
 
     [[nodiscard]] const std::string &getHotelName() const { return hotelName; }
