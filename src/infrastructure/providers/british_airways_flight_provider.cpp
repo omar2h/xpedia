@@ -1,14 +1,14 @@
 #include "british_airways_flight_provider.hpp"
-#include "../../apis/expedia_flights_api.hpp"
+#include "../apis/expedia_flights_api.hpp"
 #include "../../domain/entities/flight.hpp"
-#include "../../application/requests/flight_request.hpp"
+#include "../../domain/requests/flight_request.hpp"
 
 std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::searchReservations() const
 {
     auto req = getRequest();
-    FlightRequest const *request = dynamic_cast<FlightRequest *>(req.get());
+    const FlightRequest &request = dynamic_cast<const FlightRequest &>(*req);
 
-    vector<BritishAirwaysFlight> flightsBritishAirways = BritishAirwaysOnlineAPI::GetFlights(request->getFromCity(), request->getDate(), request->getToCity(), request->getAdults(), request->getChildren());
+    std::vector<BritishAirwaysFlight> flightsBritishAirways = BritishAirwaysOnlineAPI::GetFlights(request.getFromCity(), request.getDate(), request.getToCity(), request.getAdults(), request.getChildren());
     std::vector<std::unique_ptr<ItineraryItem>> flights;
 
     // convert

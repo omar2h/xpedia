@@ -1,15 +1,6 @@
-/*
- * expedia_flights_api.h
- *
- *  Created on: Sep 18, 2020
- *      Author: moustafa
- */
-
 #pragma once
 #include <string>
 #include <vector>
-
-using namespace std;
 
 class BritishAirwaysCustomerInfo
 {
@@ -19,15 +10,15 @@ class BritishAirwaysFlight
 {
 public:
 	double price;
-	string date;
+	std::string date;
 };
 
 class BritishAirwaysOnlineAPI
 {
 public:
-	static vector<BritishAirwaysFlight> GetFlights(string const &from, string const &date, string const &to, int adults, int childern)
+	static std::vector<BritishAirwaysFlight> GetFlights(std::string const &from, std::string const &date, std::string const &to, int adults, int childern)
 	{
-		vector<BritishAirwaysFlight> flights;
+		std::vector<BritishAirwaysFlight> flights;
 
 		flights.push_back({200, "01-05-2023"});
 		flights.push_back({250, "01-05-2023"});
@@ -43,7 +34,7 @@ class AirFranceFlight
 {
 public:
 	double cost;
-	string date;
+	std::string date;
 };
 
 class AirFranceCustomerInfo
@@ -53,15 +44,15 @@ class AirFranceCustomerInfo
 class AirFranceOnlineAPI
 {
 public:
-	void SetInfo(string const &date, string const &from, string const &to)
+	void SetInfo(std::string const &date, std::string const &from, std::string const &to)
 	{
 	}
 	void SetPassengersInfo(int childern, int adults)
 	{
 	}
-	vector<AirFranceFlight> GetAvailableFlights() const
+	std::vector<AirFranceFlight> GetAvailableFlights() const
 	{
-		vector<AirFranceFlight> flights;
+		std::vector<AirFranceFlight> flights;
 
 		flights.push_back({300, "01-05-2023"});
 		flights.push_back({320, "01-05-2023"});

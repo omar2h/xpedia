@@ -1,6 +1,6 @@
 #include "flight_reservation.hpp"
 #include "../visitors/reservation_visitor.hpp"
-#include "../../application/requests/flight_request.hpp"
+#include "../requests/flight_request.hpp"
 
 std::unique_ptr<Reservation> FlightReservation::clone() const
 {

@@ -21,7 +21,6 @@ add_subdirectory(sql)
 target_link_libraries(db
     PUBLIC
         domain
-        infrastructure
         util
 )
 

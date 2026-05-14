@@ -8,8 +8,8 @@
 #include "domain/entities/itinerary.hpp"
 #include "domain/entities/reservation_category.hpp"
 #include "application/providers/reservation_provider.hpp"
-#include "application/requests/flight_request.hpp"
-#include "application/requests/hotel_request.hpp"
+#include "domain/requests/flight_request.hpp"
+#include "domain/requests/hotel_request.hpp"
 #include "domain/entities/flight_reservation.hpp"
 #include "domain/entities/hotel_reservation.hpp"
 

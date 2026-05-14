@@ -1,5 +1,5 @@
 #include "reservation_service.hpp"
-#include "../../application/requests/reservation_request.hpp"
+#include "../../domain/requests/reservation_request.hpp"
 #include "../providers/reservation_provider.hpp"
 #include "../../domain/entities/itinerary.hpp"
 #include "../../domain/entities/reservation.hpp"

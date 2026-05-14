@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../apis/expedia_payments_api.hpp"
+#include "../apis/expedia_payments_api.hpp"
 #include "../../application/payments/payment_strategy.hpp"
 class PayPalPaymentStrategy : public PaymentStrategy
 {
@@ -14,7 +14,7 @@ public:
         paypalCard.name = card.getOwner();
         paypalCard.address = "cairo";
         paypalCard.expiry_date = card.getExpiryDate();
-        paypalCard.ccv = stoi(card.getCcv());
+        paypalCard.ccv = std::stoi(card.getCcv());
 
         paypalApi.SetCardInfo(&paypalCard);
         return paypalApi.MakePayment(amount);

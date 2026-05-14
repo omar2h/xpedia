@@ -1,22 +1,14 @@
-/*
- * expedia_payments_api.h
- *
- *  Created on: Sep 18, 2020
- *      Author: moustafa
- */
-
 #pragma once
 
 #include <string>
-using namespace std;
 
 class PayPalCreditCard
 {
 public:
-	string name;
-	string address;
-	string id;
-	string expiry_date;
+	std::string name;
+	std::string address;
+	std::string id;
+	std::string expiry_date;
 	int ccv;
 };
 
@@ -35,15 +27,15 @@ public:
 class StripeUserInfo
 {
 public:
-	string name;
-	string address;
+	std::string name;
+	std::string address;
 };
 
 class StripeCardInfo
 {
 public:
-	string id;
-	string expiry_date;
+	std::string id;
+	std::string expiry_date;
 };
 
 class StripePaymentAPI
@@ -58,10 +50,8 @@ public:
 class SquarePaymentAPI
 {
 public:
-	bool static WithDrawMoney(string JsonQuery)
+	bool static WithDrawMoney(std::string JsonQuery)
 	{
-		// cout << JsonQuery << "\n";
-		// json::JSON obj = JSON::Load(JsonQuery);
 		return true;
 	}
 };

@@ -1,15 +1,15 @@
 #include "hilton_hotel_provider.hpp"
-#include "../../apis/expedia_hotels_api.hpp"
+#include "../apis/expedia_hotels_api.hpp"
 #include "../../application/factories/reservation_request_factory.hpp"
-#include "../../application/requests/hotel_request.hpp"
+#include "../../domain/requests/hotel_request.hpp"
 #include "../../domain/entities/hotel_room.hpp"
 
 std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelProvider::searchReservations() const
 {
     auto reqPtr = getRequest();
-    HotelRequest *req = dynamic_cast<HotelRequest *>(reqPtr.get());
+    HotelRequest &req = dynamic_cast<HotelRequest &>(*reqPtr);
     std::vector<std::unique_ptr<ItineraryItem>> rooms;
-    std::vector<HiltonRoom> hiltonRooms = HiltonHotelAPI::SearchRooms(req->getCity(), req->getFromDate(), req->getToDate(), req->getAdults(), req->getChildren(), req->getRooms());
+    std::vector<HiltonRoom> hiltonRooms = HiltonHotelAPI::SearchRooms(req.getCity(), req.getFromDate(), req.getToDate(), req.getAdults(), req.getChildren(), req.getRooms());
     for (const auto &room : hiltonRooms)
     {
         HotelRoom hRoom{};

@@ -8,21 +8,17 @@ target_sources(application
         use_cases/create_itinerary_use_case.cpp
         use_cases/pay_itinerary_use_case.cpp
         use_cases/list_itineraries_use_case.cpp
-        requests/flight_request.cpp
-        requests/hotel_request.cpp
         factories/reservation_request_factory.cpp
 )
 
 target_include_directories(application
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${PROJECT_SOURCE_DIR}/apis
 )
 
 target_link_libraries(application
     PUBLIC
         domain
-        db
     PRIVATE
         util
 )

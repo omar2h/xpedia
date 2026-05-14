@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "../../domain/request_type.hpp"
+#include "../request_type.hpp"
 
 class ReservationRequest
 {

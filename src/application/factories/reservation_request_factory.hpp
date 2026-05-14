@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../requests/reservation_request.hpp"
+#include "../../domain/requests/reservation_request.hpp"
 
 class ReservationRequestFactory
 {

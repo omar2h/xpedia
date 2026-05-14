@@ -3,8 +3,8 @@
 #include "output.hpp"
 #include "input.hpp"
 #include <sstream>
-#include "../application/requests/flight_request.hpp"
-#include "../application/requests/hotel_request.hpp"
+#include "../domain/requests/flight_request.hpp"
+#include "../domain/requests/hotel_request.hpp"
 #include "../domain/entities/itinerary_item.hpp"
 #include "../domain/entities/itinerary.hpp"
 #include "../domain/entities/flight.hpp"

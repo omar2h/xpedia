@@ -1,6 +1,6 @@
 #include "hotel_reservation.hpp"
 #include "../visitors/reservation_visitor.hpp"
-#include "../../application/requests/hotel_request.hpp"
+#include "../requests/hotel_request.hpp"
 
 #include <string>
 

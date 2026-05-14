@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "../../application/requests/reservation_request.hpp"
+#include "../../domain/requests/reservation_request.hpp"
 
 class ItineraryItem;
 

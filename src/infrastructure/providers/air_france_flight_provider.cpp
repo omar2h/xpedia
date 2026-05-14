@@ -1,16 +1,16 @@
 #include "air_france_flight_provider.hpp"
-#include "../../apis/expedia_flights_api.hpp"
+#include "../apis/expedia_flights_api.hpp"
 #include "../../domain/entities/flight.hpp"
-#include "../../application/requests/flight_request.hpp"
+#include "../../domain/requests/flight_request.hpp"
 
 std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightProvider::searchReservations() const
 {
     auto req = getRequest();
-    const FlightRequest *request = dynamic_cast<FlightRequest *>(req.get());
+    const FlightRequest &request = dynamic_cast<const FlightRequest &>(*req);
 
     AirFranceOnlineAPI api{};
-    api.SetInfo(request->getDate(), request->getFromCity(), request->getToCity());
-    api.SetPassengersInfo(request->getChildren(), request->getAdults());
+    api.SetInfo(request.getDate(), request.getFromCity(), request.getToCity());
+    api.SetPassengersInfo(request.getChildren(), request.getAdults());
 
     std::vector<AirFranceFlight> airFranceFlights = api.GetAvailableFlights();
 

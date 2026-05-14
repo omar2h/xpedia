@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../application/payments/payment_strategy.hpp"
-#include "../../apis/expedia_payments_api.hpp"
+#include "../apis/expedia_payments_api.hpp"
 
 class StripePaymentStrategy : public PaymentStrategy
 {

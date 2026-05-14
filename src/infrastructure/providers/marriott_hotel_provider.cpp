@@ -1,15 +1,15 @@
 #include "marriott_hotel_provider.hpp"
-#include "../../apis/expedia_hotels_api.hpp"
+#include "../apis/expedia_hotels_api.hpp"
 #include "../../application/factories/reservation_request_factory.hpp"
-#include "../../application/requests/hotel_request.hpp"
+#include "../../domain/requests/hotel_request.hpp"
 #include "../../domain/entities/hotel_room.hpp"
 
 std::vector<std::unique_ptr<ItineraryItem>> MarriottHotelProvider::searchReservations() const
 {
     auto reqPtr = getRequest();
-    HotelRequest *req = dynamic_cast<HotelRequest *>(reqPtr.get());
+    HotelRequest &req = dynamic_cast<HotelRequest &>(*reqPtr);
     std::vector<std::unique_ptr<ItineraryItem>> rooms;
-    std::vector<MarriottFoundRoom> marriottRooms = MarriottHotelAPI::FindRooms(req->getFromDate(), req->getToDate(), req->getCity(), req->getRooms(), req->getAdults(), req->getChildren());
+    std::vector<MarriottFoundRoom> marriottRooms = MarriottHotelAPI::FindRooms(req.getFromDate(), req.getToDate(), req.getCity(), req.getRooms(), req.getAdults(), req.getChildren());
     for (const auto &room : marriottRooms)
     {
         HotelRoom hRoom{};

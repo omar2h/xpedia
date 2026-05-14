@@ -2,7 +2,7 @@
 #include "../services/reservation_service.hpp"
 #include "../../domain/entities/itinerary.hpp"
 #include "../../domain/entities/itinerary_item.hpp"
-#include "../../application/requests/reservation_request.hpp"
+#include "../../domain/requests/reservation_request.hpp"
 #include "../../application/factories/reservation_request_factory.hpp"
 #include "../../domain/factories/reservation_factory.hpp"
 #include "../../util/id_generator.hpp"
