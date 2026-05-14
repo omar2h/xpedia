@@ -2,23 +2,21 @@
 
 #include "reservation.hpp"
 #include "flight.hpp"
-#include <memory>
 
 class FlightReservation : public Reservation
 {
-    std::unique_ptr<Flight> item{};
-    std::string airline{};
+    Flight flight;
+    bool hasFlight{};
     std::string from{};
     std::string to{};
-    std::string date{};
     int adults{};
     int children{};
     double cost{};
 
 public:
     FlightReservation() = default;
-    FlightReservation(const FlightReservation &);
-    FlightReservation &operator=(const FlightReservation &);
+    FlightReservation(const FlightReservation &) = default;
+    FlightReservation &operator=(const FlightReservation &) = default;
     FlightReservation(FlightReservation &&) noexcept = default;
     FlightReservation &operator=(FlightReservation &&) noexcept = default;
     ~FlightReservation() = default;
@@ -31,19 +29,20 @@ public:
 
     void setItem(const ItineraryItem &) override;
 
-    // Setters for domain state
+    void applyRequest(const ReservationRequest &) override;
+
     void setFrom(const std::string &f) { from = f; }
     void setTo(const std::string &t) { to = t; }
     void setAdults(int a) { adults = a; }
     void setChildren(int c) { children = c; }
-    void setAirline(const std::string &a) { airline = a; }
-    void setDate(const std::string &d) { date = d; }
+    void setAirline(const std::string &a) { flight.setAirline(a); }
+    void setDate(const std::string &d) { flight.setDate(d); }
     void setCost(double c) { cost = c; }
 
-    const std::string &getAirline() const { return airline; }
-    const std::string &getFrom() const { return from; }
-    const std::string &getTo() const { return to; }
-    const std::string &getDate() const { return date; }
-    int getAdults() const { return adults; }
-    int getChildren() const { return children; }
+    [[nodiscard]] const std::string &getAirline() const { return flight.getAirline(); }
+    [[nodiscard]] const std::string &getFrom() const { return from; }
+    [[nodiscard]] const std::string &getTo() const { return to; }
+    [[nodiscard]] const std::string &getDate() const { return flight.getDate(); }
+    [[nodiscard]] int getAdults() const { return adults; }
+    [[nodiscard]] int getChildren() const { return children; }
 };

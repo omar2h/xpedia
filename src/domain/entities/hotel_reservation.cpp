@@ -1,63 +1,8 @@
 #include "hotel_reservation.hpp"
 #include "../visitors/reservation_visitor.hpp"
+#include "../../application/requests/hotel_request.hpp"
 
-#include <sstream>
 #include <string>
-
-HotelReservation::HotelReservation(const HotelReservation &other)
-    : Reservation(other),
-      item(other.item ? std::make_unique<HotelRoom>(*other.item) : nullptr),
-      hotelName(other.hotelName),
-      fromDate(other.fromDate),
-      toDate(other.toDate),
-      city(other.city),
-      roomType(other.roomType),
-      adults(other.adults),
-      children(other.children),
-      rooms(other.rooms),
-      cost(other.cost)
-{
-}
-
-HotelReservation &HotelReservation::operator=(
-    const HotelReservation &other)
-{
-    if (this == &other)
-        return *this;
-
-    Reservation::operator=(other);
-
-    if (other.item)
-    {
-        item = std::make_unique<HotelRoom>(*other.item);
-    }
-    else
-    {
-        item.reset();
-    }
-
-    hotelName = other.hotelName;
-    fromDate = other.fromDate;
-    toDate = other.toDate;
-    city = other.city;
-    roomType = other.roomType;
-    adults = other.adults;
-    children = other.children;
-    rooms = other.rooms;
-    cost = other.cost;
-
-    return *this;
-}
-
-std::unique_ptr<Reservation> HotelReservation::clone() const
-{
-    return std::make_unique<HotelReservation>(*this);
-}
-
-void HotelReservation::accept(ReservationVisitor &visitor) const
-{
-    visitor.visit(*this);
-}
 
 static int getNights(const std::string &from, const std::string &to)
 {
@@ -71,24 +16,38 @@ static int getNights(const std::string &from, const std::string &to)
     return nights > 0 ? nights : 1;
 }
 
+std::unique_ptr<Reservation> HotelReservation::clone() const
+{
+    return std::make_unique<HotelReservation>(*this);
+}
+
+void HotelReservation::accept(ReservationVisitor &visitor) const
+{
+    visitor.visit(*this);
+}
+
 double HotelReservation::totalCost() const
 {
-    if (item)
-    {
-        return item->totalCost() * rooms * getNights(fromDate, toDate);
-    }
+    if (hasRoom)
+        return room.totalCost() * rooms * getNights(room.getDateFrom(), room.getDateTo());
     return cost;
 }
 
 void HotelReservation::setItem(const ItineraryItem &i)
 {
-    assert(dynamic_cast<const HotelRoom *>(&i) != nullptr && "Item must be a HotelRoom");
-    item = std::make_unique<HotelRoom>(static_cast<const HotelRoom &>(i));
+    auto &r = dynamic_cast<const HotelRoom &>(i);
+    room = r;
+    hasRoom = true;
     setCategory(&i);
     copyProviderFrom(&i);
     setRequestType(&i);
-    hotelName = item->getHotelName();
-    fromDate = item->getDateFrom();
-    toDate = item->getDateTo();
-    roomType = item->getRoomType();
+}
+
+void HotelReservation::applyRequest(const ReservationRequest &req)
+{
+    auto &hotelReq = dynamic_cast<const HotelRequest &>(req);
+    city = hotelReq.getCity();
+    rooms = hotelReq.getRooms();
+    adults = hotelReq.getAdults();
+    children = hotelReq.getChildren();
 }

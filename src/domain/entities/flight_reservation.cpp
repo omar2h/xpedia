@@ -1,46 +1,6 @@
 #include "flight_reservation.hpp"
 #include "../visitors/reservation_visitor.hpp"
-#include <sstream>
-
-FlightReservation::FlightReservation(const FlightReservation &other)
-    : Reservation(other),
-      airline(other.airline),
-      from(other.from),
-      to(other.to),
-      date(other.date),
-      adults(other.adults),
-      children(other.children),
-      cost(other.cost),
-      item(other.item ? std::make_unique<Flight>(*other.item) : nullptr)
-{
-}
-
-FlightReservation &FlightReservation::operator=(const FlightReservation &other)
-{
-    if (this == &other)
-        return *this;
-
-    Reservation::operator=(other);
-
-    airline = other.airline;
-    from = other.from;
-    to = other.to;
-    date = other.date;
-    adults = other.adults;
-    children = other.children;
-    cost = other.cost;
-
-    if (other.item)
-    {
-        item = std::make_unique<Flight>(*other.item);
-    }
-    else
-    {
-        item.reset();
-    }
-
-    return *this;
-}
+#include "../../application/requests/flight_request.hpp"
 
 std::unique_ptr<Reservation> FlightReservation::clone() const
 {
@@ -54,21 +14,26 @@ void FlightReservation::accept(ReservationVisitor &visitor) const
 
 double FlightReservation::totalCost() const
 {
-    if (item)
-    {
-        return item->getTotalCost() * adults +
-               item->getTotalCost() * children * 0.5;
-    }
+    if (hasFlight)
+        return flight.getTotalCost() * adults + flight.getTotalCost() * children * 0.5;
     return cost;
 }
 
 void FlightReservation::setItem(const ItineraryItem &i)
 {
-    assert(dynamic_cast<const Flight *>(&i) != nullptr && "Item must be a Flight");
-    item = std::make_unique<Flight>(static_cast<const Flight &>(i));
+    auto &f = dynamic_cast<const Flight &>(i);
+    flight = f;
+    hasFlight = true;
     setCategory(&i);
     copyProviderFrom(&i);
     setRequestType(&i);
-    airline = item->getAirline();
-    date = item->getDate();
+}
+
+void FlightReservation::applyRequest(const ReservationRequest &req)
+{
+    auto &flightReq = dynamic_cast<const FlightRequest &>(req);
+    from = flightReq.getFromCity();
+    to = flightReq.getToCity();
+    adults = flightReq.getAdults();
+    children = flightReq.getChildren();
 }

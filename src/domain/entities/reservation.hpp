@@ -11,6 +11,8 @@ using json = nlohmann::json;
 #include "../request_type.hpp"
 #include "reservation_category.hpp"
 
+class ReservationRequest;
+
 class Reservation
 {
     ReservationCategory category;
@@ -25,6 +27,8 @@ public:
     virtual void accept(ReservationVisitor &) const = 0;
 
     virtual void setItem(const ItineraryItem &) = 0;
+
+    virtual void applyRequest(const ReservationRequest &) = 0;
 
     [[nodiscard]] ReservationCategory getCategory() const { return category; }
     void setCategory(ReservationCategory c) { category = c; }

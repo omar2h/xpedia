@@ -2,16 +2,12 @@
 
 #include "reservation.hpp"
 #include "hotel_room.hpp"
-#include <memory>
 
 class HotelReservation : public Reservation
 {
-    std::unique_ptr<HotelRoom> item{};
-    std::string hotelName{};
-    std::string fromDate{};
-    std::string toDate{};
+    HotelRoom room;
+    bool hasRoom{};
     std::string city{};
-    std::string roomType{};
     int adults{};
     int children{};
     int rooms{};
@@ -19,8 +15,8 @@ class HotelReservation : public Reservation
 
 public:
     HotelReservation() = default;
-    HotelReservation(const HotelReservation &);
-    HotelReservation &operator=(const HotelReservation &);
+    HotelReservation(const HotelReservation &) = default;
+    HotelReservation &operator=(const HotelReservation &) = default;
     HotelReservation(HotelReservation &&) noexcept = default;
     HotelReservation &operator=(HotelReservation &&) noexcept = default;
     ~HotelReservation() = default;
@@ -33,23 +29,24 @@ public:
 
     void setItem(const ItineraryItem &) override;
 
-    // Setters for domain state
-    void setHotelName(const std::string &name) { hotelName = name; }
-    void setFromDate(const std::string &d) { fromDate = d; }
-    void setToDate(const std::string &d) { toDate = d; }
+    void applyRequest(const ReservationRequest &) override;
+
+    void setHotelName(const std::string &name) { room.setHotelName(name); }
+    void setFromDate(const std::string &d) { room.setDateFrom(d); }
+    void setToDate(const std::string &d) { room.setDateTo(d); }
     void setCity(const std::string &c) { city = c; }
-    void setRoomType(const std::string &rt) { roomType = rt; }
+    void setRoomType(const std::string &rt) { room.setRoomType(rt); }
     void setAdults(int a) { adults = a; }
     void setChildren(int c) { children = c; }
     void setRooms(int r) { rooms = r; }
     void setCost(double c) { cost = c; }
 
-    const std::string &getHotelName() const { return hotelName; }
-    const std::string &getFromDate() const { return fromDate; }
-    const std::string &getToDate() const { return toDate; }
-    const std::string &getCity() const { return city; }
-    const std::string &getRoomType() const { return roomType; }
-    int getRooms() const { return rooms; }
-    int getAdults() const { return adults; }
-    int getChildren() const { return children; }
+    [[nodiscard]] const std::string &getHotelName() const { return room.getHotelName(); }
+    [[nodiscard]] const std::string &getFromDate() const { return room.getDateFrom(); }
+    [[nodiscard]] const std::string &getToDate() const { return room.getDateTo(); }
+    [[nodiscard]] const std::string &getCity() const { return city; }
+    [[nodiscard]] const std::string &getRoomType() const { return room.getRoomType(); }
+    [[nodiscard]] int getRooms() const { return rooms; }
+    [[nodiscard]] int getAdults() const { return adults; }
+    [[nodiscard]] int getChildren() const { return children; }
 };
