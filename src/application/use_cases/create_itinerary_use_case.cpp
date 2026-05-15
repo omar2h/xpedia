@@ -32,7 +32,7 @@ std::unique_ptr<ReservationRequest> CreateItineraryUseCase::makeRequest(RequestT
 std::vector<std::unique_ptr<ItineraryItem>> CreateItineraryUseCase::searchItems(
     RequestType type, ReservationRequest &request)
 {
-    return m_reservationService.getAvailableReservations(&request, type);
+    return m_reservationService.getAvailableReservations(request, type);
 }
 
 bool CreateItineraryUseCase::addItemToItinerary(Itinerary &itinerary, RequestType type,
