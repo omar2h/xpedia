@@ -12,9 +12,13 @@ target_sources(infrastructure
 
         serialization/reservation_serializer.cpp
 
-        apis/http_client.hpp
-        apis/http_flights_api.cpp
-        apis/http_hotels_api.cpp
+        # HTTP transport layer
+        http/http_client.hpp
+        http/cpr_http_client.cpp
+
+        # API implementations
+        apis/flights/amadeus_flights_api.cpp
+        apis/hotels/hilton_hotels_api.cpp
 )
 
 target_include_directories(infrastructure

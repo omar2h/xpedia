@@ -1,10 +1,10 @@
-#include "http_hotels_api.hpp"
+#include "hilton_hotels_api.hpp"
 #include <iostream>
 
 using json = nlohmann::json;
 
-// HttpHotelsAPI implementation
-std::string HttpHotelsAPI::buildUrl(const std::string &endpoint, const std::map<std::string, std::string> &params)
+// HiltonHotelsAPI implementation
+std::string HiltonHotelsAPI::buildUrl(const std::string &endpoint, const std::map<std::string, std::string> &params)
 {
     std::string url = m_baseUrl + endpoint;
 
@@ -24,7 +24,7 @@ std::string HttpHotelsAPI::buildUrl(const std::string &endpoint, const std::map<
     return url;
 }
 
-std::map<std::string, std::string> HttpHotelsAPI::buildHeaders()
+std::map<std::string, std::string> HiltonHotelsAPI::buildHeaders()
 {
     std::map<std::string, std::string> headers{
         {"Accept", "application/json"},
@@ -38,7 +38,7 @@ std::map<std::string, std::string> HttpHotelsAPI::buildHeaders()
     return headers;
 }
 
-std::vector<HotelRoomResult> HttpHotelsAPI::searchRooms(const HotelSearchParams &params)
+std::vector<HotelRoomResult> HiltonHotelsAPI::searchRooms(const HotelSearchParams &params)
 {
     std::vector<HotelRoomResult> results;
 
@@ -77,7 +77,7 @@ std::vector<HotelRoomResult> HttpHotelsAPI::searchRooms(const HotelSearchParams 
     return results;
 }
 
-std::optional<std::string> HttpHotelsAPI::reserveRoom(const HotelReservationParams &params)
+std::optional<std::string> HiltonHotelsAPI::reserveRoom(const HotelReservationParams &params)
 {
     json body{
         {"roomId", params.roomId},
@@ -101,28 +101,15 @@ std::optional<std::string> HttpHotelsAPI::reserveRoom(const HotelReservationPara
     return std::nullopt;
 }
 
-// HiltonHttpAPI implementation
-std::vector<HotelRoomResult> HiltonHttpAPI::searchRooms(const HotelSearchParams &params)
-{
-    HttpHotelsAPI api("https://api.hilton.com");
-    return api.searchRooms(params);
-}
-
-std::optional<std::string> HiltonHttpAPI::reserveRoom(const HotelReservationParams &params)
-{
-    HttpHotelsAPI api("https://api.hilton.com");
-    return api.reserveRoom(params);
-}
-
 // MarriottHttpAPI implementation
 std::vector<HotelRoomResult> MarriottHttpAPI::searchRooms(const HotelSearchParams &params)
 {
-    HttpHotelsAPI api("https://api.marriott.com");
+    HiltonHotelsAPI api("https://api.marriott.com");
     return api.searchRooms(params);
 }
 
 std::optional<std::string> MarriottHttpAPI::reserveRoom(const HotelReservationParams &params)
 {
-    HttpHotelsAPI api("https://api.marriott.com");
+    HiltonHotelsAPI api("https://api.marriott.com");
     return api.reserveRoom(params);
 }

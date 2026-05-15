@@ -6,22 +6,37 @@ This document explains how to integrate real API calls into the Travel Booking S
 
 The project currently uses mock API implementations that return hardcoded data. This guide shows how to replace them with real HTTP API calls.
 
-## Files Created
+## New Architecture
 
-### New HTTP API Files
-- [`http_client.hpp`](http_client.hpp) - HTTP client interface (abstracts the HTTP backend)
-- [`http_flights_api.hpp`](http_flights_api.hpp) - HTTP-based flight API client
-- [`http_flights_api.cpp`](http_flights_api.cpp) - Implementation
-- [`http_hotels_api.hpp`](http_hotels_api.hpp) - HTTP-based hotel API client
-- [`http_hotels_api.cpp`](http_hotels_api.cpp) - Implementation
-- [`api_config.hpp`](api_config.hpp) - API configuration and environment variable handling
+The infrastructure has been reorganized for better separation of concerns:
+
+```
+src/infrastructure/
+├── http/
+│   ├── http_client.hpp         - HTTP client interface (abstracts the HTTP backend)
+│   └── cpr_http_client.cpp     - CPR-based HTTP implementation
+│
+├── apis/
+│   ├── flights/
+│   │   ├── flight_models.hpp   - Flight data structures
+│   │   ├── amadeus_flights_api.hpp - Amadeus flights API client
+│   │   └── amadeus_flights_api.cpp - Implementation
+│   │
+│   └── hotels/
+│       ├── hotel_models.hpp    - Hotel data structures
+│       ├── hilton_hotels_api.hpp - Hilton hotels API client
+│       └── hilton_hotels_api.cpp - Implementation
+│
+└── config/
+    └── api_config.hpp          - API configuration and environment variable handling
+```
 
 ## Architecture
 
 The HTTP API system uses an abstract `HttpClient` interface that can be implemented with different backends:
 
 1. **MockHttpClient** (default) - Returns mock responses for development
-2. **LibcurlHttpClient** - Real HTTP implementation using libcurl (to be implemented)
+2. **CprHttpClient** - Real HTTP implementation using CPR library
 
 ## How to Use Real APIs
 
@@ -30,24 +45,30 @@ The HTTP API system uses an abstract `HttpClient` interface that can be implemen
 To use real HTTP calls, implement the `HttpClient` interface:
 
 ```cpp
-// src/infrastructure/apis/libcurl_http_client.cpp
-#include "http_client.hpp"
-#include <curl/curl.h>
+// src/infrastructure/http/cpr_http_client.cpp
+#include "cpr_http_client.hpp"
+#include <cpr/cpr.h>
 
-class LibcurlHttpClient : public HttpClient {
-public:
-    std::string get(const std::string& url, const std::map<std::string, std::string>& headers = {}) override {
-        // Implement using libcurl
-        // See http://curl.se/libcurl/c/libcurl-tutorial.html
+std::string CprHttpClient::get(const std::string& url, const std::map<std::string, std::string>& headers) {
+    cpr::Header cprHeaders;
+    for (const auto& [key, value] : headers) {
+        cprHeaders[key] = value;
     }
-    
-    std::string post(const std::string& url, const std::string& body, const std::map<std::string, std::string>& headers = {}) override {
-        // Implement using libcurl
+    auto response = cpr::Get(cpr::Url{url}, cpr::Header{cprHeaders});
+    return response.text;
+}
+
+std::string CprHttpClient::post(const std::string& url, const std::string& body, const std::map<std::string, std::string>& headers) {
+    cpr::Header cprHeaders;
+    for (const auto& [key, value] : headers) {
+        cprHeaders[key] = value;
     }
-};
+    auto response = cpr::Post(cpr::Url{url}, cpr::Body{body}, cpr::Header{cprHeaders});
+    return response.text;
+}
 
 std::unique_ptr<HttpClient> HttpClient::create() {
-    return std::make_unique<LibcurlHttpClient>();
+    return std::make_unique<CprHttpClient>();
 }
 ```
 
@@ -86,7 +107,7 @@ To use the new HTTP APIs, update the provider files:
 **For British Airways** ([`british_airways_flight_provider.cpp`](src/infrastructure/providers/british_airways_flight_provider.cpp)):
 
 ```cpp
-#include "../apis/http_flights_api.hpp"
+#include "../apis/flights/amadeus_flights_api.hpp"
 
 std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::searchReservations() const
 {
@@ -121,7 +142,7 @@ std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::search
 **For Hilton Hotels** ([`hilton_hotel_provider.cpp`](src/infrastructure/providers/hilton_hotel_provider.cpp)):
 
 ```cpp
-#include "../apis/http_hotels_api.hpp"
+#include "../apis/hotels/hilton_hotels_api.hpp"
 
 std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelProvider::searchReservations() const
 {

@@ -1,11 +1,11 @@
-#include "http_flights_api.hpp"
+#include "amadeus_flights_api.hpp"
 #include <iostream>
 #include <sstream>
 
 using json = nlohmann::json;
 
-// HttpFlightsAPI implementation
-std::string HttpFlightsAPI::buildUrl(const std::string &endpoint, const std::map<std::string, std::string> &params)
+// AmadeusFlightsAPI implementation
+std::string AmadeusFlightsAPI::buildUrl(const std::string &endpoint, const std::map<std::string, std::string> &params)
 {
     std::string url = m_baseUrl + endpoint;
 
@@ -25,7 +25,7 @@ std::string HttpFlightsAPI::buildUrl(const std::string &endpoint, const std::map
     return url;
 }
 
-std::map<std::string, std::string> HttpFlightsAPI::buildHeaders()
+std::map<std::string, std::string> AmadeusFlightsAPI::buildHeaders()
 {
     std::map<std::string, std::string> headers{
         {"Accept", "application/json"},
@@ -39,7 +39,7 @@ std::map<std::string, std::string> HttpFlightsAPI::buildHeaders()
     return headers;
 }
 
-std::vector<FlightResult> HttpFlightsAPI::searchFlights(const FlightSearchParams &params)
+std::vector<FlightResult> AmadeusFlightsAPI::searchFlights(const FlightSearchParams &params)
 {
     std::vector<FlightResult> results;
 
@@ -78,7 +78,7 @@ std::vector<FlightResult> HttpFlightsAPI::searchFlights(const FlightSearchParams
     return results;
 }
 
-std::optional<std::string> HttpFlightsAPI::reserveFlight(const FlightReservationParams &params)
+std::optional<std::string> AmadeusFlightsAPI::reserveFlight(const FlightReservationParams &params)
 {
     json body{
         {"flightId", params.flightId},
@@ -105,25 +105,25 @@ std::optional<std::string> HttpFlightsAPI::reserveFlight(const FlightReservation
 // BritishAirwaysHttpAPI implementation
 std::vector<FlightResult> BritishAirwaysHttpAPI::searchFlights(const FlightSearchParams &params)
 {
-    HttpFlightsAPI api("https://api.britishairways.com");
+    AmadeusFlightsAPI api("https://api.britishairways.com");
     return api.searchFlights(params);
 }
 
 std::optional<std::string> BritishAirwaysHttpAPI::reserveFlight(const FlightReservationParams &params)
 {
-    HttpFlightsAPI api("https://api.britishairways.com");
+    AmadeusFlightsAPI api("https://api.britishairways.com");
     return api.reserveFlight(params);
 }
 
 // AirFranceHttpAPI implementation
 std::vector<FlightResult> AirFranceHttpAPI::searchFlights(const FlightSearchParams &params)
 {
-    HttpFlightsAPI api("https://api.airfrance.com");
+    AmadeusFlightsAPI api("https://api.airfrance.com");
     return api.searchFlights(params);
 }
 
 std::optional<std::string> AirFranceHttpAPI::reserveFlight(const FlightReservationParams &params)
 {
-    HttpFlightsAPI api("https://api.airfrance.com");
+    AmadeusFlightsAPI api("https://api.airfrance.com");
     return api.reserveFlight(params);
 }

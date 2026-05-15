@@ -2,7 +2,7 @@
 
 #include <string>
 #include <map>
-#include <functional>
+#include <memory>
 
 // Simple HTTP client interface
 // This can be implemented with different backends (libcurl, cpr, WinHTTP, etc.)
