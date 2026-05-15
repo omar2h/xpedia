@@ -1,5 +1,6 @@
 add_library(util STATIC
     id_generator.cpp
+    password_utils.cpp
 )
 
 target_include_directories(util
