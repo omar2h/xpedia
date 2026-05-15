@@ -68,7 +68,7 @@ TEST(ReservationServiceTest, GetFlightReservationsReturnsProviderItems)
 
     ReservationService service(getProviders, getProvider);
     FlightRequest request("NYC", "LAX", "2026-06-01", 1, 0);
-    auto items = service.getAvailableReservations(&request, RequestType::flight);
+    auto items = service.getAvailableReservations(request, RequestType::flight);
 
     ASSERT_EQ(items.size(), 1);
     auto *flight = dynamic_cast<Flight *>(items[0].get());
@@ -94,7 +94,7 @@ TEST(ReservationServiceTest, GetHotelReservationsReturnsProviderItems)
 
     ReservationService service(getProviders, getProvider);
     HotelRequest request("2026-07-01", "2026-07-05", "Paris", 2, 0);
-    auto items = service.getAvailableReservations(&request, RequestType::hotel);
+    auto items = service.getAvailableReservations(request, RequestType::hotel);
 
     ASSERT_EQ(items.size(), 1);
     auto *hotel = dynamic_cast<HotelRoom *>(items[0].get());
@@ -106,7 +106,8 @@ TEST(ReservationServiceTest, GetHotelReservationsReturnsProviderItems)
 TEST(ReservationServiceTest, ConfirmReservationsCallsProvider)
 {
     bool providerCalled = false;
-    auto getProviders = [](ReservationCategory) { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
+    auto getProviders = [](ReservationCategory)
+    { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
     auto getProvider = [&](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         providerCalled = true;
