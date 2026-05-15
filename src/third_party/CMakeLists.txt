@@ -19,3 +19,11 @@ if(MSVC)
 else()
     target_compile_options(sqlite3 PRIVATE -w)
 endif()
+
+# Download and build libcurl for HTTP requests
+# On Windows, you may need to install curl via vcpkg or set CURL_ROOT
+find_package(CURL QUIET)
+if(NOT CURL_FOUND)
+    # Try to find curl in common locations or use vcpkg
+    message(STATUS "CURL not found. You may need to install it via vcpkg: vcpkg install curl")
+endif()

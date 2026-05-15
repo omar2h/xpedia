@@ -11,6 +11,10 @@ target_sources(infrastructure
         providers/marriott_hotel_provider.cpp
 
         serialization/reservation_serializer.cpp
+
+        apis/http_client.hpp
+        apis/http_flights_api.cpp
+        apis/http_hotels_api.cpp
 )
 
 target_include_directories(infrastructure
