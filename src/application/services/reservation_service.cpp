@@ -3,6 +3,8 @@
 #include "../providers/reservation_provider.hpp"
 #include "../../domain/entities/itinerary.hpp"
 #include "../../domain/entities/reservation.hpp"
+#include <map>
+#include <stdexcept>
 
 ReservationService::ReservationService(
     std::function<std::vector<std::unique_ptr<ReservationProvider>>(ReservationCategory)> getProviders,
@@ -11,19 +13,26 @@ ReservationService::ReservationService(
       m_getReservationProvider(std::move(getReservationProvider)) {}
 
 std::vector<std::unique_ptr<ItineraryItem>> ReservationService::getAvailableReservations(
-    ReservationRequest *request, RequestType requestType)
+    ReservationRequest &request, RequestType requestType)
 {
     std::vector<std::unique_ptr<ItineraryItem>> items;
 
-    ReservationCategory cat = requestType == RequestType::flight
-                                 ? ReservationCategory::flight
-                                 : ReservationCategory::hotel;
+    static const std::map<RequestType, ReservationCategory> requestTypeToCategory = {
+        {RequestType::flight, ReservationCategory::flight},
+        {RequestType::hotel, ReservationCategory::hotel}};
+
+    auto it = requestTypeToCategory.find(requestType);
+    if (it == requestTypeToCategory.end())
+    {
+        throw std::invalid_argument("Unknown RequestType");
+    }
+    ReservationCategory cat = it->second;
 
     auto providers = m_getProviders(cat);
 
     for (auto &provider : providers)
     {
-        provider->setRequest(request);
+        provider->setRequest(&request);
 
         std::vector<std::unique_ptr<ItineraryItem>> results = provider->searchReservations();
 
