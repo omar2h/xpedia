@@ -53,6 +53,17 @@ Thumbs.db
 .vs/
 
 # =========================
+# Sensitive credentials
+.env
+
+# IDE / editor config dirs
+.kilocode/
+
+# SQLite databases (runtime generated)
+travel.db
+travel.db-shm
+travel.db-wal
+
 # Optional: runtime/generated data
 # Uncomment if these are generated
 # =========================

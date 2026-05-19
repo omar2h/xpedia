@@ -2,14 +2,14 @@
 #include "application/use_cases/create_itinerary_use_case.hpp"
 #include "application/factories/reservation_request_factory.hpp"
 #include "application/services/reservation_service.hpp"
+#include "application/dto/flight_search_input.hpp"
+#include "application/dto/hotel_search_input.hpp"
 #include "domain/factories/reservation_factory.hpp"
 #include "domain/entities/flight.hpp"
 #include "domain/entities/hotel_room.hpp"
 #include "domain/entities/itinerary.hpp"
 #include "domain/entities/reservation_category.hpp"
 #include "application/providers/reservation_provider.hpp"
-#include "domain/requests/flight_request.hpp"
-#include "domain/requests/hotel_request.hpp"
 #include "domain/entities/flight_reservation.hpp"
 #include "domain/entities/hotel_reservation.hpp"
 
@@ -85,10 +85,10 @@ TEST(CreateItineraryTest, AddFlightItemToItinerary)
 
     Itinerary itinerary = useCase.createItinerary();
 
-    auto flightReq = std::make_unique<FlightRequest>("JFK", "LHR", "2026-08-01", 1, 0);
+    FlightSearchInput input{"JFK", "LHR", "2026-08-01", 1, 0};
     auto selectedFlight = makeFlight("BA", "2026-08-01", 800);
 
-    ASSERT_TRUE(useCase.addItemToItinerary(itinerary, RequestType::flight, std::move(flightReq), *selectedFlight));
+    ASSERT_TRUE(useCase.addFlightToItinerary(itinerary, input, *selectedFlight));
 
     const auto &reservations = itinerary.getReservations();
     ASSERT_EQ(reservations.size(), 1);
@@ -116,11 +116,10 @@ TEST(CreateItineraryTest, AddHotelItemToItinerary)
 
     Itinerary itinerary = useCase.createItinerary();
 
-    auto hotelReq = std::make_unique<HotelRequest>("2026-09-01", "2026-09-05", "Tokyo", 2, 1);
-    hotelReq->setRooms(1);
+    HotelSearchInput input{"Tokyo", "2026-09-01", "2026-09-05", 2, 1, 1};
     auto selectedRoom = makeHotelRoom("TokoyoInn", "2026-09-01", "2026-09-05", 200);
 
-    ASSERT_TRUE(useCase.addItemToItinerary(itinerary, RequestType::hotel, std::move(hotelReq), *selectedRoom));
+    ASSERT_TRUE(useCase.addHotelToItinerary(itinerary, input, *selectedRoom));
 
     const auto &reservations = itinerary.getReservations();
     ASSERT_EQ(reservations.size(), 1);
