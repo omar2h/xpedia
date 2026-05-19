@@ -1,12 +1,16 @@
 #pragma once
 
-#include "../../../application/database_interface.hpp"
+#include "../../../application/repositories/i_user_repository.hpp"
+#include "../../../application/repositories/i_customer_repository.hpp"
+#include "../../../application/repositories/i_itinerary_repository.hpp"
 #include <memory>
 
 struct sqlite3;
 struct sqlite3_stmt;
 
-class SqlDatabase : public IDatabase
+class SqlDatabase : public IUserRepository,
+                    public ICustomerRepository,
+                    public IItineraryRepository
 {
     sqlite3 *db{};
     std::string dbPath;
@@ -29,11 +33,24 @@ public:
     SqlDatabase(const SqlDatabase &) = delete;
     SqlDatabase &operator=(const SqlDatabase &) = delete;
 
-    void saveUser(User &) override;
-    [[nodiscard]] std::vector<User> getUsers(const std::string &) const override;
-    [[nodiscard]] Customer getCustomer(const User &) override;
-    void updateCustomerInfo(const Customer &) override;
-    void saveItinerary(const std::string &, const Itinerary &) override;
-    [[nodiscard]] bool checkUserIsCustomer(const User &) override;
-    [[nodiscard]] std::vector<Itinerary> getCustomerItineraries(const std::string &) override;
+    // --- Public API (used directly by tests) ---
+    void createUser(User &);
+    [[nodiscard]] std::optional<User> findUserByEmail(const std::string &email) const;
+    [[nodiscard]] std::optional<Customer> findCustomerById(const std::string &userId) const;
+    [[nodiscard]] bool customerExists(const std::string &userId) const;
+    void updateCustomer(const Customer &);
+    void saveItineraryForUser(const std::string &userId, const Itinerary &);
+    [[nodiscard]] std::vector<Itinerary> findItinerariesByUserId(const std::string &userId) const;
+
+    // --- IUserRepository ---
+    void saveUser(const User &) override;
+    [[nodiscard]] std::optional<User> findByUsername(const std::string &username) const override;
+
+    // --- ICustomerRepository ---
+    [[nodiscard]] std::optional<Customer> findById(const std::string &userId) const override;
+    void update(const Customer &) override;
+
+    // --- IItineraryRepository ---
+    void save(const std::string &userId, const Itinerary &) override;
+    [[nodiscard]] std::vector<Itinerary> findByUserId(const std::string &userId) const override;
 };

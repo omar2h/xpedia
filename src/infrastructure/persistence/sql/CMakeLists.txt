@@ -4,7 +4,8 @@ add_library(db_sql
 
 target_link_libraries(db_sql
     PUBLIC
-        db
+        domain
+        util
         infrastructure
         sqlite3
 )

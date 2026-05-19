@@ -140,7 +140,7 @@ void SqlDatabase::step(sqlite3_stmt *stmt)
     }
 }
 
-void SqlDatabase::saveUser(User &user)
+void SqlDatabase::createUser(User &user)
 {
     if (user.getId().empty())
     {
@@ -167,38 +167,59 @@ void SqlDatabase::saveUser(User &user)
     {
         if (rc == SQLITE_CONSTRAINT)
             throw ValidationException("Email already in use");
-        std::string msg = "Failed to save user: ";
+        std::string msg = "Failed to create user: ";
         msg += sqlite3_errmsg(db);
         throw PersistenceException(msg);
     }
 }
 
-std::vector<User> SqlDatabase::getUsers(const std::string &) const
+std::optional<User> SqlDatabase::findUserByEmail(const std::string &email) const
 {
-    std::vector<User> users;
     auto stmt = const_cast<SqlDatabase *>(this)->prepare(
-        "SELECT id, first_name, last_name, email, phone, password FROM users");
-    while (sqlite3_step(stmt) == SQLITE_ROW)
+        "SELECT id, first_name, last_name, email, phone, password FROM users WHERE email = ?");
+    const_cast<SqlDatabase *>(this)->bindText(stmt, 1, email);
+    int rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW)
     {
-        users.emplace_back(
+        User user(
             columnText(stmt, 0),
             columnText(stmt, 1),
             columnText(stmt, 2),
             columnText(stmt, 3),
             columnText(stmt, 4),
             columnText(stmt, 5));
+        sqlite3_finalize(stmt);
+        return user;
     }
     sqlite3_finalize(stmt);
-    return users;
+    return std::nullopt;
 }
 
-Customer SqlDatabase::getCustomer(const User &user)
+std::optional<Customer> SqlDatabase::findCustomerById(const std::string &userId) const
 {
+    auto userStmt = const_cast<SqlDatabase *>(this)->prepare(
+        "SELECT id, first_name, last_name, email, phone, password FROM users WHERE id = ?");
+    const_cast<SqlDatabase *>(this)->bindText(userStmt, 1, userId);
+    if (sqlite3_step(userStmt) != SQLITE_ROW)
+    {
+        sqlite3_finalize(userStmt);
+        return std::nullopt;
+    }
+
+    User user(
+        columnText(userStmt, 0),
+        columnText(userStmt, 1),
+        columnText(userStmt, 2),
+        columnText(userStmt, 3),
+        columnText(userStmt, 4),
+        columnText(userStmt, 5));
+    sqlite3_finalize(userStmt);
+
     Customer customer(user);
 
-    auto cardStmt = prepare(
+    auto cardStmt = const_cast<SqlDatabase *>(this)->prepare(
         "SELECT owner, number, expiry_date, ccv FROM customer_cards WHERE customer_id = ?");
-    bindText(cardStmt, 1, user.getId());
+    const_cast<SqlDatabase *>(this)->bindText(cardStmt, 1, userId);
     while (sqlite3_step(cardStmt) == SQLITE_ROW)
     {
         PaymentCard card;
@@ -210,9 +231,9 @@ Customer SqlDatabase::getCustomer(const User &user)
     }
     sqlite3_finalize(cardStmt);
 
-    auto itStmt = prepare(
+    auto itStmt = const_cast<SqlDatabase *>(this)->prepare(
         "SELECT id FROM itineraries WHERE customer_id = ?");
-    bindText(itStmt, 1, user.getId());
+    const_cast<SqlDatabase *>(this)->bindText(itStmt, 1, userId);
     while (sqlite3_step(itStmt) == SQLITE_ROW)
         customer.addItineraryId(columnText(itStmt, 0));
     sqlite3_finalize(itStmt);
@@ -220,7 +241,7 @@ Customer SqlDatabase::getCustomer(const User &user)
     return customer;
 }
 
-void SqlDatabase::updateCustomerInfo(const Customer &customer)
+void SqlDatabase::updateCustomer(const Customer &customer)
 {
     auto delStmt = prepare("DELETE FROM customer_cards WHERE customer_id = ?");
     bindText(delStmt, 1, customer.getId());
@@ -240,7 +261,7 @@ void SqlDatabase::updateCustomerInfo(const Customer &customer)
     }
 }
 
-void SqlDatabase::saveItinerary(const std::string &customerId, const Itinerary &itinerary)
+void SqlDatabase::saveItineraryForUser(const std::string &customerId, const Itinerary &itinerary)
 {
     auto insIt = prepare(
         "INSERT OR REPLACE INTO itineraries (id, customer_id, cost) VALUES (?, ?, ?)");
@@ -268,30 +289,31 @@ void SqlDatabase::saveItinerary(const std::string &customerId, const Itinerary &
     }
 }
 
-bool SqlDatabase::checkUserIsCustomer(const User &user)
+bool SqlDatabase::customerExists(const std::string &userId) const
 {
-    auto stmt = prepare("SELECT COUNT(*) FROM users WHERE id = ?");
-    bindText(stmt, 1, user.getId());
+    auto stmt = const_cast<SqlDatabase *>(this)->prepare(
+        "SELECT COUNT(*) FROM users WHERE id = ?");
+    const_cast<SqlDatabase *>(this)->bindText(stmt, 1, userId);
     int rc = sqlite3_step(stmt);
     int count = (rc == SQLITE_ROW) ? columnInt(stmt, 0) : 0;
     sqlite3_finalize(stmt);
     return count > 0;
 }
 
-std::vector<Itinerary> SqlDatabase::getCustomerItineraries(const std::string &customerId)
+std::vector<Itinerary> SqlDatabase::findItinerariesByUserId(const std::string &customerId) const
 {
     std::vector<Itinerary> itineraries;
 
-    auto itStmt = prepare("SELECT id, cost FROM itineraries WHERE customer_id = ?");
-    bindText(itStmt, 1, customerId);
+    auto itStmt = const_cast<SqlDatabase *>(this)->prepare("SELECT id, cost FROM itineraries WHERE customer_id = ?");
+    const_cast<SqlDatabase *>(this)->bindText(itStmt, 1, customerId);
     while (sqlite3_step(itStmt) == SQLITE_ROW)
     {
         Itinerary itinerary;
         itinerary.setId(columnText(itStmt, 0));
         itinerary.setCost(columnDouble(itStmt, 1));
 
-        auto resStmt = prepare("SELECT json_data FROM reservations WHERE itinerary_id = ?");
-        bindText(resStmt, 1, itinerary.getId());
+        auto resStmt = const_cast<SqlDatabase *>(this)->prepare("SELECT json_data FROM reservations WHERE itinerary_id = ?");
+        const_cast<SqlDatabase *>(this)->bindText(resStmt, 1, itinerary.getId());
         while (sqlite3_step(resStmt) == SQLITE_ROW)
         {
             json j = json::parse(columnText(resStmt, 0));
@@ -304,4 +326,41 @@ std::vector<Itinerary> SqlDatabase::getCustomerItineraries(const std::string &cu
     sqlite3_finalize(itStmt);
 
     return itineraries;
+}
+
+// --- IUserRepository ---
+
+void SqlDatabase::saveUser(const User &user)
+{
+    User copy = user;
+    createUser(copy);
+}
+
+std::optional<User> SqlDatabase::findByUsername(const std::string &username) const
+{
+    return findUserByEmail(username);
+}
+
+// --- ICustomerRepository ---
+
+std::optional<Customer> SqlDatabase::findById(const std::string &userId) const
+{
+    return findCustomerById(userId);
+}
+
+void SqlDatabase::update(const Customer &customer)
+{
+    updateCustomer(customer);
+}
+
+// --- IItineraryRepository ---
+
+void SqlDatabase::save(const std::string &userId, const Itinerary &itinerary)
+{
+    saveItineraryForUser(userId, itinerary);
+}
+
+std::vector<Itinerary> SqlDatabase::findByUserId(const std::string &userId) const
+{
+    return findItinerariesByUserId(userId);
 }
