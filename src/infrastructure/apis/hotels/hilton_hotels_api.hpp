@@ -4,8 +4,8 @@
 #include <vector>
 #include <optional>
 #include <memory>
-#include "../http/http_client.hpp"
-#include "../../third_party/json.hpp"
+#include "../../http/http_client.hpp"
+#include "../../../third_party/json.hpp"
 #include "hotel_models.hpp"
 
 // Hilton Hotels API client

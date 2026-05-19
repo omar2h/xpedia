@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdlib>
 #include <string>
 #include <map>
 
@@ -33,23 +34,10 @@ struct ApiConfig
     // Helper to get API key from environment
     static std::string getEnvVar(const std::string &name)
     {
-// On Windows, use _dupenv_s
-// On Linux/Mac, use getenv
-#ifdef _WIN32
-        char *value = nullptr;
-        size_t len = 0;
-        if (_dupenv_s(&value, &len, name.c_str()) == 0 && value != nullptr)
-        {
-            std::string result(value);
-            free(value);
-            return result;
-        }
-#else
         if (const char *value = std::getenv(name.c_str()))
         {
             return std::string(value);
         }
-#endif
         return "";
     }
 

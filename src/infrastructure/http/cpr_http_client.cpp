@@ -39,5 +39,18 @@ std::string CprHttpClient::post(const std::string &url, const std::string &body,
         return "{}";
     }
 
+    if (response.status_code >= 400)
+    {
+        std::cerr << "HTTP POST " << response.status_code << " — returning body anyway" << std::endl;
+    }
+
     return response.text;
+}
+
+// ---------------------------------------------------------------------------
+// HttpClient::create()  — static factory
+// ---------------------------------------------------------------------------
+std::unique_ptr<HttpClient> HttpClient::create()
+{
+    return std::make_unique<CprHttpClient>();
 }
