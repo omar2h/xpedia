@@ -1,5 +1,5 @@
 #include "air_france_flight_provider.hpp"
-#include "../apis/expedia_flights_api.hpp"
+#include "../apis/flights/mock_flight_search_service.hpp"
 #include "../../domain/entities/flight.hpp"
 #include "../../domain/requests/flight_request.hpp"
 
@@ -8,29 +8,34 @@ std::vector<std::unique_ptr<ItineraryItem>> AirFranceFlightProvider::searchReser
     auto req = getRequest();
     const FlightRequest &request = dynamic_cast<const FlightRequest &>(*req);
 
-    AirFranceOnlineAPI api{};
-    api.SetInfo(request.getDate(), request.getFromCity(), request.getToCity());
-    api.SetPassengersInfo(request.getChildren(), request.getAdults());
+    MockFlightSearchService searchService;
+    FlightSearchRequest searchReq;
+    searchReq.origin = request.getFromCity();
+    searchReq.destination = request.getToCity();
+    searchReq.departureDate = request.getDate();
+    searchReq.adults = request.getAdults();
+    searchReq.children = request.getChildren();
 
-    std::vector<AirFranceFlight> airFranceFlights = api.GetAvailableFlights();
+    auto result = searchService.searchFlights(searchReq);
 
-    std::vector<std::unique_ptr<ItineraryItem>> flights{};
+    std::vector<std::unique_ptr<ItineraryItem>> results;
 
-    for (const auto &flight_ : airFranceFlights)
+    for (const auto &offer : result.offers)
     {
         Flight flight;
         flight.setCategory(ReservationCategory::flight);
         flight.setProviderId("air_france");
         flight.setRequestType(RequestType::flight);
-        flight.setAirline(getName());
-        flight.setDate(flight_.date);
-        flight.setTotalCost(flight_.cost);
-        flights.push_back(flight.clone());
+        flight.setAirline(offer.airline);
+        flight.setDate(offer.departureTime);
+        flight.setTotalCost(offer.price);
+        results.push_back(flight.clone());
     }
-    return flights;
+    return results;
 }
 
-bool AirFranceFlightProvider::reserve(Reservation *reservation) const
+bool AirFranceFlightProvider::reserve(Reservation * /*reservation*/) const
 {
-    return AirFranceOnlineAPI::ReserveFlight(AirFranceCustomerInfo(), AirFranceFlight());
+    // Reservation is a mock operation (internal only, no external booking API).
+    return true;
 }
