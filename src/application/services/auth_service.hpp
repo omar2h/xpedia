@@ -3,14 +3,14 @@
 #include "../../domain/entities/user.hpp"
 #include <string>
 
-class IDatabase;
+class IUserRepository;
 
 class AuthService
 {
-    IDatabase &m_database;
+    IUserRepository &m_userRepo;
 
 public:
-    AuthService(IDatabase &database);
+    AuthService(IUserRepository &userRepo);
 
     void signup(User &user);
     [[nodiscard]] User login(const std::string &email, const std::string &password);

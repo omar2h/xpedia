@@ -6,16 +6,20 @@
 class User;
 class Itinerary;
 class PaymentCard;
-class IDatabase;
+class ICustomerRepository;
+class IItineraryRepository;
 class PaymentProcessor;
 
 class PayItineraryUseCase
 {
-    IDatabase &m_database;
+    ICustomerRepository &m_customerRepo;
+    IItineraryRepository &m_itineraryRepo;
     PaymentProcessor &m_paymentProcessor;
 
 public:
-    PayItineraryUseCase(IDatabase &database, PaymentProcessor &paymentProcessor);
+    PayItineraryUseCase(ICustomerRepository &customerRepo,
+                        IItineraryRepository &itineraryRepo,
+                        PaymentProcessor &paymentProcessor);
 
     [[nodiscard]] std::vector<PaymentCard> getCustomerCards(const User &user);
     void addCard(const User &user, const PaymentCard &card);

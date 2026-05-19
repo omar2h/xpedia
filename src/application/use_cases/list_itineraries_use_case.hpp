@@ -3,14 +3,17 @@
 #include "../results/list_itineraries_result.hpp"
 
 class User;
-class IDatabase;
+class ICustomerRepository;
+class IItineraryRepository;
 
 class ListItinerariesUseCase
 {
-    IDatabase &m_database;
+    ICustomerRepository &m_customerRepo;
+    IItineraryRepository &m_itineraryRepo;
 
 public:
-    explicit ListItinerariesUseCase(IDatabase &database);
+    ListItinerariesUseCase(ICustomerRepository &customerRepo,
+                           IItineraryRepository &itineraryRepo);
 
     [[nodiscard]] ListItinerariesResult execute(const User &user);
 };

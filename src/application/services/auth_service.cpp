@@ -1,47 +1,28 @@
 #include "auth_service.hpp"
 #include "../../exception.hpp"
-#include "../database_interface.hpp"
+#include "../repositories/i_user_repository.hpp"
 #include "../../util/password_utils.hpp"
-#include <algorithm>
+#include "../../domain/validators/email_validator.hpp"
+#include "../../domain/validators/password_validator.hpp"
 
-AuthService::AuthService(IDatabase &database)
-    : m_database(database) {}
+AuthService::AuthService(IUserRepository &userRepo)
+    : m_userRepo(userRepo) {}
 
 void AuthService::signup(User &user)
 {
     const auto &email = user.getEmail();
     const auto &password = user.getPassword();
 
-    // Improved email validation
-    if (email.find('@') == std::string::npos ||
-        email.find('.') == std::string::npos ||
-        email.find('@') > email.find('.'))
-        throw ValidationException("Invalid email format");
+    if (!EmailValidator::isValid(email))
+        throw ValidationException(EmailValidator::getError(email));
 
-    // Stronger password validation
-    if (password.size() < 8)
-        throw ValidationException("Password must be at least 8 characters");
+    if (!PasswordValidator::isValid(password))
+        throw ValidationException(PasswordValidator::getError(password));
 
-    bool hasDigit = false;
-    bool hasUpper = false;
-    bool hasLower = false;
-    for (char c : password)
-    {
-        if (std::isdigit(c))
-            hasDigit = true;
-        if (std::isupper(c))
-            hasUpper = true;
-        if (std::islower(c))
-            hasLower = true;
-    }
-    if (!hasDigit || !hasUpper || !hasLower)
-        throw ValidationException("Password must contain at least one digit, one uppercase letter, and one lowercase letter");
-
-    // Hash the password before storing
     std::string hashedPassword = PasswordUtils::hashPassword(password);
     user.setPassword(hashedPassword);
 
-    m_database.saveUser(user);
+    m_userRepo.saveUser(user);
 }
 
 User AuthService::login(const std::string &email, const std::string &password)
@@ -49,17 +30,10 @@ User AuthService::login(const std::string &email, const std::string &password)
     if (email.empty() || password.empty())
         throw AuthException("Email and password are required");
 
-    std::vector<User> users = m_database.getUsers("users.json");
+    auto user = m_userRepo.findByUsername(email);
 
-    for (const auto &usr : users)
-    {
-        if (usr.getEmail() == email)
-        {
-            // Verify password hash
-            if (PasswordUtils::verifyPassword(password, usr.getPassword()))
-                return usr;
-        }
-    }
+    if (user && PasswordUtils::verifyPassword(password, user->getPassword()))
+        return *user;
 
     throw AuthException("Invalid email/password");
 }

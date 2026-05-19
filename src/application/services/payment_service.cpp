@@ -1,22 +1,22 @@
 #include "payment_service.hpp"
-#include "../database_interface.hpp"
+#include "../repositories/i_customer_repository.hpp"
 #include "../payments/payment_strategy.hpp"
 #include "../../domain/entities/payment_card.hpp"
 #include "../../domain/entities/customer.hpp"
 #include "../../domain/entities/itinerary.hpp"
 
 PaymentProcessor::PaymentProcessor(
-    IDatabase &database,
+    ICustomerRepository &customerRepo,
     std::function<std::unique_ptr<PaymentStrategy>(::PaymentService)> getPaymentService,
     std::function<bool(const Itinerary &)> confirmReservations)
-    : m_database(database),
+    : m_customerRepo(customerRepo),
       m_getPaymentService(std::move(getPaymentService)),
       m_confirmReservations(std::move(confirmReservations)) {}
 
 void PaymentProcessor::addCard(Customer &customer, const PaymentCard &card)
 {
     customer.addCard(card);
-    m_database.updateCustomerInfo(customer);
+    m_customerRepo.update(customer);
 }
 
 bool PaymentProcessor::withdrawMoney(

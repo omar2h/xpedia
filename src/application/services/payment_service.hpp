@@ -6,19 +6,19 @@
 class Customer;
 class PaymentCard;
 class Itinerary;
-class IDatabase;
+class ICustomerRepository;
 class PaymentStrategy;
 enum class PaymentService;
 
 class PaymentProcessor
 {
-    IDatabase &m_database;
+    ICustomerRepository &m_customerRepo;
     std::function<std::unique_ptr<PaymentStrategy>(::PaymentService)> m_getPaymentService;
     std::function<bool(const Itinerary &)> m_confirmReservations;
 
 public:
     PaymentProcessor(
-        IDatabase &database,
+        ICustomerRepository &customerRepo,
         std::function<std::unique_ptr<PaymentStrategy>(::PaymentService)> getPaymentService,
         std::function<bool(const Itinerary &)> confirmReservations);
 

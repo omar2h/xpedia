@@ -3,12 +3,12 @@
 #include <vector>
 #include <memory>
 
-#include "../../domain/request_type.hpp"
+#include "../dto/flight_search_input.hpp"
+#include "../dto/hotel_search_input.hpp"
 
 class User;
 class Itinerary;
 class ItineraryItem;
-class ReservationRequest;
 class ReservationRequestFactory;
 class ReservationFactory;
 class ReservationService;
@@ -27,12 +27,17 @@ public:
 
     [[nodiscard]] Itinerary createItinerary();
 
-    [[nodiscard]] std::unique_ptr<ReservationRequest> makeRequest(RequestType type);
+    [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> searchFlights(
+        const FlightSearchInput &input);
 
-    [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> searchItems(
-        RequestType type, ReservationRequest &request);
+    [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> searchHotels(
+        const HotelSearchInput &input);
 
-    [[nodiscard]] bool addItemToItinerary(Itinerary &itinerary, RequestType type,
-                                          std::unique_ptr<ReservationRequest> request,
-                                          const ItineraryItem &selectedItem);
+    [[nodiscard]] bool addFlightToItinerary(Itinerary &itinerary,
+                                            const FlightSearchInput &input,
+                                            const ItineraryItem &selectedItem);
+
+    [[nodiscard]] bool addHotelToItinerary(Itinerary &itinerary,
+                                           const HotelSearchInput &input,
+                                           const ItineraryItem &selectedItem);
 };
