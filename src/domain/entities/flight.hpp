@@ -6,12 +6,24 @@
 class Flight : public ItineraryItem
 {
     std::string airline{};
+    std::string flightNumber{};
+    std::string from{};
+    std::string to{};
     std::string date{};
     double totalCost{};
 
 public:
     [[nodiscard]] const std::string &getAirline() const { return airline; }
     void setAirline(const std::string &airline_) { airline = airline_; }
+
+    [[nodiscard]] const std::string &getFlightNumber() const { return flightNumber; }
+    void setFlightNumber(const std::string &flightNumber_) { flightNumber = flightNumber_; }
+
+    [[nodiscard]] const std::string &getFrom() const { return from; }
+    void setFrom(const std::string &from_) { from = from_; }
+
+    [[nodiscard]] const std::string &getTo() const { return to; }
+    void setTo(const std::string &to_) { to = to_; }
 
     [[nodiscard]] const std::string &getDate() const { return date; }
     void setDate(const std::string &date_) { date = date_; }

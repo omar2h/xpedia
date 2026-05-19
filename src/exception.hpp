@@ -32,3 +32,9 @@ class BusinessException : public AppException
 public:
     using AppException::AppException;
 };
+
+class ApiException : public AppException
+{
+public:
+    using AppException::AppException;
+};
