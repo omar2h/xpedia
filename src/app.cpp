@@ -1,178 +1,97 @@
 #include "app.hpp"
-#include "application/frontend_interface.hpp"
+#include "presentation/view/view_interface.hpp"
+#include "presentation/input.hpp"
+#include "presentation/presenters/auth_presenter.hpp"
+#include "presentation/presenters/itinerary_presenter.hpp"
+#include "presentation/presenters/payment_presenter.hpp"
+#include "presentation/presenters/flight_search_presenter.hpp"
+#include "presentation/mappers/user_profile_mapper.hpp"
+#include "presentation/mappers/itinerary_mapper.hpp"
 #include "domain/entities/user.hpp"
-#include "domain/entities/payment_card.hpp"
-#include "domain/entities/itinerary.hpp"
-#include "domain/entities/itinerary_item.hpp"
-#include "domain/requests/reservation_request.hpp"
-#include "application/use_cases/create_itinerary_use_case.hpp"
-#include "application/use_cases/pay_itinerary_use_case.hpp"
 #include "application/use_cases/list_itineraries_use_case.hpp"
-#include "application/results/pay_itinerary_result.hpp"
 #include "application/results/list_itineraries_result.hpp"
-App::App(IFrontend &frontend,
-         CreateItineraryUseCase &createItineraryUseCase,
-         PayItineraryUseCase &payItineraryUseCase,
-         ListItinerariesUseCase &listItinerariesUseCase)
-    : m_frontend(frontend),
-      m_createItineraryUseCase(createItineraryUseCase),
-      m_payItineraryUseCase(payItineraryUseCase),
+#include "exception.hpp"
+#include <optional>
+
+App::App(IView& view, IInput& input,
+         AuthPresenter& authPresenter,
+         ItineraryPresenter& itineraryPresenter,
+         PaymentPresenter& paymentPresenter,
+         FlightSearchPresenter& flightSearchPresenter,
+         ListItinerariesUseCase& listItinerariesUseCase)
+    : m_view(view), m_input(input),
+      m_authPresenter(authPresenter),
+      m_itineraryPresenter(itineraryPresenter),
+      m_paymentPresenter(paymentPresenter),
+      m_flightSearchPresenter(flightSearchPresenter),
       m_listItinerariesUseCase(listItinerariesUseCase) {}
 
 void App::run()
 {
-    User user;
-    while (true)
+    AppState state = AppState::StartMenu;
+    std::optional<User> currentUser;
+
+    while (state != AppState::Exit)
     {
-        while (true)
+        switch (state)
         {
-            m_frontend.showMessage("\n");
-            auto choice = static_cast<StartMenuChoice>(m_frontend.showStartMenu());
-
-            switch (choice)
-            {
-            case StartMenuChoice::Login:
-                user = m_frontend.login();
-                m_frontend.displayWelcomeMessage(user.getFirstName(), user.getLastName());
-                break;
-            case StartMenuChoice::SignUp:
-                m_frontend.signup();
-                break;
-            case StartMenuChoice::Exit:
-                return;
-            default:
-                m_frontend.showError("Invalid choice");
-                break;
-            }
-
-            if (choice == StartMenuChoice::Login)
-                break;
-        }
-
-        bool loggedIn = true;
-        while (loggedIn)
+        case AppState::StartMenu:
         {
-            auto choice = static_cast<MainMenuChoice>(m_frontend.displayMainMenu());
-
-            switch (choice)
-            {
-            case MainMenuChoice::ViewProfile:
-                m_frontend.displayUserProfile(user);
-                break;
-            case MainMenuChoice::CreateItinerary:
-                handleCreateItinerary(user);
-                break;
-            case MainMenuChoice::ListItineraries:
-            {
-                auto result = m_listItinerariesUseCase.execute(user);
-                if (result.success)
-                    m_frontend.displayItineraries(result.itineraries);
-                else
-                    m_frontend.showMessage(result.message);
-                break;
-            }
-            case MainMenuChoice::Logout:
-                loggedIn = false;
-                break;
-            default:
-                m_frontend.showError("Invalid choice");
-                break;
-            }
-        }
-    }
-}
-
-void App::handleCreateItinerary(User &user)
-{
-    Itinerary itinerary = m_createItineraryUseCase.createItinerary();
-
-    while (true)
-    {
-        auto choice = static_cast<CreateItineraryMenuChoice>(m_frontend.displayCreateItineraryMenu());
-
-        switch (choice)
-        {
-        case CreateItineraryMenuChoice::AddFlight:
-            addItemToItinerary(itinerary, RequestType::flight);
+            auto result = m_authPresenter.run();
+            state = result.state;
+            if (result.user)
+                currentUser = std::move(result.user);
             break;
-        case CreateItineraryMenuChoice::AddHotel:
-            addItemToItinerary(itinerary, RequestType::hotel);
-            break;
-        case CreateItineraryMenuChoice::CheckOut:
-        {
-            if (itinerary.getReservations().empty())
-            {
-                m_frontend.showMessage("Cannot checkout: itinerary is empty");
-                break;
-            }
-            m_frontend.displayItinerary(itinerary);
-            handlePayment(user, itinerary);
-            return;
         }
-        case CreateItineraryMenuChoice::Cancel:
-            return;
-        default:
-            m_frontend.showError("Invalid choice");
+        case AppState::MainMenu:
+            state = handleMainMenu(*currentUser);
+            break;
+        case AppState::Exit:
             break;
         }
     }
 }
 
-void App::addItemToItinerary(Itinerary &itinerary, RequestType type)
+AppState App::handleMainMenu(User& user)
 {
-    auto request = m_createItineraryUseCase.makeRequest(type);
-    if (!request)
+    m_view.showMainMenu();
+    int choice;
+    try
     {
-        m_frontend.showError("Unsupported reservation type");
-        return;
+        choice = m_input.readInt(1, 4);
+    }
+    catch (const AppException& e)
+    {
+        m_view.showError(e.what());
+        return AppState::MainMenu;
     }
 
-    m_frontend.readRequestData(*request, type);
-
-    auto items = m_createItineraryUseCase.searchItems(type, *request);
-    int sel = m_frontend.readReservationChoice(items);
-
-    if (sel != -1 &&
-        !m_createItineraryUseCase.addItemToItinerary(itinerary, type, std::move(request), *items[sel - 1]))
+    switch (static_cast<MainMenuChoice>(choice))
     {
-        m_frontend.showError("Failed to add item to itinerary");
+    case MainMenuChoice::SearchFlights:
+        m_flightSearchPresenter.run(user);
+        return AppState::MainMenu;
+    case MainMenuChoice::ViewItineraries:
+    {
+        auto result = m_listItinerariesUseCase.execute(user);
+        if (result.success)
+        {
+            std::vector<ItineraryViewModel> viewModels;
+            for (const auto& it : result.itineraries)
+                viewModels.push_back(toItineraryViewModel(it));
+            m_view.displayItineraries(viewModels);
+        }
+        else
+            m_view.showMessage(result.message);
+        return AppState::MainMenu;
     }
-}
-
-bool App::handlePayment(User &user, const Itinerary &itinerary)
-{
-    auto cards = m_payItineraryUseCase.getCustomerCards(user);
-
-    while (true)
-    {
-        int choice = m_frontend.displayPaymentOptions(cards);
-
-        if (choice == -1)
-            return false;
-
-        if (choice == 0)
-        {
-            PaymentCard newCard = m_frontend.readCard();
-            m_payItineraryUseCase.addCard(user, newCard);
-            cards = m_payItineraryUseCase.getCustomerCards(user);
-            continue;
-        }
-
-        PaymentCard selectedCard = cards[choice - 1];
-
-        int serviceChoice = m_frontend.displayPaymentServices();
-        if (serviceChoice == -1)
-            return false;
-
-        auto result = m_payItineraryUseCase.execute(user, itinerary, selectedCard, serviceChoice);
-
-        if (result.status == PayItineraryResult::Confirmed)
-        {
-            m_frontend.showMessage(result.message);
-            return true;
-        }
-
-        m_frontend.showError(result.message);
-        return false;
+    case MainMenuChoice::ViewProfile:
+        m_view.displayUserProfile(toUserProfileViewModel(user));
+        return AppState::MainMenu;
+    case MainMenuChoice::Logout:
+        return AppState::StartMenu;
+    default:
+        m_view.showError("Invalid choice");
+        return AppState::MainMenu;
     }
 }

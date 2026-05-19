@@ -1,233 +1,235 @@
-# Real API Integration Guide
+# API Integration Guide
 
-This document explains how to integrate real API calls into the Travel Booking System.
+## Architecture Principle
 
-## Overview
+**Flight booking offers** are fetched from a single real API — Duffel.
+There is no separate "flight status" layer; Duffel is a booking API and
+returns everything needed to display and select a flight.
 
-The project currently uses mock API implementations that return hardcoded data. This guide shows how to replace them with real HTTP API calls.
+```
+Presentation
+    ↓
+Application Services
+    ↓
+Domain Models
+    ↓
+Infrastructure
+    ├── DuffelFlightsAPI   ← real  (Duffel /air/offer_requests)
+    ├── MockBookingAPI     ← mock  (fallback / pricing)
+    ├── HTTP Client
+    └── Persistence
+```
 
-## New Architecture
+---
 
-The infrastructure has been reorganized for better separation of concerns:
+## Layer Responsibilities
+
+| Layer              | Status  | What it does                                   |
+|--------------------|---------|------------------------------------------------|
+| **Flight Booking** | **Real**| Offers, prices, routes, times — via Duffel     |
+| **Booking / Offer**| Mock    | Fallback offers + pricing (MockBookingAPI)     |
+| **Reservation**    | Mock    | Internal store (SQLite / JSON / in-memory)     |
+| **Payment**        | Mock    | Always returns success                         |
+| **Hotel**          | Mock    | `hilton_hotels_api.hpp` stubs                  |
+
+---
+
+## Directory Layout
 
 ```
 src/infrastructure/
 ├── http/
-│   ├── http_client.hpp         - HTTP client interface (abstracts the HTTP backend)
-│   └── cpr_http_client.cpp     - CPR-based HTTP implementation
+│   ├── http_client.hpp          – abstract HTTP client interface
+│   └── cpr_http_client.cpp      – CPR-based real HTTP implementation
 │
 ├── apis/
-│   ├── flights/
-│   │   ├── flight_models.hpp   - Flight data structures
-│   │   ├── amadeus_flights_api.hpp - Amadeus flights API client
-│   │   └── amadeus_flights_api.cpp - Implementation
-│   │
-│   └── hotels/
-│       ├── hotel_models.hpp    - Hotel data structures
-│       ├── hilton_hotels_api.hpp - Hilton hotels API client
-│       └── hilton_hotels_api.cpp - Implementation
+│   └── flights/
+│       ├── flight_offer_models.hpp   – FlightOffer, FlightSearchParams (lean booking structs)
+│       ├── duffel_flights_api.hpp    – DuffelFlightsAPI (real booking API)
+│       ├── duffel_flights_api.cpp    – Real HTTP implementation
+│       └── mock_booking_api.hpp      – MockBookingAPI (fallback offers + pricing)
+│
+├── apis/  (legacy mock files, still used by other providers)
+│   ├── expedia_flights_api.hpp   – Mock flight data
+│   ├── expedia_hotels_api.hpp    – Mock hotel data
+│   └── expedia_payments_api.hpp  – Mock payment data
 │
 └── config/
-    └── api_config.hpp          - API configuration and environment variable handling
+    └── api_config.hpp            – API URLs and environment-variable helpers
 ```
 
-## Architecture
+---
 
-The HTTP API system uses an abstract `HttpClient` interface that can be implemented with different backends:
+## Flight Booking — Real API (Duffel)
 
-1. **MockHttpClient** (default) - Returns mock responses for development
-2. **CprHttpClient** - Real HTTP implementation using CPR library
+### `FlightOffer`  ([`flight_offer_models.hpp`](src/infrastructure/apis/flights/flight_offer_models.hpp))
 
-## How to Use Real APIs
-
-### 1. Implement a Real HTTP Client (Optional)
-
-To use real HTTP calls, implement the `HttpClient` interface:
+A **lean booking offer** — what the user sees and selects.
 
 ```cpp
-// src/infrastructure/http/cpr_http_client.cpp
-#include "cpr_http_client.hpp"
-#include <cpr/cpr.h>
+struct FlightOffer
+{
+    std::string id;
+    std::string airline;
+    std::string flightNumber;
+    std::string from;          // IATA code
+    std::string to;            // IATA code
+    std::string departureTime;
+    std::string arrivalTime;
+    double      price    = 0.0;
+    std::string currency = "USD";
+};
+```
 
-std::string CprHttpClient::get(const std::string& url, const std::map<std::string, std::string>& headers) {
-    cpr::Header cprHeaders;
-    for (const auto& [key, value] : headers) {
-        cprHeaders[key] = value;
-    }
-    auto response = cpr::Get(cpr::Url{url}, cpr::Header{cprHeaders});
-    return response.text;
-}
+### `FlightSearchParams`  ([`flight_offer_models.hpp`](src/infrastructure/apis/flights/flight_offer_models.hpp))
 
-std::string CprHttpClient::post(const std::string& url, const std::string& body, const std::map<std::string, std::string>& headers) {
-    cpr::Header cprHeaders;
-    for (const auto& [key, value] : headers) {
-        cprHeaders[key] = value;
-    }
-    auto response = cpr::Post(cpr::Url{url}, cpr::Body{body}, cpr::Header{cprHeaders});
-    return response.text;
-}
+Minimal search parameters for a booking query.
 
-std::unique_ptr<HttpClient> HttpClient::create() {
-    return std::make_unique<CprHttpClient>();
+```cpp
+struct FlightSearchParams
+{
+    std::string from;
+    std::string to;
+    std::string departureDate;
+    int         adults = 1;
+};
+```
+
+### `DuffelFlightsAPI`  ([`duffel_flights_api.hpp`](src/infrastructure/apis/flights/duffel_flights_api.hpp))
+
+Real HTTP client that calls the Duffel offer-request endpoint.
+
+```cpp
+std::vector<FlightOffer> DuffelFlightsAPI::searchFlights(const FlightSearchParams &params);
+```
+
+**Endpoint:** `POST https://api.duffel.com/air/offer_requests`
+
+**Headers:**
+| Header           | Value                    |
+|------------------|--------------------------|
+| `Authorization`  | `Bearer <api_key>`       |
+| `Duffel-Version` | `v2`                     |
+| `Content-Type`   | `application/json`       |
+
+**Request body:**
+```json
+{
+  "data": {
+    "slices": [
+      {
+        "origin": "JFK",
+        "destination": "LHR",
+        "departure_date": "2026-05-20"
+      }
+    ],
+    "passengers": [
+      { "type": "adult" }
+    ],
+    "cabin_class": "economy"
+  }
 }
 ```
 
-### 2. Set Environment Variables
+**Response — offers are at `data.offers[]`:**
+```json
+{
+  "data": {
+    "offers": [
+      {
+        "id": "off_123",
+        "owner": { "name": "British Airways" },
+        "total_amount": "234.50",
+        "total_currency": "GBP",
+        "slices": [
+          {
+            "origin": { "iata_code": "JFK" },
+            "destination": { "iata_code": "LHR" },
+            "departure_at": "2026-05-20T18:30:00+00:00",
+            "arrival_at":   "2026-05-21T06:30:00+00:00"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
 
-Set the API keys as environment variables:
+---
 
-**Windows (Command Prompt):**
+## Mock Booking / Pricing — Fallback Layer
+
+### `MockBookingAPI`  ([`mock_booking_api.hpp`](src/infrastructure/apis/flights/mock_booking_api.hpp))
+
+Returns hardcoded `FlightOffer` objects.  No network call.  Used as a
+fallback when the real Duffel API is unavailable.
+
+```cpp
+std::vector<FlightOffer> MockBookingAPI::searchOffers(from, to, date, adults, children);
+```
+
+---
+
+## How Providers Use the Duffel Layer
+
+Each flight provider calls `DuffelFlightsAPI::searchFlights()` and maps
+the result into domain `Flight` entities:
+
+```cpp
+DuffelFlightsAPI duffel(apiKey);
+FlightSearchParams params{from, to, date, adults};
+
+std::vector<FlightOffer> offers = duffel.searchFlights(params);
+
+for (const auto &offer : offers)
+{
+    Flight flight;
+    flight.setAirline(offer.airline);
+    flight.setFlightNumber(offer.flightNumber);
+    flight.setFrom(offer.from);
+    flight.setTo(offer.to);
+    flight.setDate(offer.departureTime);
+    flight.setTotalCost(offer.price);
+    results.push_back(flight.clone());
+}
+```
+
+---
+
+## Reservation Layer — Internal Only
+
+`reserve()` on each provider is a **mock stub**.  It does not call any
+external booking API.  In a real system this would write to a local
+persistence store (SQLite / JSON / in-memory) via `ReservationService`.
+
+```cpp
+bool Provider::reserve(Reservation *) const
+{
+    return MockBookingAPI::reserve("mock_offer_id");
+}
+```
+
+---
+
+## Payments — Mock Layer
+
+`StripePaymentStrategy`, `PayPalPaymentStrategy`, and `SquarePaymentStrategy`
+all delegate to [`expedia_payments_api.hpp`](src/infrastructure/apis/expedia_payments_api.hpp),
+which always returns `true`.  No real payment gateway is called.
+
+---
+
+## Environment Variables
+
 ```cmd
-set BRITISH_AIRWAYS_API_KEY=your_api_key_here
-set AIR_FRANCE_API_KEY=your_api_key_here
-set HILTON_API_KEY=your_api_key_here
-set MARRIOTT_API_KEY=your_api_key_here
+set DUFFEL_API_KEY=your_key
 ```
 
-**Windows (PowerShell):**
-```powershell
-$env:BRITISH_AIRWAYS_API_KEY="your_api_key_here"
-$env:AIR_FRANCE_API_KEY="your_api_key_here"
-$env:HILTON_API_KEY="your_api_key_here"
-$env:MARRIOTT_API_KEY="your_api_key_here"
-```
+Read via `ApiConfig::getEnvVar()` in [`api_config.hpp`](src/infrastructure/config/api_config.hpp).
 
-**Linux/macOS:**
-```bash
-export BRITISH_AIRWAYS_API_KEY=your_api_key_here
-export AIR_FRANCE_API_KEY=your_api_key_here
-export HILTON_API_KEY=your_api_key_here
-export MARRIOTT_API_KEY=your_api_key_here
-```
+---
 
-### 3. Update Provider Implementations
-
-To use the new HTTP APIs, update the provider files:
-
-**For British Airways** ([`british_airways_flight_provider.cpp`](src/infrastructure/providers/british_airways_flight_provider.cpp)):
-
-```cpp
-#include "../apis/flights/amadeus_flights_api.hpp"
-
-std::vector<std::unique_ptr<ItineraryItem>> BritishAirwaysFlightProvider::searchReservations() const
-{
-    auto req = getRequest();
-    const FlightRequest &request = dynamic_cast<const FlightRequest &>(*req);
-    
-    FlightSearchParams params;
-    params.from = request.getFromCity();
-    params.to = request.getToCity();
-    params.date = request.getDate();
-    params.adults = request.getAdults();
-    params.children = request.getChildren();
-    
-    std::vector<FlightResult> flights = BritishAirwaysHttpAPI::searchFlights(params);
-    
-    std::vector<std::unique_ptr<ItineraryItem>> results;
-    for (const auto &flight_ : flights)
-    {
-        Flight flight;
-        flight.setCategory(ReservationCategory::flight);
-        flight.setProviderId("british_airways");
-        flight.setRequestType(RequestType::flight);
-        flight.setAirline(getName());
-        flight.setDate(flight_.date);
-        flight.setTotalCost(flight_.price);
-        results.push_back(flight.clone());
-    }
-    return results;
-}
-```
-
-**For Hilton Hotels** ([`hilton_hotel_provider.cpp`](src/infrastructure/providers/hilton_hotel_provider.cpp)):
-
-```cpp
-#include "../apis/hotels/hilton_hotels_api.hpp"
-
-std::vector<std::unique_ptr<ItineraryItem>> HiltonHotelProvider::searchReservations() const
-{
-    auto reqPtr = getRequest();
-    HotelRequest &req = dynamic_cast<HotelRequest &>(*reqPtr);
-    
-    HotelSearchParams params;
-    params.city = req.getCity();
-    params.fromDate = req.getFromDate();
-    params.toDate = req.getToDate();
-    params.adults = req.getAdults();
-    params.children = req.getChildren();
-    params.rooms = req.getRooms();
-    
-    std::vector<HotelRoomResult> rooms = HiltonHttpAPI::searchRooms(params);
-    
-    std::vector<std::unique_ptr<ItineraryItem>> results;
-    for (const auto &room : rooms)
-    {
-        HotelRoom hRoom{};
-        hRoom.setDateFrom(room.dateFrom);
-        hRoom.setDateTo(room.dateTo);
-        hRoom.setRequestType(RequestType::hotel);
-        hRoom.setCategory(ReservationCategory::hotel);
-        hRoom.setProviderId("hilton");
-        hRoom.setAvailableRooms(room.available);
-        hRoom.setPricePerNight(room.pricePerNight);
-        hRoom.setRoomType(room.roomType);
-        hRoom.setHotelName(getName());
-        results.push_back(hRoom.clone());
-    }
-    return results;
-}
-```
-
-## API Endpoints
-
-The HTTP API classes expect the following JSON response formats:
-
-### Flight Search Response
-```json
-{
-  "flights": [
-    {
-      "price": 200.0,
-      "date": "2023-05-01",
-      "airline": "British Airways",
-      "flightNumber": "BA123",
-      "departureTime": "10:00",
-      "arrivalTime": "12:00",
-      "fromAirport": "LHR",
-      "toAirport": "JFK"
-    }
-  ]
-}
-```
-
-### Hotel Search Response
-```json
-{
-  "rooms": [
-    {
-      "roomType": "Deluxe King",
-      "available": 5,
-      "pricePerNight": 250.0,
-      "dateFrom": "2023-05-01",
-      "dateTo": "2023-05-05",
-      "hotelName": "Hilton Downtown",
-      "hotelId": "hilton_123"
-    }
-  ]
-}
-```
-
-### Reservation Response
-```json
-{
-  "reservationId": "res_abc123",
-  "status": "confirmed"
-}
-```
-
-## Building the Project
-
-After making changes, rebuild the project:
+## Building
 
 ```bash
 mkdir build && cd build
@@ -235,24 +237,5 @@ cmake ..
 cmake --build .
 ```
 
-## Testing
-
-The HTTP API classes can be tested with mock servers or by using the actual API endpoints. For development, you can use tools like:
-
-- [json-server](https://github.com/typicode/json-server) for mock REST APIs
-- [WireMock](http://wiremock.org/) for HTTP mock server
-- Postman Mock Server
-
-## Error Handling
-
-The HTTP API implementations include basic error handling:
-- JSON parsing error handling
-- Network error handling via the HttpClient interface
-
-## Next Steps
-
-1. Implement a real `HttpClient` using libcurl, cpr, or WinHTTP
-2. Obtain API keys from the respective providers
-3. Set up environment variables
-4. Update the provider implementations to use the new HTTP APIs
-5. Test with the actual API endpoints
+Requires the **CPR** library (for `CprHttpClient`) and **nlohmann/json**
+(vendored at `src/third_party/json.hpp`).

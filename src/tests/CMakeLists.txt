@@ -11,7 +11,6 @@ target_link_libraries(run_tests
     PRIVATE
         application
         infrastructure
-        db
         db_sql
         domain
         util

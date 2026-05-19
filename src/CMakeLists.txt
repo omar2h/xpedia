@@ -32,6 +32,19 @@ if(BUILD_TESTS)
     enable_testing()
 endif()
 
+include(FetchContent)
+
+set(BUILD_SHARED_LIBS OFF)
+set(CPR_USE_SYSTEM_CURL OFF)
+
+FetchContent_Declare(
+    cpr
+    GIT_REPOSITORY https://github.com/libcpr/cpr.git
+    GIT_TAG 1.10.5
+)
+
+FetchContent_MakeAvailable(cpr)
+
 # ---- Subdirectories ----
 
 add_subdirectory(third_party)
@@ -40,7 +53,7 @@ add_subdirectory(util)
 add_subdirectory(infrastructure/persistence)
 add_subdirectory(application)
 add_subdirectory(infrastructure)
-add_subdirectory(frontend)
+add_subdirectory(presentation)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)
@@ -52,10 +65,9 @@ add_executable(travel_app app.cpp main.cpp)
 
 target_link_libraries(travel_app
     PRIVATE
-        frontend
+        presentation
         application
         infrastructure
-        db
         db_sql
         domain
         util

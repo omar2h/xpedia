@@ -1,38 +1,34 @@
 #pragma once
 
-#include <memory>
-#include <vector>
+#include "presentation/app_state.hpp"
 
-#include "domain/request_type.hpp"
-
-class IFrontend;
+class IView;
+class IInput;
 class User;
-class Itinerary;
-class ItineraryItem;
-class PaymentCard;
-class CreateItineraryUseCase;
-class PayItineraryUseCase;
+class AuthPresenter;
+class ItineraryPresenter;
+class PaymentPresenter;
+class FlightSearchPresenter;
 class ListItinerariesUseCase;
-
-enum class StartMenuChoice { Login = 1, SignUp = 2, Exit = 3 };
-enum class MainMenuChoice { ViewProfile = 1, CreateItinerary = 2, ListItineraries = 3, Logout = 4 };
-enum class CreateItineraryMenuChoice { AddFlight = 1, AddHotel = 2, CheckOut = 3, Cancel = 4 };
 
 class App
 {
-    IFrontend &m_frontend;
-    CreateItineraryUseCase &m_createItineraryUseCase;
-    PayItineraryUseCase &m_payItineraryUseCase;
-    ListItinerariesUseCase &m_listItinerariesUseCase;
+    IView& m_view;
+    IInput& m_input;
+    AuthPresenter& m_authPresenter;
+    ItineraryPresenter& m_itineraryPresenter;
+    PaymentPresenter& m_paymentPresenter;
+    FlightSearchPresenter& m_flightSearchPresenter;
+    ListItinerariesUseCase& m_listItinerariesUseCase;
 
-    void handleCreateItinerary(User &user);
-    void addItemToItinerary(Itinerary &itinerary, RequestType type);
-    bool handlePayment(User &user, const Itinerary &itinerary);
+    AppState handleMainMenu(User& currentUser);
 
 public:
-    App(IFrontend &frontend,
-        CreateItineraryUseCase &createItineraryUseCase,
-        PayItineraryUseCase &payItineraryUseCase,
-        ListItinerariesUseCase &listItinerariesUseCase);
+    App(IView& view, IInput& input,
+        AuthPresenter& authPresenter,
+        ItineraryPresenter& itineraryPresenter,
+        PaymentPresenter& paymentPresenter,
+        FlightSearchPresenter& flightSearchPresenter,
+        ListItinerariesUseCase& listItinerariesUseCase);
     void run();
 };

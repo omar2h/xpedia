@@ -1,9 +1,13 @@
 #include "app.hpp"
-#include "frontend/console_frontend.hpp"
-#include "frontend/output.hpp"
-#include "frontend/input.hpp"
-#include "frontend/login_handler.hpp"
-#include "frontend/signup_handler.hpp"
+#include "presentation/console_frontend.hpp"
+#include "presentation/output.hpp"
+#include "presentation/input.hpp"
+#include "presentation/login_handler.hpp"
+#include "presentation/signup_handler.hpp"
+#include "presentation/presenters/auth_presenter.hpp"
+#include "presentation/presenters/itinerary_presenter.hpp"
+#include "presentation/presenters/payment_presenter.hpp"
+#include "presentation/presenters/flight_search_presenter.hpp"
 #include "domain/entities/user.hpp"
 #include "domain/entities/itinerary.hpp"
 #include "domain/entities/reservation_category.hpp"
@@ -17,11 +21,12 @@
 #include "application/use_cases/list_itineraries_use_case.hpp"
 #include "infrastructure/persistence/sql/sql_database.hpp"
 #include "infrastructure/factories/reservation_provider_factory.hpp"
-#include "infrastructure/providers/british_airways_flight_provider.hpp"
-#include "infrastructure/providers/air_france_flight_provider.hpp"
 #include "infrastructure/providers/marriott_hotel_provider.hpp"
 #include "infrastructure/providers/hilton_hotel_provider.hpp"
 #include "infrastructure/factories/payment_factory.hpp"
+#include "infrastructure/config/api_config.hpp"
+#include "infrastructure/apis/duffel/duffel_flight_service.hpp"
+#include "util/env_loader.hpp"
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -30,14 +35,12 @@
 
 static void registerReservationProviders(ReservationProviderFactory &factory)
 {
-    factory.registerProvider(ReservationCategory::flight, "british_airways", "British Airways",
-                             [] { return std::make_unique<BritishAirwaysFlightProvider>(); });
-    factory.registerProvider(ReservationCategory::flight, "air_france", "Air France",
-                             [] { return std::make_unique<AirFranceFlightProvider>(); });
     factory.registerProvider(ReservationCategory::hotel, "marriott", "Marriott",
-                             [] { return std::make_unique<MarriottHotelProvider>(); });
+                              []
+                              { return std::make_unique<MarriottHotelProvider>(); });
     factory.registerProvider(ReservationCategory::hotel, "hilton", "Hilton",
-                             [] { return std::make_unique<HiltonHotelProvider>(); });
+                              []
+                              { return std::make_unique<HiltonHotelProvider>(); });
 }
 
 int main()
@@ -59,17 +62,39 @@ int main()
     auto confirmReservations = [&](const Itinerary &itin)
     { return reservationService.confirmReservations(itin); };
     PaymentProcessor paymentProcessor{database, getPaymentService, confirmReservations};
-    PayItineraryUseCase payItineraryUseCase{database, paymentProcessor};
-    ListItinerariesUseCase listItinerariesUseCase{database};
+    PayItineraryUseCase payItineraryUseCase{database, database, paymentProcessor};
+    ListItinerariesUseCase listItinerariesUseCase{database, database};
     CreateItineraryUseCase createItineraryUseCase{requestFactory, reservationFactory, reservationService};
     ConsoleOutput output;
     ConsoleInput input;
     LoginHandler loginHandler{authService, output, input};
     SignupHandler signupHandler{authService, output, input};
-    ConsoleFrontend frontend{loginHandler, signupHandler, output, input};
+    ConsoleFrontend view{output};
 
-    App app{frontend, createItineraryUseCase, payItineraryUseCase,
-            listItinerariesUseCase};
+    PaymentPresenter paymentPresenter{view, input, payItineraryUseCase};
+    ItineraryPresenter itineraryPresenter{view, input, createItineraryUseCase, paymentPresenter};
+    AuthPresenter authPresenter{view, input, loginHandler, signupHandler};
+
+    loadEnvFile(".env");
+
+    std::string apiKey = ApiConfig::getEnvVar("DUFFEL_API_KEY");
+    if (apiKey.empty())
+    {
+        std::cerr << "Warning: DUFFEL_API_KEY not set. Flight search will fail.\n";
+    }
+    else
+    {
+        std::string masked = apiKey.size() > 8
+            ? apiKey.substr(0, 4) + "****" + apiKey.substr(apiKey.size() - 4)
+            : "****";
+        std::cerr << "DUFFEL_API_KEY: " << masked << " (" << apiKey.size() << " chars)\n";
+    }
+    DuffelFlightService duffelService{apiKey};
+
+    FlightSearchPresenter flightSearchPresenter{view, input, duffelService, database};
+
+    App app{view, input, authPresenter, itineraryPresenter, paymentPresenter,
+            flightSearchPresenter, listItinerariesUseCase};
 
     try
     {

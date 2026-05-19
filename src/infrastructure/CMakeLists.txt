@@ -16,19 +16,35 @@ target_sources(infrastructure
         http/http_client.hpp
         http/cpr_http_client.cpp
 
-        # API implementations
-        apis/flights/amadeus_flights_api.cpp
+        # ── Flight APIs ──────────────────────────────────────────────────
+        # Mock flight search service (for testing / offline mode)
+        apis/flights/mock_flight_search_service.cpp
+
+        # Mock booking API (offline route search)
+        apis/flights/mock_booking_api.cpp
+
+        # Duffel real API integration
+        apis/duffel/client/duffel_client.cpp
+        apis/duffel/parser/duffel_parser.cpp
+        apis/duffel/mapper/duffel_mapper.cpp
+        apis/duffel/duffel_flight_service.cpp
+
+        # ── Hotel APIs ───────────────────────────────────────────────────
+        # Real hotel API (not yet wired to providers)
         apis/hotels/hilton_hotels_api.cpp
 )
 
 target_include_directories(infrastructure
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/third_party
 )
 
 target_link_libraries(infrastructure
     PUBLIC
         application
+        cpr::cpr
 )
 
 target_compile_features(infrastructure PUBLIC cxx_std_17)
