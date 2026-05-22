@@ -1,11 +1,13 @@
 #pragma once
 
+#include <string>
+
 #include "view/view_interface.hpp"
 #include "input.hpp"
 #include "../exception.hpp"
 
-template<typename Func>
-auto retryOnError(IView& view, Func fn) -> decltype(fn())
+template <typename Func>
+auto retryOnError(IView &view, Func fn) -> decltype(fn())
 {
     while (true)
     {
@@ -13,17 +15,40 @@ auto retryOnError(IView& view, Func fn) -> decltype(fn())
         {
             return fn();
         }
-        catch (const AppException& e)
+        catch (const AppException &e)
         {
             view.showError(e.what());
         }
     }
 }
 
-inline int readChoice(IView& view, IInput& input, const std::string& prompt, int low, int high, bool allowCancel = false)
+inline int readChoice(
+    IView &view,
+    IInput &input,
+    const std::string &prompt,
+    int min,
+    int max,
+    bool allowCancel = false)
 {
-    return retryOnError(view, [&] {
-        view.showPrompt(prompt);
-        return input.readInt(low, high, allowCancel);
-    });
+    while (true)
+    {
+        if (!prompt.empty())
+        {
+            view.showPrompt(prompt);
+        }
+
+        int choice = input.readInt();
+
+        if (allowCancel && choice == -1)
+        {
+            return choice;
+        }
+
+        if (choice >= min && choice <= max)
+        {
+            return choice;
+        }
+
+        view.showError("Invalid choice");
+    }
 }

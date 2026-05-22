@@ -2,16 +2,16 @@
 #include "../view/view_interface.hpp"
 #include "../input.hpp"
 
-CardInput CardInputForm::collect(IView& view, IInput& input)
+CardInput CardInputForm::collect(IView &view, IInput &input)
 {
     CardInput result;
     view.showPrompt("Enter Card Number: ");
-    result.number = input.readString();
+    result.number = input.readLine();
     view.showPrompt("Enter Card Owner: ");
-    result.owner = input.readString();
+    result.owner = input.readLine();
     view.showPrompt("Enter Card Expiry Date: ");
-    result.expiryDate = input.readString();
+    result.expiryDate = input.readLine();
     view.showPrompt("Enter Card CCV: ");
-    result.ccv = input.readString();
+    result.ccv = input.readLine();
     return result;
 }

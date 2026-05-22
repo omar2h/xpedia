@@ -1,5 +1,7 @@
 #include "input.hpp"
+
 #include "../exception.hpp"
+
 #include <iostream>
 #include <limits>
 
@@ -20,25 +22,7 @@ int ConsoleInput::readInt()
     return value;
 }
 
-int ConsoleInput::readInt(int low, int high)
-{
-    return readInt(low, high, false);
-}
-
-int ConsoleInput::readInt(int low, int high, bool allowCancel)
-{
-    int choice = readInt();
-
-    if (choice >= low && choice <= high)
-        return choice;
-
-    if (allowCancel && choice == -1)
-        return -1;
-
-    throw ValidationException("Invalid Choice");
-}
-
-std::string ConsoleInput::readString()
+std::string ConsoleInput::readLine()
 {
     std::string input;
     std::getline(std::cin, input);

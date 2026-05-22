@@ -2,15 +2,15 @@
 #include "../view/view_interface.hpp"
 #include "../input.hpp"
 
-HotelSearchInput HotelSearchForm::collect(IView& view, IInput& input)
+HotelSearchInput HotelSearchForm::collect(IView &view, IInput &input)
 {
     HotelSearchInput result;
     view.showPrompt("Enter City: ");
-    result.city = input.readString();
+    result.city = input.readLine();
     view.showPrompt("Enter From Date: ");
-    result.fromDate = input.readString();
+    result.fromDate = input.readLine();
     view.showPrompt("Enter To Date: ");
-    result.toDate = input.readString();
+    result.toDate = input.readLine();
     view.showPrompt("Enter Adults: ");
     result.adults = input.readInt();
     view.showPrompt("Enter Children: ");

@@ -12,19 +12,19 @@ FlightSearchInput FlightSearchForm::collect(
         "Origin (IATA code): ");
 
     result.origin =
-        input.readString();
+        input.readLine();
 
     view.showPrompt(
         "Destination (IATA code): ");
 
     result.destination =
-        input.readString();
+        input.readLine();
 
     view.showPrompt(
         "Departure date (YYYY-MM-DD): ");
 
     result.departureDate =
-        input.readString();
+        input.readLine();
 
     view.showPrompt(
         "Adults: ");
