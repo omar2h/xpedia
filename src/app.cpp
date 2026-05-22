@@ -2,9 +2,8 @@
 #include "presentation/view/view_interface.hpp"
 #include "presentation/input.hpp"
 #include "presentation/presenters/auth_presenter.hpp"
-#include "presentation/presenters/itinerary_presenter.hpp"
-#include "presentation/presenters/payment_presenter.hpp"
 #include "presentation/presenters/flight_search_presenter.hpp"
+#include "presentation/presenter_helpers.hpp"
 #include "presentation/mappers/user_profile_mapper.hpp"
 #include "presentation/mappers/itinerary_mapper.hpp"
 #include "domain/entities/user.hpp"
@@ -15,14 +14,10 @@
 
 App::App(IView& view, IInput& input,
          AuthPresenter& authPresenter,
-         ItineraryPresenter& itineraryPresenter,
-         PaymentPresenter& paymentPresenter,
          FlightSearchPresenter& flightSearchPresenter,
          ListItinerariesUseCase& listItinerariesUseCase)
     : m_view(view), m_input(input),
       m_authPresenter(authPresenter),
-      m_itineraryPresenter(itineraryPresenter),
-      m_paymentPresenter(paymentPresenter),
       m_flightSearchPresenter(flightSearchPresenter),
       m_listItinerariesUseCase(listItinerariesUseCase) {}
 
@@ -58,7 +53,7 @@ AppState App::handleMainMenu(User& user)
     int choice;
     try
     {
-        choice = m_input.readInt(1, 4);
+        choice = readChoice(m_view, m_input, "", 1, 4);
     }
     catch (const AppException& e)
     {

@@ -54,6 +54,7 @@ add_subdirectory(infrastructure/persistence)
 add_subdirectory(application)
 add_subdirectory(infrastructure)
 add_subdirectory(presentation)
+add_subdirectory(composition)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)
@@ -70,6 +71,7 @@ target_link_libraries(travel_app
         infrastructure
         db_sql
         domain
+        composition
         util
         sqlite3
 )
