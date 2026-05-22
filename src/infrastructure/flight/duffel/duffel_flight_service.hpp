@@ -1,9 +1,10 @@
 #pragma once
 
 #include "../../../application/interfaces/iflight_search_service.hpp"
+
 #include "client/duffel_client.hpp"
-#include "parser/duffel_parser.hpp"
 #include "mapper/duffel_mapper.hpp"
+#include "parser/duffel_parser.hpp"
 
 class DuffelFlightService : public IFlightSearchService
 {
@@ -14,6 +15,5 @@ class DuffelFlightService : public IFlightSearchService
 public:
     explicit DuffelFlightService(const std::string &apiKey);
 
-    Result<std::vector<FlightOffer>> searchFlights(
-        const FlightSearchRequest &request) override;
+    Result<std::vector<FlightOffer>> searchFlights(const FlightSearchRequest &request) override;
 };

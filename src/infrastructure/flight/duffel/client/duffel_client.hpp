@@ -4,6 +4,8 @@
 #include <string>
 
 #include "../../../http/http_client.hpp"
+#include "result.hpp"
+#include "../../../../domain/value_objects/flight_search_request.hpp"
 
 class DuffelClient
 {
@@ -13,8 +15,5 @@ class DuffelClient
 public:
     explicit DuffelClient(const std::string &apiKey);
 
-    std::string searchOffers(
-        const std::string &from,
-        const std::string &to,
-        const std::string &date);
+    Result<std::string> searchFlights(const FlightSearchRequest &request);
 };

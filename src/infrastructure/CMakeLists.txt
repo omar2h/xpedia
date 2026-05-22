@@ -2,19 +2,18 @@ add_library(infrastructure)
 
 target_sources(infrastructure
     PRIVATE
-        factories/reservation_provider_factory.cpp
         factories/payment_factory.cpp
 
-        providers/air_france_flight_provider.cpp
-        providers/british_airways_flight_provider.cpp
-        providers/hilton_hotel_provider.cpp
-        providers/marriott_hotel_provider.cpp
+        factories/booking_provider_factory.cpp
+        factories/hotel_search_provider_factory.cpp
 
         serialization/reservation_serializer.cpp
 
         # HTTP transport layer
         http/http_client.hpp
         http/cpr_http_client.cpp
+
+        flight/aggregated/aggregated_flight_search_service.cpp
 
         # ── Flight APIs ──────────────────────────────────────────────────
         # Mock flight search service (for testing / offline mode)
@@ -24,10 +23,10 @@ target_sources(infrastructure
         apis/flights/mock_booking_api.cpp
 
         # Duffel real API integration
-        apis/duffel/client/duffel_client.cpp
-        apis/duffel/parser/duffel_parser.cpp
-        apis/duffel/mapper/duffel_mapper.cpp
-        apis/duffel/duffel_flight_service.cpp
+        flight/duffel/client/duffel_client.cpp
+        flight/duffel/parser/duffel_parser.cpp
+        flight/duffel/mapper/duffel_mapper.cpp
+        flight/duffel/duffel_flight_service.cpp
 
         # ── Hotel APIs ───────────────────────────────────────────────────
         # Real hotel API (not yet wired to providers)
