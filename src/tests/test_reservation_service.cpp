@@ -1,130 +1,107 @@
 #include <gtest/gtest.h>
+
+#include "application/providers/booking_provider.hpp"
+#include "application/providers/hotel_search_provider.hpp"
 #include "application/services/reservation_service.hpp"
-#include "application/providers/reservation_provider.hpp"
-#include "domain/entities/flight.hpp"
-#include "domain/entities/hotel_room.hpp"
-#include "domain/request_type.hpp"
-#include "domain/requests/flight_request.hpp"
-#include "domain/requests/hotel_request.hpp"
 #include "domain/entities/flight_reservation.hpp"
-#include "domain/entities/hotel_reservation.hpp"
-#include "domain/entities/reservation_category.hpp"
+#include "domain/entities/hotel_room.hpp"
 #include "domain/entities/itinerary.hpp"
+#include "domain/entities/reservation_category.hpp"
+#include "domain/value_objects/hotel_search_request.hpp"
+
+#include <memory>
 #include <vector>
 
 namespace
 {
-    class MockFlightProvider : public ReservationProvider
+    class MockHotelProvider : public HotelSearchProvider
     {
     public:
-        std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const override
+        std::vector<std::unique_ptr<ItineraryItem>>
+        searchHotels(const HotelSearchRequest &request) override
         {
             std::vector<std::unique_ptr<ItineraryItem>> items;
-            auto flight = std::make_unique<Flight>();
-            flight->setAirline("MockAir");
-            flight->setTotalCost(300);
-            items.push_back(std::move(flight));
-            return items;
-        }
 
-        bool reserve(Reservation *) const override { return true; }
-        std::string getName() const override { return "MockFlight"; }
-        std::string getCategory() const override { return "flight"; }
-    };
-
-    class MockHotelProvider : public ReservationProvider
-    {
-    public:
-        std::vector<std::unique_ptr<ItineraryItem>> searchReservations() const override
-        {
-            std::vector<std::unique_ptr<ItineraryItem>> items;
             auto room = std::make_unique<HotelRoom>();
             room->setHotelName("MockHotel");
+            room->setDateFrom(request.checkInDate);
+            room->setDateTo(request.checkOutDate);
             room->setPricePerNight(150);
+            room->setCategory(ReservationCategory::hotel);
+            room->setProviderId("mock_hotel");
+
             items.push_back(std::move(room));
             return items;
         }
 
-        bool reserve(Reservation *) const override { return true; }
+        bool reserve(Reservation *) override { return true; }
+
         std::string getName() const override { return "MockHotel"; }
-        std::string getCategory() const override { return "hotel"; }
+    };
+
+    class MockBookingProvider : public BookingProvider
+    {
+    public:
+        bool reserve(const Reservation &) const override { return true; }
+
+        std::string getProviderId() const override { return "mock"; }
     };
 }
 
-TEST(ReservationServiceTest, GetFlightReservationsReturnsProviderItems)
+TEST(ReservationServiceTest, SearchHotelsReturnsProviderItems)
 {
-    auto getProviders = [](ReservationCategory cat) -> std::vector<std::unique_ptr<ReservationProvider>>
-    {
-        if (cat != ReservationCategory::flight)
-            return {};
-        std::vector<std::unique_ptr<ReservationProvider>> providers;
-        providers.push_back(std::make_unique<MockFlightProvider>());
-        return providers;
-    };
-    auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
-    {
-        return nullptr;
-    };
-
-    ReservationService service(getProviders, getProvider);
-    FlightRequest request("NYC", "LAX", "2026-06-01", 1, 0);
-    auto items = service.getAvailableReservations(request, RequestType::flight);
-
-    ASSERT_EQ(items.size(), 1);
-    auto *flight = dynamic_cast<Flight *>(items[0].get());
-    ASSERT_NE(flight, nullptr);
-    EXPECT_EQ(flight->getAirline(), "MockAir");
-    EXPECT_DOUBLE_EQ(flight->getTotalCost(), 300);
-}
-
-TEST(ReservationServiceTest, GetHotelReservationsReturnsProviderItems)
-{
-    auto getProviders = [](ReservationCategory cat) -> std::vector<std::unique_ptr<ReservationProvider>>
-    {
-        if (cat != ReservationCategory::hotel)
-            return {};
-        std::vector<std::unique_ptr<ReservationProvider>> providers;
+    auto getProviders = [] {
+        std::vector<std::unique_ptr<HotelSearchProvider>> providers;
         providers.push_back(std::make_unique<MockHotelProvider>());
         return providers;
     };
-    auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
-    {
+
+    auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<BookingProvider> {
         return nullptr;
     };
 
     ReservationService service(getProviders, getProvider);
-    HotelRequest request("2026-07-01", "2026-07-05", "Paris", 2, 0);
-    auto items = service.getAvailableReservations(request, RequestType::hotel);
+
+    HotelSearchRequest request;
+    request.city = "Paris";
+    request.checkInDate = "2026-07-01";
+    request.checkOutDate = "2026-07-05";
+    request.adults = 2;
+    request.rooms = 1;
+
+    auto items = service.searchHotels(request);
 
     ASSERT_EQ(items.size(), 1);
     auto *hotel = dynamic_cast<HotelRoom *>(items[0].get());
     ASSERT_NE(hotel, nullptr);
     EXPECT_EQ(hotel->getHotelName(), "MockHotel");
+    EXPECT_EQ(hotel->getDateFrom(), "2026-07-01");
     EXPECT_DOUBLE_EQ(hotel->getPricePerNight(), 150);
 }
 
-TEST(ReservationServiceTest, ConfirmReservationsCallsProvider)
+TEST(ReservationServiceTest, ConfirmReservationsCallsBookingProvider)
 {
     bool providerCalled = false;
-    auto getProviders = [](ReservationCategory)
-    { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
-    auto getProvider = [&](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
-    {
+
+    auto getProviders = [] {
+        return std::vector<std::unique_ptr<HotelSearchProvider>>{};
+    };
+
+    auto getProvider = [&](ReservationCategory, const std::string &) -> std::unique_ptr<BookingProvider> {
         providerCalled = true;
-        return std::make_unique<MockFlightProvider>();
+        return std::make_unique<MockBookingProvider>();
     };
 
     ReservationService service(getProviders, getProvider);
+
     Itinerary itinerary;
     itinerary.setId("test123");
-    FlightReservation res;
-    res.setCategory(ReservationCategory::flight);
-    res.setProviderId("mock");
-    auto clone = res.clone();
-    itinerary.addItem(std::move(clone));
 
-    bool result = service.confirmReservations(itinerary);
+    auto reservation = std::make_unique<FlightReservation>();
+    reservation->setCategory(ReservationCategory::flight);
+    reservation->setProviderId("mock");
+    itinerary.addItem(std::move(reservation));
 
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(service.confirmReservations(itinerary));
     EXPECT_TRUE(providerCalled);
 }

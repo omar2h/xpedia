@@ -58,7 +58,8 @@ TEST(CreateItineraryTest, CreateItineraryGeneratesId)
 {
     ReservationRequestFactory reqFactory;
     ReservationFactory resFactory;
-    auto getProviders = [](ReservationCategory) { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
+    auto getProviders = [](ReservationCategory)
+    { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
     auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         return nullptr;
@@ -75,7 +76,8 @@ TEST(CreateItineraryTest, AddFlightItemToItinerary)
 {
     ReservationRequestFactory reqFactory;
     ReservationFactory resFactory;
-    auto getProviders = [](ReservationCategory) { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
+    auto getProviders = [](ReservationCategory)
+    { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
     auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         return nullptr;
@@ -106,7 +108,8 @@ TEST(CreateItineraryTest, AddHotelItemToItinerary)
 {
     ReservationRequestFactory reqFactory;
     ReservationFactory resFactory;
-    auto getProviders = [](ReservationCategory) { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
+    auto getProviders = [](ReservationCategory)
+    { return std::vector<std::unique_ptr<ReservationProvider>>{}; };
     auto getProvider = [](ReservationCategory, const std::string &) -> std::unique_ptr<ReservationProvider>
     {
         return nullptr;

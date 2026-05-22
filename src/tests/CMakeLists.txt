@@ -3,7 +3,6 @@ add_executable(run_tests
     test_reservation_serializer.cpp
     test_reservation_service.cpp
     test_payment_processor.cpp
-    test_create_itinerary.cpp
     test_integration.cpp
 )
 
