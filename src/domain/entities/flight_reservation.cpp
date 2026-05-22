@@ -1,14 +1,17 @@
 #include "flight_reservation.hpp"
+
 #include "../visitors/reservation_visitor.hpp"
-#include "../requests/flight_request.hpp"
+
 #include "../../exception.hpp"
 
-std::unique_ptr<Reservation> FlightReservation::clone() const
+std::unique_ptr<Reservation>
+FlightReservation::clone() const
 {
     return std::make_unique<FlightReservation>(*this);
 }
 
-void FlightReservation::accept(ReservationVisitor &visitor) const
+void FlightReservation::accept(
+    ReservationVisitor &visitor) const
 {
     visitor.visit(*this);
 }
@@ -18,35 +21,57 @@ double FlightReservation::totalCost() const
     return cost;
 }
 
-void FlightReservation::setItem(const ItineraryItem &i)
+void FlightReservation::setItem(const ItineraryItem &item)
 {
-    auto *f = dynamic_cast<const Flight *>(&i);
-    if (!f)
-        throw BusinessException("FlightReservation::setItem expected Flight");
-    flight = *f;
+    auto *flight =
+        dynamic_cast<const Flight *>(&item);
+
+    if (!flight)
+    {
+        throw BusinessException(
+            "FlightReservation::setItem expected Flight");
+    }
+
+    this->flight = *flight;
+
     hasFlight = true;
-    setCategory(&i);
-    copyProviderFrom(&i);
-    setRequestType(&i);
+
+    setCategory(item.getCategory());
+
+    setProviderId(item.getProviderId());
+
+    setRequestType(item.getRequestType());
 }
 
 void FlightReservation::recalculateCost()
 {
     if (!hasFlight)
-        throw BusinessException("FlightReservation: flight not set");
+    {
+        throw BusinessException(
+            "FlightReservation: flight not set");
+    }
+
     if (adults == 0 && children == 0)
-        throw BusinessException("FlightReservation: no passengers");
-    cost = flight.getTotalCost() * adults + flight.getTotalCost() * children * 0.5;
+    {
+        throw BusinessException(
+            "FlightReservation: no passengers");
+    }
+
+    cost =
+        flight.getTotalCost() * adults +
+        flight.getTotalCost() * children * 0.5;
 }
 
-void FlightReservation::applyRequest(const ReservationRequest &req)
+void FlightReservation::applySearchRequest(
+    const FlightSearchRequest &request)
 {
-    auto *flightReq = dynamic_cast<const FlightRequest *>(&req);
-    if (!flightReq)
-        throw BusinessException("FlightReservation::applyRequest expected FlightRequest");
-    from = flightReq->getFromCity();
-    to = flightReq->getToCity();
-    adults = flightReq->getAdults();
-    children = flightReq->getChildren();
+    from = request.origin;
+
+    to = request.destination;
+
+    adults = request.adults;
+
+    children = request.children;
+
     recalculateCost();
 }

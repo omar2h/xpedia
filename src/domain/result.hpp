@@ -1,38 +1,50 @@
 #pragma once
 
+#include <optional>
 #include <string>
-#include <utility>
 
-template<typename T>
+template <typename T>
 class Result
 {
-    bool m_success;
-    T m_value;
+    std::optional<T> m_value;
     std::string m_error;
 
-    Result(bool success, T value, std::string error)
-        : m_success(success)
-        , m_value(std::move(value))
-        , m_error(std::move(error))
-    {
-    }
+    bool m_success{false};
 
 public:
-    static Result ok(T value)
+    static Result success(T value)
     {
-        return Result(true, std::move(value), {});
+        Result r;
+
+        r.m_success = true;
+        r.m_value = std::move(value);
+
+        return r;
     }
 
-    static Result fail(std::string error)
+    static Result failure(
+        const std::string &error)
     {
-        return Result(false, T{}, std::move(error));
+        Result r;
+
+        r.m_success = false;
+        r.m_error = error;
+
+        return r;
     }
 
-    [[nodiscard]] bool isSuccess() const { return m_success; }
-    [[nodiscard]] bool isError() const { return !m_success; }
+    bool isSuccess() const
+    {
+        return m_success;
+    }
 
-    [[nodiscard]] T& value() { return m_value; }
-    [[nodiscard]] const T& value() const { return m_value; }
+    T &value()
+    {
+        return *m_value;
+    }
 
-    [[nodiscard]] const std::string& error() const { return m_error; }
+    const std::string &error() const
+    {
+        return m_error;
+    }
 };

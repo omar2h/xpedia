@@ -7,10 +7,11 @@
 struct FlightSegment
 {
     Airline airline;
+
     std::string flightNumber;
 
-    std::string from;
-    std::string to;
+    std::string fromIata;
+    std::string toIata;
 
     std::string departureTime;
     std::string arrivalTime;
@@ -18,5 +19,5 @@ struct FlightSegment
     std::string aircraft;
     std::string cabinClass;
 
-    int checkedBags{};
+    int checkedBagQuantity{};
 };

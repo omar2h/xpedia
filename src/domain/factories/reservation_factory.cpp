@@ -5,8 +5,20 @@
 std::unique_ptr<Reservation> ReservationFactory::getReservation(RequestType type)
 {
     if (type == RequestType::flight)
-        return std::make_unique<FlightReservation>();
+    {
+        auto reservation = std::make_unique<FlightReservation>();
+        reservation->setRequestType(type);
+        reservation->setCategory(ReservationCategory::flight);
+        return reservation;
+    }
+
     if (type == RequestType::hotel)
-        return std::make_unique<HotelReservation>();
+    {
+        auto reservation = std::make_unique<HotelReservation>();
+        reservation->setRequestType(type);
+        reservation->setCategory(ReservationCategory::hotel);
+        return reservation;
+    }
+
     return nullptr;
 }

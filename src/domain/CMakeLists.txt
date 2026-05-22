@@ -11,8 +11,6 @@ target_sources(domain
         entities/itinerary_item.cpp
         entities/user.cpp
         factories/reservation_factory.cpp
-        requests/flight_request.cpp
-        requests/hotel_request.cpp
         validators/password_validator.cpp
         validators/email_validator.cpp
 )

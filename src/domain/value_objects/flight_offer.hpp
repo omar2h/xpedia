@@ -7,6 +7,8 @@
 
 struct FlightOffer
 {
+    std::string providerId;
+
     std::string offerId;
 
     std::string totalAmount;

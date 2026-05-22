@@ -1,50 +1,70 @@
 #pragma once
 
 #include "reservation.hpp"
-#include "flight.hpp"
+
+#include "../entities/flight.hpp"
+#include "../value_objects/flight_search_request.hpp"
 
 class FlightReservation : public Reservation
 {
     Flight flight;
-    bool hasFlight{};
-    std::string from{};
-    std::string to{};
+
+    std::string from;
+    std::string to;
+
     int adults{};
     int children{};
+
     double cost{};
+
+    bool hasFlight{};
 
     void recalculateCost();
 
 public:
-    FlightReservation() = default;
-    FlightReservation(const FlightReservation &) = default;
-    FlightReservation &operator=(const FlightReservation &) = default;
-    FlightReservation(FlightReservation &&) noexcept = default;
-    FlightReservation &operator=(FlightReservation &&) noexcept = default;
-    ~FlightReservation() = default;
+    [[nodiscard]]
+    const std::string &getAirline() const { return flight.getAirline(); }
+    void setAirline(const std::string &airline) { flight.setAirline(airline); }
 
-    [[nodiscard]] std::unique_ptr<Reservation> clone() const override;
+    [[nodiscard]]
+    const std::string &getFlightNumber() const { return flight.getFlightNumber(); }
+    void setFlightNumber(const std::string &flightNumber) { flight.setFlightNumber(flightNumber); }
 
-    void accept(ReservationVisitor &) const override;
+    [[nodiscard]]
+    const std::string &getFrom() const { return from; }
+    void setFrom(const std::string &from_) { from = from_; }
 
-    [[nodiscard]] double totalCost() const override;
+    [[nodiscard]]
+    const std::string &getTo() const { return to; }
+    void setTo(const std::string &to_) { to = to_; }
 
-    void setItem(const ItineraryItem &) override;
+    [[nodiscard]]
+    const std::string &getDate() const { return flight.getDate(); }
+    void setDate(const std::string &date) { flight.setDate(date); }
 
-    void applyRequest(const ReservationRequest &) override;
+    [[nodiscard]]
+    int getAdults() const { return adults; }
+    void setAdults(int adults_) { adults = adults_; }
 
-    void setFrom(const std::string &f) { from = f; }
-    void setTo(const std::string &t) { to = t; }
-    void setAdults(int a) { adults = a; }
-    void setChildren(int c) { children = c; }
-    void setAirline(const std::string &a) { flight.setAirline(a); }
-    void setDate(const std::string &d) { flight.setDate(d); }
-    void setCost(double c) { cost = c; }
+    [[nodiscard]]
+    int getChildren() const { return children; }
+    void setChildren(int children_) { children = children_; }
 
-    [[nodiscard]] const std::string &getAirline() const { return flight.getAirline(); }
-    [[nodiscard]] const std::string &getFrom() const { return from; }
-    [[nodiscard]] const std::string &getTo() const { return to; }
-    [[nodiscard]] const std::string &getDate() const { return flight.getDate(); }
-    [[nodiscard]] int getAdults() const { return adults; }
-    [[nodiscard]] int getChildren() const { return children; }
+    void setCost(double cost_) { cost = cost_; }
+
+    [[nodiscard]]
+    std::unique_ptr<Reservation>
+    clone() const override;
+
+    [[nodiscard]]
+    double totalCost() const override;
+
+    void accept(
+        ReservationVisitor &visitor) const override;
+
+    void setItem(
+        const ItineraryItem &item) override;
+
+    void applySearchRequest(
+        const FlightSearchRequest &request);
 };

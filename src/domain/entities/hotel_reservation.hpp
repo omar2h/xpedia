@@ -1,54 +1,71 @@
 #pragma once
 
 #include "reservation.hpp"
-#include "hotel_room.hpp"
+
+#include "../entities/hotel_room.hpp"
+#include "../value_objects/hotel_search_request.hpp"
 
 class HotelReservation : public Reservation
 {
     HotelRoom room;
-    bool hasRoom{};
-    std::string city{};
+
+    std::string city;
+
     int adults{};
     int children{};
     int rooms{};
+
     double cost{};
+
+    bool hasRoom{};
 
     void recalculateCost();
 
 public:
-    HotelReservation() = default;
-    HotelReservation(const HotelReservation &) = default;
-    HotelReservation &operator=(const HotelReservation &) = default;
-    HotelReservation(HotelReservation &&) noexcept = default;
-    HotelReservation &operator=(HotelReservation &&) noexcept = default;
-    ~HotelReservation() = default;
+    [[nodiscard]]
+    const std::string &getHotelName() const { return room.getHotelName(); }
+    void setHotelName(const std::string &hotelName) { room.setHotelName(hotelName); }
 
-    [[nodiscard]] std::unique_ptr<Reservation> clone() const override;
+    [[nodiscard]]
+    const std::string &getFromDate() const { return room.getDateFrom(); }
+    void setFromDate(const std::string &fromDate) { room.setDateFrom(fromDate); }
 
-    void accept(ReservationVisitor &) const override;
+    [[nodiscard]]
+    const std::string &getToDate() const { return room.getDateTo(); }
+    void setToDate(const std::string &toDate) { room.setDateTo(toDate); }
 
-    [[nodiscard]] double totalCost() const override;
+    [[nodiscard]]
+    const std::string &getCity() const { return city; }
+    void setCity(const std::string &city_) { city = city_; }
 
-    void setItem(const ItineraryItem &) override;
+    [[nodiscard]]
+    const std::string &getRoomType() const { return room.getRoomType(); }
+    void setRoomType(const std::string &roomType) { room.setRoomType(roomType); }
 
-    void applyRequest(const ReservationRequest &) override;
+    [[nodiscard]]
+    int getRooms() const { return rooms; }
+    void setRooms(int rooms_) { rooms = rooms_; }
 
-    void setHotelName(const std::string &name) { room.setHotelName(name); }
-    void setFromDate(const std::string &d) { room.setDateFrom(d); }
-    void setToDate(const std::string &d) { room.setDateTo(d); }
-    void setCity(const std::string &c) { city = c; }
-    void setRoomType(const std::string &rt) { room.setRoomType(rt); }
-    void setAdults(int a) { adults = a; }
-    void setChildren(int c) { children = c; }
-    void setRooms(int r) { rooms = r; }
-    void setCost(double c) { cost = c; }
+    [[nodiscard]]
+    int getAdults() const { return adults; }
+    void setAdults(int adults_) { adults = adults_; }
 
-    [[nodiscard]] const std::string &getHotelName() const { return room.getHotelName(); }
-    [[nodiscard]] const std::string &getFromDate() const { return room.getDateFrom(); }
-    [[nodiscard]] const std::string &getToDate() const { return room.getDateTo(); }
-    [[nodiscard]] const std::string &getCity() const { return city; }
-    [[nodiscard]] const std::string &getRoomType() const { return room.getRoomType(); }
-    [[nodiscard]] int getRooms() const { return rooms; }
-    [[nodiscard]] int getAdults() const { return adults; }
-    [[nodiscard]] int getChildren() const { return children; }
+    [[nodiscard]]
+    int getChildren() const { return children; }
+    void setChildren(int children_) { children = children_; }
+
+    void setCost(double cost_) { cost = cost_; }
+
+    [[nodiscard]]
+    std::unique_ptr<Reservation>
+    clone() const override;
+
+    [[nodiscard]]
+    double totalCost() const override;
+
+    void accept(ReservationVisitor &visitor) const override;
+
+    void setItem(const ItineraryItem &item) override;
+
+    void applySearchRequest(const HotelSearchRequest &request);
 };
