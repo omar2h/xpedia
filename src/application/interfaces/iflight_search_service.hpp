@@ -12,6 +12,5 @@ class IFlightSearchService
 public:
     virtual ~IFlightSearchService() = default;
 
-    virtual Result<std::vector<FlightOffer>> searchFlights(
-        const FlightSearchRequest &request) = 0;
+    virtual Result<std::vector<FlightOffer>> searchFlights(const FlightSearchRequest &request) = 0;
 };

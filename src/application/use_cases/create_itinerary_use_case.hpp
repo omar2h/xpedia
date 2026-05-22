@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-#include "../dto/flight_search_input.hpp"
+#include "application/dto/flight_search_input.hpp"
 #include "../dto/hotel_search_input.hpp"
 
 class User;

@@ -4,10 +4,9 @@
 
 struct FlightSearchInput
 {
-    std::string origin;
-    std::string destination;
-    std::string departureDate;
+    std::string origin{};
+    std::string destination{};
+    std::string departureDate{};
 
-    int adults = 1;
-    int children = 0;
+    int adults{1};
 };

@@ -6,25 +6,26 @@
 #include <string>
 
 #include "../../domain/entities/reservation_category.hpp"
+#include "../providers/hotel_search_provider.hpp"
+#include "../providers/booking_provider.hpp"
 
 class Itinerary;
 class ItineraryItem;
-class ReservationProvider;
-class ReservationRequest;
-enum class RequestType;
+class FlightSearchRequest;
+class HotelSearchRequest;
+class BookingProvider;
 
 class ReservationService
 {
-    std::function<std::vector<std::unique_ptr<ReservationProvider>>(ReservationCategory)> m_getProviders;
-    std::function<std::unique_ptr<ReservationProvider>(ReservationCategory, const std::string &)> m_getReservationProvider;
+    std::function<std::vector<std::unique_ptr<HotelSearchProvider>>()> m_getHotelProviders;
+    std::function<std::unique_ptr<BookingProvider>(ReservationCategory, const std::string &)> m_getBookingProvider;
 
 public:
     ReservationService(
-        std::function<std::vector<std::unique_ptr<ReservationProvider>>(ReservationCategory)> getProviders,
-        std::function<std::unique_ptr<ReservationProvider>(ReservationCategory, const std::string &)> getReservationProvider);
+        std::function<std::vector<std::unique_ptr<HotelSearchProvider>>()> getHotelProviders,
+        std::function<std::unique_ptr<BookingProvider>(ReservationCategory, const std::string &)> getBookingProvider);
 
-    [[nodiscard]] std::vector<std::unique_ptr<ItineraryItem>> getAvailableReservations(
-        ReservationRequest &request, RequestType requestType);
+    std::vector<std::unique_ptr<ItineraryItem>> searchHotels(HotelSearchRequest &request);
 
-    [[nodiscard]] bool confirmReservations(const Itinerary &currItinerary);
+    [[nodiscard]] bool confirmReservations(const Itinerary &itinerary);
 };
