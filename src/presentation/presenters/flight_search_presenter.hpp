@@ -1,22 +1,19 @@
 #pragma once
 
+#include "../../application/use_cases/search/search_flights_use_case.hpp"
+
 class IView;
 class IInput;
 class User;
-class IFlightSearchService;
-class IItineraryRepository;
 
 class FlightSearchPresenter
 {
-    IView& m_view;
-    IInput& m_input;
-    IFlightSearchService& m_flightSearchService;
-    IItineraryRepository& m_itineraryRepo;
+    IView &m_view;
+    IInput &m_input;
+    SearchFlightsUseCase &m_useCase;
 
 public:
-    FlightSearchPresenter(IView& view, IInput& input,
-                          IFlightSearchService& flightSearchService,
-                          IItineraryRepository& itineraryRepo);
+    FlightSearchPresenter(IView &view, IInput &input, SearchFlightsUseCase &useCase);
 
-    void run(User& user);
+    void run(User &user);
 };
