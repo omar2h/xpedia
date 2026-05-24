@@ -10,8 +10,7 @@ AggregatedHotelSearchService::AggregatedHotelSearchService(
 {
 }
 
-Result<std::vector<HotelOffer>> AggregatedHotelSearchService::
-    searchHotels(const HotelSearchRequest &request)
+Result<std::vector<HotelOffer>> AggregatedHotelSearchService::searchHotels(const HotelSearchRequest &request)
 {
     std::vector<HotelOffer> allOffers;
     std::string errors;
@@ -34,8 +33,7 @@ Result<std::vector<HotelOffer>> AggregatedHotelSearchService::
         anySucceeded = true;
         auto &offers = result.value();
 
-        allOffers.insert(allOffers.end(), std::make_move_iterator(offers.begin()),
-                         std::make_move_iterator(offers.end()));
+        allOffers.insert(allOffers.end(), std::make_move_iterator(offers.begin()), std::make_move_iterator(offers.end()));
     }
 
     if (!anySucceeded)

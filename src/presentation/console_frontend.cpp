@@ -170,8 +170,7 @@ void ConsoleFrontend::displayFlightOffers(
     m_output.writeLine("");
 }
 
-void ConsoleFrontend::displayHotelOffers(
-    const HotelOfferListView &view)
+void ConsoleFrontend::displayHotelOffers(const HotelOfferListView &view)
 {
     if (view.offers.empty())
     {
@@ -186,50 +185,24 @@ void ConsoleFrontend::displayHotelOffers(
 
     for (const auto &offer : view.offers)
     {
-        m_output.writeLine("");
+        if (!offer.hotelName.empty())
+        {
+            m_output.writeLine("");
+            m_output.writeLine(offer.hotelName);
+            m_output.writeLine("");
+        }
 
-        std::string title =
-            "[" + std::to_string(offer.number) + "] " +
-            offer.accommodationName;
+        m_output.writeLine("[" + std::to_string(offer.number) + "] " + offer.title);
 
-        m_output.writeLine(title);
+        if (!offer.subtitle.empty())
+            m_output.writeLine(offer.subtitle);
 
-        if (!offer.cityName.empty())
-            m_output.writeLine("Location  : " + offer.cityName +
-                               (offer.countryCode.empty() ? "" : ", " + offer.countryCode));
-
-        if (offer.reviewScore > 0)
-            m_output.writeLine("Rating    : " + std::to_string(offer.reviewScore) +
-                               " (" + std::to_string(offer.reviewCount) + " reviews)");
-
-        if (offer.rating > 0)
-            m_output.writeLine("Stars     : " + std::to_string((int)offer.rating));
+        if (!offer.providerText.empty())
+            m_output.writeLine(offer.providerText);
 
         m_output.writeLine("");
-
-        if (!offer.checkInDate.empty())
-            m_output.writeLine("Check-in  : " + offer.checkInDate);
-
-        if (!offer.checkOutDate.empty())
-            m_output.writeLine("Check-out : " + offer.checkOutDate);
-
-        m_output.writeLine("Rooms     : " + std::to_string(offer.rooms));
-
-        m_output.writeLine("");
-
-        if (offer.roomOptions > 0)
-            m_output.writeLine("Room options : " + std::to_string(offer.roomOptions));
-
-        if (offer.amenityCount > 0)
-            m_output.writeLine("Amenities    : " + std::to_string(offer.amenityCount));
-
-        m_output.writeLine("");
-
-        if (!offer.price.empty())
-            m_output.writeLine("From      : " + offer.price + " " + offer.currency);
-
-        m_output.writeLine(
-            "--------------------------------------------------");
+        m_output.writeLine("Price : " + offer.priceText);
+        m_output.writeLine("--------------------------------------------------");
     }
 
     m_output.writeLine("");

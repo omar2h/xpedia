@@ -10,12 +10,10 @@ Result<std::vector<HotelOffer>> SearchHotelsUseCase::execute(const HotelSearchIn
     HotelSearchRequest request;
 
     request.city = input.city;
-    request.latitude = input.latitude;
-    request.longitude = input.longitude;
     request.checkInDate = input.fromDate;
     request.checkOutDate = input.toDate;
     request.adults = input.adults;
-    request.childAges.resize(input.children);
+    request.childAges.resize(input.children, 5);
     request.rooms = input.rooms;
 
     return m_hotelService.searchHotels(request);

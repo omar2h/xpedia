@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../application/use_cases/search/search_hotels_use_case.hpp"
+#include "application/use_cases/search/search_hotels_use_case.hpp"
 
 class IView;
 class IInput;
