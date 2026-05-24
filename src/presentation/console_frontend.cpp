@@ -66,7 +66,7 @@ void ConsoleFrontend::showStartMenu()
 
 void ConsoleFrontend::showMainMenu()
 {
-    std::vector<std::string> menu{"Search Flights", "View Itineraries", "View Profile", "Logout"};
+    std::vector<std::string> menu{"Search Flights", "Search Hotels", "View Itineraries", "View Profile", "Logout"};
     printMenu(m_output, menu);
 }
 
@@ -162,6 +162,71 @@ void ConsoleFrontend::displayFlightOffers(
 
         m_output.writeLine(
             "Price     : " + offer.price);
+
+        m_output.writeLine(
+            "--------------------------------------------------");
+    }
+
+    m_output.writeLine("");
+}
+
+void ConsoleFrontend::displayHotelOffers(
+    const HotelOfferListView &view)
+{
+    if (view.offers.empty())
+    {
+        m_output.writeLine("No hotel offers found.");
+        return;
+    }
+
+    m_output.writeLine("");
+    m_output.writeLine("==================================================");
+    m_output.writeLine("Hotel Offers");
+    m_output.writeLine("==================================================");
+
+    for (const auto &offer : view.offers)
+    {
+        m_output.writeLine("");
+
+        std::string title =
+            "[" + std::to_string(offer.number) + "] " +
+            offer.accommodationName;
+
+        m_output.writeLine(title);
+
+        if (!offer.cityName.empty())
+            m_output.writeLine("Location  : " + offer.cityName +
+                               (offer.countryCode.empty() ? "" : ", " + offer.countryCode));
+
+        if (offer.reviewScore > 0)
+            m_output.writeLine("Rating    : " + std::to_string(offer.reviewScore) +
+                               " (" + std::to_string(offer.reviewCount) + " reviews)");
+
+        if (offer.rating > 0)
+            m_output.writeLine("Stars     : " + std::to_string((int)offer.rating));
+
+        m_output.writeLine("");
+
+        if (!offer.checkInDate.empty())
+            m_output.writeLine("Check-in  : " + offer.checkInDate);
+
+        if (!offer.checkOutDate.empty())
+            m_output.writeLine("Check-out : " + offer.checkOutDate);
+
+        m_output.writeLine("Rooms     : " + std::to_string(offer.rooms));
+
+        m_output.writeLine("");
+
+        if (offer.roomOptions > 0)
+            m_output.writeLine("Room options : " + std::to_string(offer.roomOptions));
+
+        if (offer.amenityCount > 0)
+            m_output.writeLine("Amenities    : " + std::to_string(offer.amenityCount));
+
+        m_output.writeLine("");
+
+        if (!offer.price.empty())
+            m_output.writeLine("From      : " + offer.price + " " + offer.currency);
 
         m_output.writeLine(
             "--------------------------------------------------");

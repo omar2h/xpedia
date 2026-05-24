@@ -25,4 +25,5 @@ public:
     void showPaymentServices() override;
     void showSearchResults(const std::vector<SearchResultViewModel>&) override;
     void displayFlightOffers(const FlightOfferListView&) override;
+    void displayHotelOffers(const HotelOfferListView&) override;
 };

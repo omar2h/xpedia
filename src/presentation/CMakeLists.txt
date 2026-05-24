@@ -9,6 +9,7 @@ target_sources(presentation
         presenters/itinerary_presenter.cpp
         presenters/payment_presenter.cpp
         presenters/flight_search_presenter.cpp
+        presenters/hotel_search_presenter.cpp
         forms/flight_search_form.cpp
         forms/hotel_search_form.cpp
         forms/card_input_form.cpp

@@ -22,6 +22,23 @@ int ConsoleInput::readInt()
     return value;
 }
 
+double ConsoleInput::readDouble()
+{
+    double value{};
+    std::cin >> value;
+
+    if (std::cin.fail())
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        throw ValidationException("Invalid input");
+    }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    return value;
+}
+
 std::string ConsoleInput::readLine()
 {
     std::string input;

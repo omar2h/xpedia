@@ -3,6 +3,7 @@ add_library(composition)
 target_sources(composition
     PRIVATE
         flight/flight_module.cpp
+        hotel/hotel_module.cpp
         auth/auth_module.cpp
 )
 

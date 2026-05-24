@@ -9,6 +9,7 @@ target_sources(application
         use_cases/pay_itinerary_use_case.cpp
         use_cases/list_itineraries_use_case.cpp
         use_cases/search/search_flights_use_case.cpp
+        use_cases/search/search_hotels_use_case.cpp
 )
 
 target_include_directories(application

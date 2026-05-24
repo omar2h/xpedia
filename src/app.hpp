@@ -7,6 +7,7 @@ class IInput;
 class User;
 class AuthPresenter;
 class FlightSearchPresenter;
+class HotelSearchPresenter;
 class ListItinerariesUseCase;
 
 class App
@@ -15,6 +16,7 @@ class App
     IInput &m_input;
     AuthPresenter &m_authPresenter;
     FlightSearchPresenter &m_flightSearchPresenter;
+    HotelSearchPresenter &m_hotelSearchPresenter;
     ListItinerariesUseCase &m_listItinerariesUseCase;
 
     AppState handleMainMenu(User &currentUser);
@@ -23,6 +25,7 @@ public:
     App(IView &view, IInput &input,
         AuthPresenter &authPresenter,
         FlightSearchPresenter &flightSearchPresenter,
+        HotelSearchPresenter &hotelSearchPresenter,
         ListItinerariesUseCase &listItinerariesUseCase);
     void run();
 };

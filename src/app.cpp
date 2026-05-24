@@ -3,6 +3,7 @@
 #include "presentation/input.hpp"
 #include "presentation/presenters/auth_presenter.hpp"
 #include "presentation/presenters/flight_search_presenter.hpp"
+#include "presentation/presenters/hotel_search_presenter.hpp"
 #include "presentation/presenter_helpers.hpp"
 #include "presentation/mappers/user_profile_mapper.hpp"
 #include "presentation/mappers/itinerary_mapper.hpp"
@@ -15,10 +16,12 @@
 App::App(IView& view, IInput& input,
          AuthPresenter& authPresenter,
          FlightSearchPresenter& flightSearchPresenter,
+         HotelSearchPresenter& hotelSearchPresenter,
          ListItinerariesUseCase& listItinerariesUseCase)
     : m_view(view), m_input(input),
       m_authPresenter(authPresenter),
       m_flightSearchPresenter(flightSearchPresenter),
+      m_hotelSearchPresenter(hotelSearchPresenter),
       m_listItinerariesUseCase(listItinerariesUseCase) {}
 
 void App::run()
@@ -53,7 +56,7 @@ AppState App::handleMainMenu(User& user)
     int choice;
     try
     {
-        choice = readChoice(m_view, m_input, "", 1, 4);
+        choice = readChoice(m_view, m_input, "", 1, 5);
     }
     catch (const AppException& e)
     {
@@ -65,6 +68,9 @@ AppState App::handleMainMenu(User& user)
     {
     case MainMenuChoice::SearchFlights:
         m_flightSearchPresenter.run(user);
+        return AppState::MainMenu;
+    case MainMenuChoice::SearchHotels:
+        m_hotelSearchPresenter.run(user);
         return AppState::MainMenu;
     case MainMenuChoice::ViewItineraries:
     {

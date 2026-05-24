@@ -24,4 +24,5 @@ public:
     virtual void showPaymentServices() = 0;
     virtual void showSearchResults(const std::vector<SearchResultViewModel>&) = 0;
     virtual void displayFlightOffers(const FlightOfferListView&) = 0;
+    virtual void displayHotelOffers(const HotelOfferListView&) = 0;
 };

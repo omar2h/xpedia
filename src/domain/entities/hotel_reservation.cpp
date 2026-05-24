@@ -135,7 +135,7 @@ void HotelReservation::applySearchRequest(
 
     adults = request.adults;
 
-    children = request.children;
+    children = static_cast<int>(request.childAges.size());
 
     rooms = request.rooms;
 

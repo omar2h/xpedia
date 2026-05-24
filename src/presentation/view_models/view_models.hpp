@@ -53,3 +53,34 @@ struct FlightOfferListView
 {
     std::vector<FlightOfferViewModel> offers;
 };
+
+struct HotelOfferViewModel
+{
+    int number{};
+
+    std::string accommodationName;
+    std::string cityName;
+    std::string countryCode;
+    std::string address;
+
+    double rating{};
+    double reviewScore{};
+    int reviewCount{};
+
+    std::string checkInDate;
+    std::string checkOutDate;
+    int rooms{};
+
+    std::string price;
+    std::string currency;
+
+    int roomOptions{};
+    int amenityCount{};
+
+    std::string phoneNumber;
+};
+
+struct HotelOfferListView
+{
+    std::vector<HotelOfferViewModel> offers;
+};

@@ -2,6 +2,7 @@
 
 #include "composition/auth/auth_module.hpp"
 #include "composition/flight/flight_module.hpp"
+#include "composition/hotel/hotel_module.hpp"
 
 #include "application/use_cases/list_itineraries_use_case.hpp"
 
@@ -26,6 +27,7 @@ int main()
 
         auto authModule = createAuthModule(view, input, database);
         auto flightModule = createFlightModule(view, input, database);
+        auto hotelModule = createHotelModule(view, input, database);
         ListItinerariesUseCase listItinerariesUseCase{database, database};
 
         App app{
@@ -33,6 +35,7 @@ int main()
             input,
             *authModule.presenter,
             *flightModule.presenter,
+            *hotelModule.presenter,
             listItinerariesUseCase};
 
         app.run();
