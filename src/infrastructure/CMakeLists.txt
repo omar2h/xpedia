@@ -34,10 +34,10 @@ target_sources(infrastructure
 
         # ── Hotel Duffel Search ──────────────────────────────────────────
         hotel/aggregated/aggregated_hotel_search_service.cpp
-        hotel/duffel/client/duffel_hotel_client.cpp
-        hotel/duffel/parser/duffel_hotel_parser.cpp
-        hotel/duffel/mapper/duffel_hotel_mapper.cpp
-        hotel/duffel/duffel_hotel_service.cpp
+        hotel/liteapi/client/liteapi_hotel_client.cpp
+        hotel/liteapi/parser/liteapi_hotel_parser.cpp
+        # hotel/liteapi/mapper/liteapi_hotel_mapper.cpp
+        hotel/liteapi/liteapi_hotel_service.cpp
 )
 
 target_include_directories(infrastructure

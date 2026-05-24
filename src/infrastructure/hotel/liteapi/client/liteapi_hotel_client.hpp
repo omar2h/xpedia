@@ -7,13 +7,13 @@
 #include "../../../../domain/result.hpp"
 #include "../../../../domain/value_objects/hotel_search_request.hpp"
 
-class DuffelHotelClient
+class LiteApiHotelClient
 {
     std::string m_apiKey;
     std::unique_ptr<HttpClient> m_http;
 
 public:
-    explicit DuffelHotelClient(const std::string &apiKey);
+    explicit LiteApiHotelClient(const std::string &apiKey);
 
     Result<std::string> searchHotels(const HotelSearchRequest &request);
 };

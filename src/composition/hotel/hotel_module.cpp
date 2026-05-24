@@ -3,8 +3,7 @@
 #include "application/interfaces/ihotel_search_service.hpp"
 
 #include "infrastructure/config/api_config.hpp"
-#include "infrastructure/hotel/duffel/duffel_hotel_service.hpp"
-
+#include "infrastructure/hotel/liteapi/liteapi_hotel_service.hpp"
 #include "presentation/console_frontend.hpp"
 #include "presentation/input.hpp"
 
@@ -16,10 +15,10 @@ HotelModule createHotelModule(ConsoleFrontend &view, ConsoleInput &input, SqlDat
 
     loadEnvFile(".env");
 
-    std::string apiKey = ApiConfig::getEnvVar("DUFFEL_API_KEY");
+    std::string apiKey = ApiConfig::getEnvVar("LITEAPI_KEY");
 
     std::vector<std::unique_ptr<IHotelSearchService>> services;
-    services.push_back(std::make_unique<DuffelHotelService>(apiKey));
+    services.push_back(std::make_unique<LiteApiHotelService>(apiKey));
     auto aggregatedService = std::make_unique<AggregatedHotelSearchService>(std::move(services));
     auto useCase = std::make_unique<SearchHotelsUseCase>(*aggregatedService);
     auto presenter = std::make_unique<HotelSearchPresenter>(view, input, *useCase);
