@@ -8,9 +8,8 @@
 
 #include "infrastructure/hotel/aggregated/aggregated_hotel_search_service.hpp"
 
-class ConsoleFrontend;
-class ConsoleInput;
-class SqlDatabase;
+class IView;
+class IInput;
 
 struct HotelModule
 {
@@ -19,4 +18,4 @@ struct HotelModule
     std::unique_ptr<HotelSearchPresenter> presenter;
 };
 
-HotelModule createHotelModule(ConsoleFrontend &view, ConsoleInput &input, SqlDatabase &database);
+HotelModule createHotelModule(IView &view, IInput &input);

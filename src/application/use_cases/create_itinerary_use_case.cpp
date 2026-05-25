@@ -29,12 +29,11 @@ Itinerary CreateItineraryUseCase::createItinerary()
 std::vector<std::unique_ptr<ItineraryItem>> CreateItineraryUseCase::searchFlights(
     const FlightSearchInput &input)
 {
-    auto request = m_requestFactory.getRequest(RequestType::flight);
-    auto *flightReq = static_cast<FlightRequest *>(request.get());
-    flightReq->setFromCity(input.origin);
-    flightReq->setToCity(input.destination);
-    flightReq->setDate(input.departureDate);
-    flightReq->setAdults(input.adults);
+    FlightRequest flightReq;
+    flightReq.setFromCity(input.origin);
+    flightReq.setToCity(input.destination);
+    flightReq.setDate(input.departureDate);
+    flightReq.setAdults(input.adults);
     return m_reservationService.getAvailableReservations(*request, RequestType::flight);
 }
 

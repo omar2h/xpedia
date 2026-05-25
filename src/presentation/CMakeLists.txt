@@ -13,6 +13,8 @@ target_sources(presentation
         forms/flight_search_form.cpp
         forms/hotel_search_form.cpp
         forms/card_input_form.cpp
+        itinerary_item_flows/flight_itinerary_item_flow.cpp
+        itinerary_item_flows/hotel_itinerary_item_flow.cpp
 )
 
 target_include_directories(presentation

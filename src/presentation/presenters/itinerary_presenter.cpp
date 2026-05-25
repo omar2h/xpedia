@@ -2,102 +2,61 @@
 #include "payment_presenter.hpp"
 #include "../view/view_interface.hpp"
 #include "../input.hpp"
-#include "../app_state.hpp"
 #include "../presenter_helpers.hpp"
-#include "../forms/flight_search_form.hpp"
-#include "../forms/hotel_search_form.hpp"
-#include "../mappers/search_result_mapper.hpp"
 #include "../mappers/itinerary_mapper.hpp"
+#include "../itinerary_item_flows/itinerary_item_flow.hpp"
 #include "../../domain/entities/itinerary.hpp"
-#include "../../application/use_cases/create_itinerary_use_case.hpp"
-#include "../../exception.hpp"
+#include "application/use_cases/create_empty_itinerary_use_case.hpp"
 
-ItineraryPresenter::ItineraryPresenter(IView& view, IInput& input, CreateItineraryUseCase& useCase, PaymentPresenter& paymentPresenter)
-    : m_view(view), m_input(input), m_createItineraryUseCase(useCase), m_paymentPresenter(paymentPresenter) {}
+ItineraryPresenter::ItineraryPresenter(
+    IView& view,
+    IInput& input,
+    CreateEmptyItineraryUseCase& createItineraryUseCase,
+    std::vector<std::unique_ptr<ItineraryItemFlow>> itemFlows,
+    PaymentPresenter& paymentPresenter)
+    : m_view(view), m_input(input),
+      m_createItineraryUseCase(createItineraryUseCase),
+      m_itemFlows(std::move(itemFlows)),
+      m_paymentPresenter(paymentPresenter) {}
 
 void ItineraryPresenter::run(User& user)
 {
-    Itinerary itinerary = m_createItineraryUseCase.createItinerary();
+    Itinerary itinerary = m_createItineraryUseCase.execute();
 
     while (true)
     {
-        m_view.showCreateItineraryMenu();
-        int choice = readChoice(m_view, m_input, "", 1, 4);
-
-        switch (static_cast<CreateItineraryMenuChoice>(choice))
+        m_view.showMessage("Menu:");
+        int flowCount = static_cast<int>(m_itemFlows.size());
+        for (int i = 0; i < flowCount; i++)
         {
-        case CreateItineraryMenuChoice::AddFlight:
-            addFlight(itinerary);
-            break;
-        case CreateItineraryMenuChoice::AddHotel:
-            addHotel(itinerary);
-            break;
-        case CreateItineraryMenuChoice::CheckOut:
+            m_view.showMessage("\t" + std::to_string(i + 1) + ": " + m_itemFlows[i]->label());
+        }
+        int checkoutChoice = flowCount + 1;
+        int cancelChoice = flowCount + 2;
+        m_view.showMessage("\t" + std::to_string(checkoutChoice) + ": Check Out");
+        m_view.showMessage("\t" + std::to_string(cancelChoice) + ": Cancel");
+        m_view.showPrompt("");
+
+        int choice = readChoice(m_view, m_input, "", 1, cancelChoice);
+
+        if (choice >= 1 && choice <= flowCount)
+        {
+            m_itemFlows[choice - 1]->execute(itinerary);
+        }
+        else if (choice == checkoutChoice)
         {
             if (itinerary.getReservations().empty())
             {
                 m_view.showMessage("Cannot checkout: itinerary is empty");
-                break;
+                continue;
             }
             m_view.displayItinerary(toItineraryViewModel(itinerary));
             m_paymentPresenter.run(user, itinerary);
             return;
         }
-        case CreateItineraryMenuChoice::Cancel:
+        else if (choice == cancelChoice)
+        {
             return;
-        default:
-            m_view.showError("Invalid choice");
-            break;
         }
-    }
-}
-
-void ItineraryPresenter::addFlight(Itinerary& itinerary)
-{
-    auto input = FlightSearchForm::collect(m_view, m_input);
-    auto items = m_createItineraryUseCase.searchFlights(input);
-
-    if (items.empty())
-    {
-        m_view.showMessage("No flights found");
-        return;
-    }
-
-    std::vector<SearchResultViewModel> viewModels;
-    for (const auto& item : items)
-        viewModels.push_back(toSearchResultViewModel(*item));
-
-    m_view.showSearchResults(viewModels);
-    int sel = readChoice(m_view, m_input, "Enter choice(-1 to cancel): ", 1, static_cast<int>(items.size()), true);
-
-    if (sel != -1 &&
-        !m_createItineraryUseCase.addFlightToItinerary(itinerary, input, *items[sel - 1]))
-    {
-        m_view.showError("Failed to add flight to itinerary");
-    }
-}
-
-void ItineraryPresenter::addHotel(Itinerary& itinerary)
-{
-    auto input = HotelSearchForm::collect(m_view, m_input);
-    auto items = m_createItineraryUseCase.searchHotels(input);
-
-    if (items.empty())
-    {
-        m_view.showMessage("No hotels found");
-        return;
-    }
-
-    std::vector<SearchResultViewModel> viewModels;
-    for (const auto& item : items)
-        viewModels.push_back(toSearchResultViewModel(*item));
-
-    m_view.showSearchResults(viewModels);
-    int sel = readChoice(m_view, m_input, "Enter choice(-1 to cancel): ", 1, static_cast<int>(items.size()), true);
-
-    if (sel != -1 &&
-        !m_createItineraryUseCase.addHotelToItinerary(itinerary, input, *items[sel - 1]))
-    {
-        m_view.showError("Failed to add hotel to itinerary");
     }
 }

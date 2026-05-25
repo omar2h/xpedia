@@ -1,10 +1,12 @@
 #pragma once
 
+#include <optional>
+
+#include "application/dto/selected_hotel_offer.hpp"
 #include "application/use_cases/search/search_hotels_use_case.hpp"
 
 class IView;
 class IInput;
-class User;
 
 class HotelSearchPresenter
 {
@@ -15,5 +17,5 @@ class HotelSearchPresenter
 public:
     HotelSearchPresenter(IView &view, IInput &input, SearchHotelsUseCase &useCase);
 
-    void run(User &user);
+    std::optional<SelectedHotelOffer> searchAndSelect();
 };

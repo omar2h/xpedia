@@ -4,17 +4,11 @@
 
 #include "infrastructure/config/api_config.hpp"
 #include "infrastructure/hotel/liteapi/liteapi_hotel_service.hpp"
-#include "presentation/console_frontend.hpp"
 #include "presentation/input.hpp"
+#include "presentation/view/view_interface.hpp"
 
-#include "util/env_loader.hpp"
-
-HotelModule createHotelModule(ConsoleFrontend &view, ConsoleInput &input, SqlDatabase &database)
+HotelModule createHotelModule(IView &view, IInput &input)
 {
-    (void)database;
-
-    loadEnvFile(".env");
-
     std::string apiKey = ApiConfig::getEnvVar("LITEAPI_KEY");
 
     std::vector<std::unique_ptr<IHotelSearchService>> services;

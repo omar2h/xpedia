@@ -19,7 +19,6 @@ public:
     virtual void displayItineraries(const std::vector<ItineraryViewModel>&) = 0;
     virtual void showStartMenu() = 0;
     virtual void showMainMenu() = 0;
-    virtual void showCreateItineraryMenu() = 0;
     virtual void showPaymentOptions(const std::vector<PaymentCardViewModel>&) = 0;
     virtual void showPaymentServices() = 0;
     virtual void showSearchResults(const std::vector<SearchResultViewModel>&) = 0;

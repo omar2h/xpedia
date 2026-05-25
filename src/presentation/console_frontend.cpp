@@ -66,13 +66,7 @@ void ConsoleFrontend::showStartMenu()
 
 void ConsoleFrontend::showMainMenu()
 {
-    std::vector<std::string> menu{"Search Flights", "Search Hotels", "View Itineraries", "View Profile", "Logout"};
-    printMenu(m_output, menu);
-}
-
-void ConsoleFrontend::showCreateItineraryMenu()
-{
-    std::vector<std::string> menu{"Add Flight", "Add Hotel", "Check Out", "Cancel"};
+    std::vector<std::string> menu{"Create Itinerary", "View Itineraries", "View Profile", "Logout"};
     printMenu(m_output, menu);
 }
 

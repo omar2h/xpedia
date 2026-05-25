@@ -20,7 +20,6 @@ public:
     void displayItineraries(const std::vector<ItineraryViewModel>&) override;
     void showStartMenu() override;
     void showMainMenu() override;
-    void showCreateItineraryMenu() override;
     void showPaymentOptions(const std::vector<PaymentCardViewModel>&) override;
     void showPaymentServices() override;
     void showSearchResults(const std::vector<SearchResultViewModel>&) override;

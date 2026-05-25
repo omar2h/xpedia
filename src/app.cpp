@@ -2,8 +2,7 @@
 #include "presentation/view/view_interface.hpp"
 #include "presentation/input.hpp"
 #include "presentation/presenters/auth_presenter.hpp"
-#include "presentation/presenters/flight_search_presenter.hpp"
-#include "presentation/presenters/hotel_search_presenter.hpp"
+#include "presentation/presenters/itinerary_presenter.hpp"
 #include "presentation/presenter_helpers.hpp"
 #include "presentation/mappers/user_profile_mapper.hpp"
 #include "presentation/mappers/itinerary_mapper.hpp"
@@ -13,15 +12,13 @@
 #include "exception.hpp"
 #include <optional>
 
-App::App(IView& view, IInput& input,
-         AuthPresenter& authPresenter,
-         FlightSearchPresenter& flightSearchPresenter,
-         HotelSearchPresenter& hotelSearchPresenter,
-         ListItinerariesUseCase& listItinerariesUseCase)
+App::App(IView &view, IInput &input,
+         AuthPresenter &authPresenter,
+         ItineraryPresenter &itineraryPresenter,
+         ListItinerariesUseCase &listItinerariesUseCase)
     : m_view(view), m_input(input),
       m_authPresenter(authPresenter),
-      m_flightSearchPresenter(flightSearchPresenter),
-      m_hotelSearchPresenter(hotelSearchPresenter),
+      m_itineraryPresenter(itineraryPresenter),
       m_listItinerariesUseCase(listItinerariesUseCase) {}
 
 void App::run()
@@ -50,15 +47,15 @@ void App::run()
     }
 }
 
-AppState App::handleMainMenu(User& user)
+AppState App::handleMainMenu(User &user)
 {
     m_view.showMainMenu();
     int choice;
     try
     {
-        choice = readChoice(m_view, m_input, "", 1, 5);
+        choice = readChoice(m_view, m_input, "", 1, 4);
     }
-    catch (const AppException& e)
+    catch (const AppException &e)
     {
         m_view.showError(e.what());
         return AppState::MainMenu;
@@ -66,11 +63,8 @@ AppState App::handleMainMenu(User& user)
 
     switch (static_cast<MainMenuChoice>(choice))
     {
-    case MainMenuChoice::SearchFlights:
-        m_flightSearchPresenter.run(user);
-        return AppState::MainMenu;
-    case MainMenuChoice::SearchHotels:
-        m_hotelSearchPresenter.run(user);
+    case MainMenuChoice::CreateItinerary:
+        m_itineraryPresenter.run(user);
         return AppState::MainMenu;
     case MainMenuChoice::ViewItineraries:
     {
@@ -78,7 +72,7 @@ AppState App::handleMainMenu(User& user)
         if (result.success)
         {
             std::vector<ItineraryViewModel> viewModels;
-            for (const auto& it : result.itineraries)
+            for (const auto &it : result.itineraries)
                 viewModels.push_back(toItineraryViewModel(it));
             m_view.displayItineraries(viewModels);
         }

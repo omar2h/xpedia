@@ -1,10 +1,12 @@
 #pragma once
 
+#include <optional>
+
+#include "application/dto/selected_flight_offer.hpp"
 #include "../../application/use_cases/search/search_flights_use_case.hpp"
 
 class IView;
 class IInput;
-class User;
 
 class FlightSearchPresenter
 {
@@ -15,5 +17,5 @@ class FlightSearchPresenter
 public:
     FlightSearchPresenter(IView &view, IInput &input, SearchFlightsUseCase &useCase);
 
-    void run(User &user);
+    std::optional<SelectedFlightOffer> searchAndSelect();
 };

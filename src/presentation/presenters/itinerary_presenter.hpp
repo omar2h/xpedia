@@ -1,23 +1,30 @@
 #pragma once
 
+#include <vector>
+#include <memory>
+
 class IView;
 class IInput;
 class User;
 class Itinerary;
-class CreateItineraryUseCase;
 class PaymentPresenter;
+class ItineraryItemFlow;
+class CreateEmptyItineraryUseCase;
 
 class ItineraryPresenter
 {
     IView& m_view;
     IInput& m_input;
-    CreateItineraryUseCase& m_createItineraryUseCase;
+    CreateEmptyItineraryUseCase& m_createItineraryUseCase;
     PaymentPresenter& m_paymentPresenter;
-
-    void addFlight(Itinerary& itinerary);
-    void addHotel(Itinerary& itinerary);
+    std::vector<std::unique_ptr<ItineraryItemFlow>> m_itemFlows;
 
 public:
-    ItineraryPresenter(IView& view, IInput& input, CreateItineraryUseCase& useCase, PaymentPresenter& paymentPresenter);
+    ItineraryPresenter(
+        IView& view,
+        IInput& input,
+        CreateEmptyItineraryUseCase& createItineraryUseCase,
+        std::vector<std::unique_ptr<ItineraryItemFlow>> itemFlows,
+        PaymentPresenter& paymentPresenter);
     void run(User& user);
 };

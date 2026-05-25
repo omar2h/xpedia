@@ -8,9 +8,8 @@
 
 #include "infrastructure/flight/aggregated/aggregated_flight_search_service.hpp"
 
-class ConsoleFrontend;
-class ConsoleInput;
-class SqlDatabase;
+class IView;
+class IInput;
 
 struct FlightModule
 {
@@ -19,4 +18,4 @@ struct FlightModule
     std::unique_ptr<FlightSearchPresenter> presenter;
 };
 
-FlightModule createFlightModule(ConsoleFrontend &view, ConsoleInput &input, SqlDatabase &database);
+FlightModule createFlightModule(IView &view, IInput &input);

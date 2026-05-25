@@ -5,17 +5,11 @@
 #include "infrastructure/config/api_config.hpp"
 #include "infrastructure/flight/duffel/duffel_flight_service.hpp"
 
-#include "presentation/console_frontend.hpp"
 #include "presentation/input.hpp"
+#include "presentation/view/view_interface.hpp"
 
-#include "util/env_loader.hpp"
-
-FlightModule createFlightModule(ConsoleFrontend &view, ConsoleInput &input, SqlDatabase &database)
+FlightModule createFlightModule(IView &view, IInput &input)
 {
-    (void)database;
-
-    loadEnvFile(".env");
-
     std::string apiKey = ApiConfig::getEnvVar("DUFFEL_API_KEY");
 
     std::vector<std::unique_ptr<IFlightSearchService>> services;

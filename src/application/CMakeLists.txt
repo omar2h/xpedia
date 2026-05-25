@@ -5,6 +5,9 @@ target_sources(application
         services/auth_service.cpp
         services/reservation_service.cpp
         services/payment_service.cpp
+        use_cases/add_flight_to_itinerary_use_case.cpp
+        use_cases/add_hotel_to_itinerary_use_case.cpp
+        use_cases/create_empty_itinerary_use_case.cpp
         # use_cases/create_itinerary_use_case.cpp
         use_cases/pay_itinerary_use_case.cpp
         use_cases/list_itineraries_use_case.cpp
