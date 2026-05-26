@@ -15,16 +15,18 @@ class SqlDatabase : public IUserRepository,
     sqlite3 *db{};
     std::string dbPath;
 
+    class Statement;
+
     void exec(const std::string &sql);
-    sqlite3_stmt *prepare(const std::string &sql);
-    void bindText(sqlite3_stmt *stmt, int index, const std::string &value);
-    void bindInt(sqlite3_stmt *stmt, int index, int value);
-    void bindDouble(sqlite3_stmt *stmt, int index, double value);
-    std::string columnText(sqlite3_stmt *stmt, int index) const;
-    int columnInt(sqlite3_stmt *stmt, int index) const;
-    double columnDouble(sqlite3_stmt *stmt, int index) const;
-    bool columnIsNull(sqlite3_stmt *stmt, int index) const;
-    void step(sqlite3_stmt *stmt);
+    [[nodiscard]] Statement prepare(const std::string &sql) const;
+    void bindText(sqlite3_stmt *stmt, int index, const std::string &value) const;
+    void bindInt(sqlite3_stmt *stmt, int index, int value) const;
+    void bindDouble(sqlite3_stmt *stmt, int index, double value) const;
+    [[nodiscard]] std::string columnText(sqlite3_stmt *stmt, int index) const;
+    [[nodiscard]] int columnInt(sqlite3_stmt *stmt, int index) const;
+    [[nodiscard]] double columnDouble(sqlite3_stmt *stmt, int index) const;
+    [[nodiscard]] bool columnIsNull(sqlite3_stmt *stmt, int index) const;
+    void step(sqlite3_stmt *stmt) const;
 
 public:
     explicit SqlDatabase(const std::string &path = "travel.db");
