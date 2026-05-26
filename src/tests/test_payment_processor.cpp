@@ -126,3 +126,22 @@ TEST(PaymentProcessorTest, MakeReservationsReturnsOneOnSuccess)
     int result = processor.makeReservations(customer, itinerary, 1);
     EXPECT_EQ(result, 1);
 }
+
+TEST(PaymentProcessorTest, MakeReservationsReturnsZeroWhenConfirmationFails)
+{
+    StubCustomerRepo customerRepo;
+    auto getPayment = [](PaymentService) -> std::unique_ptr<PaymentStrategy>
+    {
+        return std::make_unique<AlwaysPayStrategy>();
+    };
+    auto confirm = [](const Itinerary &) { return false; };
+
+    PaymentProcessor processor(customerRepo, getPayment, confirm);
+    PaymentCard card("1234", "Test", "12/26", "123");
+    Customer customer;
+    customer.setSelectedCard(card);
+    Itinerary itinerary;
+
+    int result = processor.makeReservations(customer, itinerary, 1);
+    EXPECT_EQ(result, 0);
+}
