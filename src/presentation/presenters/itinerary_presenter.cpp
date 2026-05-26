@@ -51,8 +51,10 @@ void ItineraryPresenter::run(User& user)
                 continue;
             }
             m_view.displayItinerary(toItineraryViewModel(itinerary));
-            m_paymentPresenter.run(user, itinerary);
-            return;
+            bool confirmed = m_paymentPresenter.run(user, itinerary);
+            if (confirmed)
+                return;
+            m_view.showMessage("Checkout cancelled or failed");
         }
         else if (choice == cancelChoice)
         {
