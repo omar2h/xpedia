@@ -62,9 +62,11 @@ TEST(PaymentProcessorTest, WithdrawMoneyReturnsTrueOnSuccess)
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
     PaymentCard card("1234", "Test", "12/26", "123");
+    Customer customer;
+    customer.setSelectedCard(card);
     Itinerary itinerary;
 
-    bool result = processor.withdrawMoney(card, 1, itinerary);
+    bool result = processor.withdrawMoney(customer, itinerary.totalCost(), 1);
     EXPECT_TRUE(result);
 }
 
@@ -79,9 +81,11 @@ TEST(PaymentProcessorTest, WithdrawMoneyReturnsFalseOnFailure)
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
     PaymentCard card("1234", "Test", "12/26", "123");
+    Customer customer;
+    customer.setSelectedCard(card);
     Itinerary itinerary;
 
-    bool result = processor.withdrawMoney(card, 1, itinerary);
+    bool result = processor.withdrawMoney(customer, itinerary.totalCost(), 1);
     EXPECT_FALSE(result);
 }
 
@@ -95,11 +99,12 @@ TEST(PaymentProcessorTest, MakeReservationsReturnsMinusOneOnPaymentFailure)
     auto confirm = [](const Itinerary &) { return true; };
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
-    Customer customer;
     PaymentCard card("1234", "Test", "12/26", "123");
+    Customer customer;
+    customer.setSelectedCard(card);
     Itinerary itinerary;
 
-    int result = processor.makeReservations(customer, card, 1, itinerary);
+    int result = processor.makeReservations(customer, itinerary, 1);
     EXPECT_EQ(result, -1);
 }
 
@@ -113,10 +118,11 @@ TEST(PaymentProcessorTest, MakeReservationsReturnsOneOnSuccess)
     auto confirm = [](const Itinerary &) { return true; };
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
-    Customer customer;
     PaymentCard card("1234", "Test", "12/26", "123");
+    Customer customer;
+    customer.setSelectedCard(card);
     Itinerary itinerary;
 
-    int result = processor.makeReservations(customer, card, 1, itinerary);
+    int result = processor.makeReservations(customer, itinerary, 1);
     EXPECT_EQ(result, 1);
 }

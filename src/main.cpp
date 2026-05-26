@@ -60,7 +60,7 @@ int main()
             [](const Itinerary &) { return true; }};
 
         PayItineraryUseCase payItineraryUseCase{database, database, paymentProcessor};
-        PaymentPresenter paymentPresenter{view, input, payItineraryUseCase};
+        PaymentPresenter paymentPresenter{view, input, payItineraryUseCase, database};
 
         std::vector<std::unique_ptr<ItineraryItemFlow>> flows;
         flows.push_back(std::make_unique<FlightItineraryItemFlow>(*flightModule.presenter, addFlightToItineraryUseCase));

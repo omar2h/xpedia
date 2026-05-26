@@ -31,25 +31,22 @@ void PayItineraryUseCase::addCard(const User &user, const PaymentCard &card)
     m_customerRepo.update(*customer);
 }
 
-PayItineraryResult PayItineraryUseCase::execute(const User &user, const Itinerary &itinerary,
-                                                 const PaymentCard &card, int serviceChoice)
+Result<Itinerary> PayItineraryUseCase::execute(Customer &customer, Itinerary &itinerary, int serviceChoice)
 {
-    if (itinerary.getReservations().empty())
-        return {PayItineraryResult::NoReservations, "No Reservations to Pay"};
-
-    auto customer = m_customerRepo.findById(user.getId());
-    if (!customer)
-        return {PayItineraryResult::Failed, "Customer not found"};
-
-    int isConfirmed = m_paymentProcessor.makeReservations(*customer, card, serviceChoice, itinerary);
+    int isConfirmed = m_paymentProcessor.makeReservations(customer, itinerary, serviceChoice);
 
     if (isConfirmed == 1)
     {
-        m_itineraryRepo.save(customer->getId(), itinerary);
-        customer->addItineraryId(itinerary.getId());
-        m_customerRepo.update(*customer);
-        return {PayItineraryResult::Confirmed, "Reservation is Confirmed"};
+        m_itineraryRepo.save(customer.getId(), itinerary);
+        customer.addItineraryId(itinerary.getId());
+        m_customerRepo.update(customer);
+        return Result<Itinerary>::success(itinerary);
     }
 
-    return {PayItineraryResult::Failed, "Reservation Failed, Itinerary Cancelled"};
+    if (isConfirmed == -1)
+    {
+        return Result<Itinerary>::failure("Payment failed. Itinerary was not saved.");
+    }
+
+    return Result<Itinerary>::failure("Reservation confirmation failed. Itinerary was not saved.");
 }

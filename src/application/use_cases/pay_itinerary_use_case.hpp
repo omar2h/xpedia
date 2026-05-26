@@ -1,9 +1,11 @@
 #pragma once
 
 #include <vector>
+#include "../../domain/result.hpp"
 #include "../results/pay_itinerary_result.hpp"
 
 class User;
+class Customer;
 class Itinerary;
 class PaymentCard;
 class ICustomerRepository;
@@ -24,6 +26,5 @@ public:
     [[nodiscard]] std::vector<PaymentCard> getCustomerCards(const User &user);
     void addCard(const User &user, const PaymentCard &card);
 
-    [[nodiscard]] PayItineraryResult execute(const User &user, const Itinerary &itinerary,
-                                              const PaymentCard &card, int serviceChoice);
+    [[nodiscard]] Result<Itinerary> execute(Customer &customer, Itinerary &itinerary, int serviceChoice);
 };

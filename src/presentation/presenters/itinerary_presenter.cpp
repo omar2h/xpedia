@@ -51,10 +51,14 @@ void ItineraryPresenter::run(User& user)
                 continue;
             }
             m_view.displayItinerary(toItineraryViewModel(itinerary));
-            bool confirmed = m_paymentPresenter.run(user, itinerary);
-            if (confirmed)
+            const bool paymentSucceeded = m_paymentPresenter.run(user, itinerary);
+            if (paymentSucceeded)
+            {
+                m_view.showMessage("Itinerary confirmed and saved successfully.");
                 return;
-            m_view.showMessage("Checkout cancelled or failed");
+            }
+            m_view.showMessage("Checkout was not completed. Your itinerary was not saved.");
+            return;
         }
         else if (choice == cancelChoice)
         {

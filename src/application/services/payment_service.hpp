@@ -22,7 +22,7 @@ public:
         std::function<std::unique_ptr<PaymentStrategy>(::PaymentService)> getPaymentService,
         std::function<bool(const Itinerary &)> confirmReservations);
 
-    [[nodiscard]] bool withdrawMoney(const PaymentCard &card, int service, const Itinerary &currItinerary);
-    [[nodiscard]] int makeReservations(Customer &customer, const PaymentCard &card, int serviceChoice, const Itinerary &currItinerary);
+    [[nodiscard]] bool withdrawMoney(const Customer &customer, double amount, int service);
+    [[nodiscard]] int makeReservations(Customer &customer, Itinerary &itinerary, int serviceChoice);
     void addCard(Customer &customer, const PaymentCard &card);
 };

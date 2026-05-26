@@ -8,6 +8,7 @@
 #include "../../domain/request_type.hpp"
 
 #include <memory>
+#include <stdexcept>
 
 AddFlightToItineraryUseCase::AddFlightToItineraryUseCase(ReservationFactory &reservationFactory)
     : m_reservationFactory(reservationFactory) {}
@@ -16,6 +17,16 @@ bool AddFlightToItineraryUseCase::execute(Itinerary &itinerary, const SelectedFl
 {
     const auto &offer = selectedOffer.offer;
     const auto &input = selectedOffer.input;
+
+    double totalAmount = 0.0;
+    try
+    {
+        totalAmount = std::stod(offer.totalAmount);
+    }
+    catch (const std::exception &)
+    {
+        return false;
+    }
 
     auto flight = std::make_unique<Flight>();
     if (!offer.segments.empty())
@@ -28,7 +39,7 @@ bool AddFlightToItineraryUseCase::execute(Itinerary &itinerary, const SelectedFl
         flight->setTo(last.toIata);
         flight->setDate(first.departureTime.substr(0, 10));
     }
-    flight->setTotalCost(std::stod(offer.totalAmount));
+    flight->setTotalCost(totalAmount);
     flight->setProviderId(offer.providerId);
     flight->setRequestType(RequestType::flight);
     flight->setCategory(ReservationCategory::flight);
@@ -47,7 +58,7 @@ bool AddFlightToItineraryUseCase::execute(Itinerary &itinerary, const SelectedFl
             flightRes->setTo(offer.segments.back().toIata);
         }
         flightRes->setAdults(input.adults);
-        flightRes->setCost(std::stod(offer.totalAmount));
+        flightRes->setCost(totalAmount);
     }
 
     itinerary.addItem(std::move(reservation));

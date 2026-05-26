@@ -20,19 +20,21 @@ void PaymentProcessor::addCard(Customer &customer, const PaymentCard &card)
 }
 
 bool PaymentProcessor::withdrawMoney(
-    const PaymentCard &card,
-    int service,
-    const Itinerary &currItinerary)
+    const Customer &customer,
+    double amount,
+    int service)
 {
+    if (service < 1 || service > 3)
+        return false;
+
     auto paymentStrategy = m_getPaymentService(static_cast<PaymentService>(service - 1));
-    bool isPaid = paymentStrategy->pay(card, currItinerary.totalCost());
-    return isPaid;
+    return paymentStrategy->pay(customer.getSelectedCard(), amount);
 }
 
-int PaymentProcessor::makeReservations(Customer &customer, const PaymentCard &card, int serviceChoice, const Itinerary &currItinerary)
+int PaymentProcessor::makeReservations(Customer &customer, Itinerary &itinerary, int serviceChoice)
 {
-    bool isPaid = withdrawMoney(card, serviceChoice, currItinerary);
+    bool isPaid = withdrawMoney(customer, itinerary.totalCost(), serviceChoice);
     if (!isPaid)
         return -1;
-    return m_confirmReservations(currItinerary) ? 1 : 0;
+    return m_confirmReservations(itinerary) ? 1 : 0;
 }
