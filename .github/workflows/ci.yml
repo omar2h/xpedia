@@ -53,6 +53,12 @@ jobs:
         run: |
           ctest --test-dir build-ninja --output-on-failure
 
+      - name: Upload Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: travel-app-linux
+          path: build-ninja/travel_app
+
       - name: Check Formatting
         run: |
           find src \
