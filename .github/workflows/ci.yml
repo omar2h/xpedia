@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+jobs:
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Ninja
+        run: |
+          sudo apt update
+          sudo apt install -y ninja-build
+
+      - name: Configure CMake
+        run: |
+          cmake -S src -B build-ninja -G Ninja
+
+      - name: Build
+        run: |
+          cmake --build build-ninja
+
+      - name: Run Tests
+        run: |
+          ctest --test-dir build-ninja --output-on-failure
