@@ -17,13 +17,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install clang-format
+      - name: Install clang-format-15
         run: |
           sudo apt update
-          sudo apt install -y clang-format
+          sudo apt install -y clang-format-15
 
-      - name: Show clang-format version
-        run: clang-format --version
+      - name: Show clang-format-15 version
+        run: clang-format-15 --version
 
       - name: Install Ninja
         run: |
@@ -44,5 +44,8 @@ jobs:
 
       - name: Check Formatting
         run: |
-          find src -type f \( -name "*.cpp" -o -name "*.hpp" \) \
-          -exec sh -c 'echo "Checking: $1"; clang-format --dry-run --Werror "$1"' _ {} \;
+          find src \
+            -path "src/third_party" -prune \
+            -o \( -name "*.cpp" -o -name "*.hpp" \) \
+            -print \
+          | xargs clang-format-15 --dry-run --Werror
