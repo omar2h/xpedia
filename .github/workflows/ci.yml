@@ -39,6 +39,16 @@ jobs:
         run: |
           cmake --build build-ninja
 
+      - name: Run clang-tidy
+        continue-on-error: true
+        run: |
+          find src \
+            -path "src/third_party" -prune \
+            -o \( -name "*.cpp" \) \
+            -print \
+          | xargs clang-tidy \
+              -p build-ninja
+
       - name: Run Tests
         run: |
           ctest --test-dir build-ninja --output-on-failure
