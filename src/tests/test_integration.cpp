@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <filesystem>
 #include <fstream>
+#include <string>
+#include <vector>
 
 #include "infrastructure/persistence/sql/sql_database.hpp"
 #include "infrastructure/serialization/reservation_serializer.hpp"
@@ -122,11 +124,14 @@ TEST_F(SqlIntegrationTest, ItineraryWithReservations)
 
 TEST_F(SqlIntegrationTest, MultipleCustomersWithCards)
 {
+    std::vector<std::string> userIds;
+
     for (int i = 0; i < 3; i++)
     {
         User user("", "User" + std::to_string(i), "Last",
                   "user" + std::to_string(i) + "@test.com", "555-0" + std::to_string(i), "pass");
         db->createUser(user);
+        userIds.push_back(user.getId());
 
         PaymentCard card("card" + std::to_string(i), "User" + std::to_string(i), "12/28", "123");
         Customer customer(user);
@@ -136,7 +141,7 @@ TEST_F(SqlIntegrationTest, MultipleCustomersWithCards)
 
     for (int i = 0; i < 3; i++)
     {
-        auto customer = db->findCustomerById(std::to_string(i + 1));
+        auto customer = db->findCustomerById(userIds[i]);
         ASSERT_TRUE(customer.has_value());
         ASSERT_EQ(customer->getCards().size(), 1);
         EXPECT_EQ(customer->getCards()[0].getNumber(), "card" + std::to_string(i));

@@ -8,7 +8,6 @@ target_sources(application
         use_cases/add_flight_to_itinerary_use_case.cpp
         use_cases/add_hotel_to_itinerary_use_case.cpp
         use_cases/create_empty_itinerary_use_case.cpp
-        # use_cases/create_itinerary_use_case.cpp
         use_cases/pay_itinerary_use_case.cpp
         use_cases/list_itineraries_use_case.cpp
         use_cases/search/search_flights_use_case.cpp
@@ -17,6 +16,7 @@ target_sources(application
 
 target_include_directories(application
     PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

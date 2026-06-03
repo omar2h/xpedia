@@ -3,6 +3,7 @@
 #include "../forms/flight_search_form.hpp"
 #include "../view/view_interface.hpp"
 #include "../input.hpp"
+#include "../mappers/flight_offer_mapper.hpp"
 #include "../presenter_helpers.hpp"
 
 FlightSearchPresenter::FlightSearchPresenter(
@@ -38,27 +39,7 @@ std::optional<SelectedFlightOffer> FlightSearchPresenter::searchAndSelect()
 
     for (const auto &offer : offers)
     {
-        FlightOfferViewModel item;
-        item.number = index++;
-        item.price = offer.totalAmount + " " + offer.currency;
-        item.duration = offer.duration;
-        item.multiSegment = offer.segments.size() > 1;
-
-        if (!offer.segments.empty())
-        {
-            const auto &first = offer.segments.front();
-            const auto &last = offer.segments.back();
-            item.airline = first.airline.name;
-            item.flightNumber = first.flightNumber;
-            item.route = first.fromIata + " -> " + last.toIata;
-            item.departureTime = first.departureTime;
-            item.arrivalTime = last.arrivalTime;
-            item.aircraft = first.aircraft;
-            item.cabin = first.cabinClass;
-            item.baggage = std::to_string(first.checkedBagQuantity) + " bag(s)";
-            item.stops = std::to_string(static_cast<int>(offer.segments.size()) - 1);
-        }
-        viewModel.offers.push_back(item);
+        viewModel.offers.push_back(FlightOfferMapper::map(offer, index++));
     }
 
     m_view.displayFlightOffers(viewModel);

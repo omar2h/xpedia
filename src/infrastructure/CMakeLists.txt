@@ -42,9 +42,10 @@ target_sources(infrastructure
 
 target_include_directories(infrastructure
     PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
         ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/third_party
+        ${CMAKE_CURRENT_SOURCE_DIR}/../third_party
 )
 
 target_link_libraries(infrastructure

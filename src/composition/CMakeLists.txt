@@ -18,7 +18,7 @@ target_link_libraries(composition
 
 target_include_directories(composition
     PUBLIC
-        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
