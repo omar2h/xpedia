@@ -4,6 +4,6 @@ class Itinerary;
 
 class CreateEmptyItineraryUseCase
 {
-public:
+  public:
     Itinerary execute() const;
 };

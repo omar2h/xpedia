@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../apis/expedia_payments_api.hpp"
 #include "../../application/payments/payment_strategy.hpp"
+#include "../apis/expedia_payments_api.hpp"
 class PayPalPaymentStrategy : public PaymentStrategy
 {
     PayPalCreditCard paypalCard;
     PayPalOnlinePaymentAPI paypalApi{};
 
-public:
-    [[nodiscard]] bool pay(const PaymentCard &card, double amount)
+  public:
+    [[nodiscard]] bool pay(const PaymentCard& card, double amount)
     {
         paypalCard.id = "1";
         paypalCard.name = card.getOwner();

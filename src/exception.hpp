@@ -5,36 +5,36 @@
 
 class AppException : public std::runtime_error
 {
-public:
+  public:
     using std::runtime_error::runtime_error;
 };
 
 class PersistenceException : public AppException
 {
-public:
+  public:
     using AppException::AppException;
 };
 
 class AuthException : public AppException
 {
-public:
+  public:
     using AppException::AppException;
 };
 
 class ValidationException : public AppException
 {
-public:
+  public:
     using AppException::AppException;
 };
 
 class BusinessException : public AppException
 {
-public:
+  public:
     using AppException::AppException;
 };
 
 class ApiException : public AppException
 {
-public:
+  public:
     using AppException::AppException;
 };

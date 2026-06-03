@@ -1,8 +1,8 @@
 #include "payment_factory.hpp"
 #include "../../exception.hpp"
 #include "payments/paypal_payment_strategy.hpp"
-#include "payments/stripe_payment_strategy.hpp"
 #include "payments/square_payment_strategy.hpp"
+#include "payments/stripe_payment_strategy.hpp"
 
 std::unique_ptr<PaymentStrategy> PaymentFactory::getPaymentService(PaymentService service) const
 {

@@ -7,6 +7,6 @@ class IInput;
 
 class CardInputForm
 {
-public:
+  public:
     static CardInput collect(IView& view, IInput& input);
 };

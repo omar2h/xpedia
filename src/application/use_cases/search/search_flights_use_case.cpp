@@ -1,11 +1,8 @@
 #include "search_flights_use_case.hpp"
 
-SearchFlightsUseCase::SearchFlightsUseCase(IFlightSearchService &flightService)
-    : m_flightService(flightService)
-{
-}
+SearchFlightsUseCase::SearchFlightsUseCase(IFlightSearchService& flightService) : m_flightService(flightService) {}
 
-Result<std::vector<FlightOffer>> SearchFlightsUseCase::execute(const FlightSearchInput &input)
+Result<std::vector<FlightOffer>> SearchFlightsUseCase::execute(const FlightSearchInput& input)
 {
     FlightSearchRequest request;
 

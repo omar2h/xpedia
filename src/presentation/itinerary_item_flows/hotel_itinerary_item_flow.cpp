@@ -3,10 +3,11 @@
 #include "../presenters/hotel_search_presenter.hpp"
 #include "application/use_cases/add_hotel_to_itinerary_use_case.hpp"
 
-HotelItineraryItemFlow::HotelItineraryItemFlow(
-    HotelSearchPresenter& presenter,
-    AddHotelToItineraryUseCase& addHotelUseCase)
-    : m_presenter(presenter), m_addHotelUseCase(addHotelUseCase) {}
+HotelItineraryItemFlow::HotelItineraryItemFlow(HotelSearchPresenter& presenter,
+                                               AddHotelToItineraryUseCase& addHotelUseCase)
+    : m_presenter(presenter), m_addHotelUseCase(addHotelUseCase)
+{
+}
 
 std::string HotelItineraryItemFlow::label() const
 {

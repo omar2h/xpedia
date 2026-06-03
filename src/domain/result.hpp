@@ -3,15 +3,14 @@
 #include <optional>
 #include <string>
 
-template <typename T>
-class Result
+template <typename T> class Result
 {
     std::optional<T> m_value;
     std::string m_error;
 
     bool m_success{false};
 
-public:
+  public:
     static Result success(T value)
     {
         Result r;
@@ -22,8 +21,7 @@ public:
         return r;
     }
 
-    static Result failure(
-        const std::string &error)
+    static Result failure(const std::string& error)
     {
         Result r;
 
@@ -38,12 +36,12 @@ public:
         return m_success;
     }
 
-    T &value()
+    T& value()
     {
         return *m_value;
     }
 
-    const std::string &error() const
+    const std::string& error() const
     {
         return m_error;
     }

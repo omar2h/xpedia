@@ -10,8 +10,8 @@ class LiteApiHotelService : public IHotelSearchService
     LiteApiHotelClient m_client;
     liteapi::LiteApiHotelParser m_parser;
 
-public:
-    explicit LiteApiHotelService(const std::string &apiKey);
+  public:
+    explicit LiteApiHotelService(const std::string& apiKey);
 
-    Result<std::vector<HotelOffer>> searchHotels(const HotelSearchRequest &request) override;
+    Result<std::vector<HotelOffer>> searchHotels(const HotelSearchRequest& request) override;
 };

@@ -9,9 +9,9 @@
 
 class SearchHotelsUseCase
 {
-    IHotelSearchService &m_hotelService;
+    IHotelSearchService& m_hotelService;
 
-public:
-    explicit SearchHotelsUseCase(IHotelSearchService &hotelService);
-    Result<std::vector<HotelOffer>> execute(const HotelSearchInput &input);
+  public:
+    explicit SearchHotelsUseCase(IHotelSearchService& hotelService);
+    Result<std::vector<HotelOffer>> execute(const HotelSearchInput& input);
 };

@@ -6,10 +6,12 @@
 
 #include <utility>
 
-AddHotelToItineraryUseCase::AddHotelToItineraryUseCase(ReservationFactory &reservationFactory)
-    : m_reservationFactory(reservationFactory) {}
+AddHotelToItineraryUseCase::AddHotelToItineraryUseCase(ReservationFactory& reservationFactory)
+    : m_reservationFactory(reservationFactory)
+{
+}
 
-bool AddHotelToItineraryUseCase::execute(Itinerary &itinerary, const SelectedHotelOffer &selectedOffer)
+bool AddHotelToItineraryUseCase::execute(Itinerary& itinerary, const SelectedHotelOffer& selectedOffer)
 {
     auto reservation = SelectedHotelOfferReservationMapper::map(m_reservationFactory, selectedOffer);
     if (!reservation)

@@ -1,8 +1,8 @@
 #pragma once
 
+#include "flight_search_status.hpp"
 #include <string>
 #include <vector>
-#include "flight_search_status.hpp"
 
 using FlightSearchStatus = travel_booking_system::infrastructure::apis::flights::FlightSearchStatus;
 

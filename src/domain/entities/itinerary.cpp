@@ -1,21 +1,20 @@
 #include "itinerary.hpp"
 #include "itinerary_item.hpp"
 
-Itinerary::Itinerary(const Itinerary &other)
-    : id(other.id), cost(other.cost)
+Itinerary::Itinerary(const Itinerary& other) : id(other.id), cost(other.cost)
 {
-    for (const auto &res : other.reservations)
+    for (const auto& res : other.reservations)
         reservations.push_back(res->clone());
 }
 
-Itinerary &Itinerary::operator=(const Itinerary &other)
+Itinerary& Itinerary::operator=(const Itinerary& other)
 {
     if (this == &other)
         return *this;
     id = other.id;
     cost = other.cost;
     reservations.clear();
-    for (const auto &res : other.reservations)
+    for (const auto& res : other.reservations)
         reservations.push_back(res->clone());
     return *this;
 }
@@ -30,8 +29,7 @@ void Itinerary::clear()
     reservations.clear();
 }
 
-const std::vector<std::unique_ptr<Reservation>> &
-Itinerary::getReservations() const
+const std::vector<std::unique_ptr<Reservation>>& Itinerary::getReservations() const
 {
     return reservations;
 }
@@ -44,7 +42,7 @@ void Itinerary::setReservations(std::vector<std::unique_ptr<Reservation>> reserv
 double Itinerary::totalCost() const
 {
     double cost{};
-    for (const auto &res : reservations)
+    for (const auto& res : reservations)
     {
         cost += res->totalCost();
     }

@@ -1,20 +1,20 @@
 #include "pay_itinerary_use_case.hpp"
+#include "../../domain/entities/customer.hpp"
+#include "../../domain/entities/itinerary.hpp"
+#include "../../domain/entities/payment_card.hpp"
+#include "../../domain/entities/user.hpp"
 #include "../repositories/i_customer_repository.hpp"
 #include "../repositories/i_itinerary_repository.hpp"
 #include "../services/payment_service.hpp"
-#include "../../domain/entities/itinerary.hpp"
-#include "../../domain/entities/customer.hpp"
-#include "../../domain/entities/user.hpp"
-#include "../../domain/entities/payment_card.hpp"
 #include <stdexcept>
 
-PayItineraryUseCase::PayItineraryUseCase(ICustomerRepository &customerRepo,
-                                         IItineraryRepository &itineraryRepo,
-                                         PaymentProcessor &paymentProcessor)
-    : m_customerRepo(customerRepo), m_itineraryRepo(itineraryRepo),
-      m_paymentProcessor(paymentProcessor) {}
+PayItineraryUseCase::PayItineraryUseCase(ICustomerRepository& customerRepo, IItineraryRepository& itineraryRepo,
+                                         PaymentProcessor& paymentProcessor)
+    : m_customerRepo(customerRepo), m_itineraryRepo(itineraryRepo), m_paymentProcessor(paymentProcessor)
+{
+}
 
-std::vector<PaymentCard> PayItineraryUseCase::getCustomerCards(const User &user)
+std::vector<PaymentCard> PayItineraryUseCase::getCustomerCards(const User& user)
 {
     auto customer = m_customerRepo.findById(user.getId());
     if (!customer)
@@ -22,7 +22,7 @@ std::vector<PaymentCard> PayItineraryUseCase::getCustomerCards(const User &user)
     return customer->getCards();
 }
 
-void PayItineraryUseCase::addCard(const User &user, const PaymentCard &card)
+void PayItineraryUseCase::addCard(const User& user, const PaymentCard& card)
 {
     auto customer = m_customerRepo.findById(user.getId());
     if (!customer)
@@ -31,7 +31,7 @@ void PayItineraryUseCase::addCard(const User &user, const PaymentCard &card)
     m_customerRepo.update(*customer);
 }
 
-Result<Itinerary> PayItineraryUseCase::execute(Customer &customer, Itinerary &itinerary, int serviceChoice)
+Result<Itinerary> PayItineraryUseCase::execute(Customer& customer, Itinerary& itinerary, int serviceChoice)
 {
     int isConfirmed = m_paymentProcessor.makeReservations(customer, itinerary, serviceChoice);
 

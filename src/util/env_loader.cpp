@@ -1,8 +1,8 @@
 #include "env_loader.hpp"
-#include <fstream>
-#include <sstream>
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
+#include <sstream>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -15,16 +15,14 @@ static std::string trimmed(std::string s)
     return s;
 }
 
-static std::string stripQuotes(const std::string &s)
+static std::string stripQuotes(const std::string& s)
 {
-    if (s.size() >= 2 &&
-        ((s[0] == '"' && s.back() == '"') ||
-         (s[0] == '\'' && s.back() == '\'')))
+    if (s.size() >= 2 && ((s[0] == '"' && s.back() == '"') || (s[0] == '\'' && s.back() == '\'')))
         return s.substr(1, s.size() - 2);
     return s;
 }
 
-static std::string stripInlineComment(const std::string &s)
+static std::string stripInlineComment(const std::string& s)
 {
     auto pos = s.find('#');
     if (pos == std::string::npos)
@@ -32,7 +30,7 @@ static std::string stripInlineComment(const std::string &s)
     return s.substr(0, pos);
 }
 
-bool loadEnvFile(const std::string &path)
+bool loadEnvFile(const std::string& path)
 {
     std::ifstream file(path);
     if (!file.is_open())

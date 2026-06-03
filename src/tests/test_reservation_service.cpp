@@ -10,20 +10,27 @@
 
 namespace
 {
-    class MockBookingProvider : public BookingProvider
+class MockBookingProvider : public BookingProvider
+{
+  public:
+    bool reserve(const Reservation&) const override
     {
-    public:
-        bool reserve(const Reservation &) const override { return true; }
+        return true;
+    }
 
-        std::string getProviderId() const override { return "mock"; }
-    };
-}
+    std::string getProviderId() const override
+    {
+        return "mock";
+    }
+};
+} // namespace
 
 TEST(ReservationServiceTest, ConfirmReservationsCallsBookingProvider)
 {
     bool providerCalled = false;
 
-    auto getProvider = [&](ReservationCategory, const std::string &) -> std::unique_ptr<BookingProvider> {
+    auto getProvider = [&](ReservationCategory, const std::string&) -> std::unique_ptr<BookingProvider>
+    {
         providerCalled = true;
         return std::make_unique<MockBookingProvider>();
     };

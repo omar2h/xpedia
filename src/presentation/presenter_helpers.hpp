@@ -2,12 +2,11 @@
 
 #include <string>
 
-#include "view/view_interface.hpp"
-#include "input.hpp"
 #include "../exception.hpp"
+#include "input.hpp"
+#include "view/view_interface.hpp"
 
-template <typename Func>
-auto retryOnError(IView &view, Func fn) -> decltype(fn())
+template <typename Func> auto retryOnError(IView& view, Func fn) -> decltype(fn())
 {
     while (true)
     {
@@ -15,20 +14,14 @@ auto retryOnError(IView &view, Func fn) -> decltype(fn())
         {
             return fn();
         }
-        catch (const AppException &e)
+        catch (const AppException& e)
         {
             view.showError(e.what());
         }
     }
 }
 
-inline int readChoice(
-    IView &view,
-    IInput &input,
-    const std::string &prompt,
-    int min,
-    int max,
-    bool allowCancel = false)
+inline int readChoice(IView& view, IInput& input, const std::string& prompt, int min, int max, bool allowCancel = false)
 {
     while (true)
     {

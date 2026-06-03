@@ -2,15 +2,15 @@
 
 #include "../../application/payments/payment_strategy.hpp"
 #include "../../infrastructure/json_keys.hpp"
-#include "../apis/expedia_payments_api.hpp"
 #include "../../third_party/json.hpp"
+#include "../apis/expedia_payments_api.hpp"
 #include <sstream>
 
 class SquarePaymentStrategy : public PaymentStrategy
 {
 
-public:
-    [[nodiscard]] std::string getJsonQuery(const PaymentCard &card, double amount)
+  public:
+    [[nodiscard]] std::string getJsonQuery(const PaymentCard& card, double amount)
     {
         nlohmann::json obj;
         obj[JsonKeys::userInfo] = nlohmann::json::array({card.getOwner(), "cairo"});
@@ -22,7 +22,7 @@ public:
         oss << obj;
         return oss.str();
     }
-    [[nodiscard]] bool pay(const PaymentCard &card, double amount)
+    [[nodiscard]] bool pay(const PaymentCard& card, double amount)
     {
         return SquarePaymentAPI::WithDrawMoney(getJsonQuery(card, amount));
     }

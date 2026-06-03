@@ -5,6 +5,6 @@
 
 class PaymentFactory
 {
-public:
+  public:
     [[nodiscard]] std::unique_ptr<PaymentStrategy> getPaymentService(PaymentService service) const;
 };

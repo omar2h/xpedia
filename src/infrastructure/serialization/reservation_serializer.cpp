@@ -1,11 +1,11 @@
 #include "reservation_serializer.hpp"
-#include "../json_keys.hpp"
-#include "../../domain/request_type.hpp"
 #include "../../domain/entities/flight_reservation.hpp"
 #include "../../domain/entities/hotel_reservation.hpp"
+#include "../../domain/request_type.hpp"
 #include "../../exception.hpp"
+#include "../json_keys.hpp"
 
-json ReservationSerializer::serialize(const Reservation &reservation)
+json ReservationSerializer::serialize(const Reservation& reservation)
 {
     obj.clear();
 
@@ -14,7 +14,7 @@ json ReservationSerializer::serialize(const Reservation &reservation)
     return obj;
 }
 
-json ReservationSerializer::toJson(const Reservation &reservation)
+json ReservationSerializer::toJson(const Reservation& reservation)
 {
     obj.clear();
 
@@ -28,7 +28,7 @@ json ReservationSerializer::toJson(const Reservation &reservation)
     return obj;
 }
 
-void ReservationSerializer::visit(const FlightReservation &flight)
+void ReservationSerializer::visit(const FlightReservation& flight)
 {
     obj[JsonKeys::airline] = flight.getAirline();
 
@@ -43,7 +43,7 @@ void ReservationSerializer::visit(const FlightReservation &flight)
     obj[JsonKeys::cost] = flight.totalCost();
 }
 
-void ReservationSerializer::visit(const HotelReservation &hotel)
+void ReservationSerializer::visit(const HotelReservation& hotel)
 {
     obj[JsonKeys::hotel] = hotel.getHotelName();
 
@@ -62,7 +62,7 @@ void ReservationSerializer::visit(const HotelReservation &hotel)
     obj[JsonKeys::cost] = hotel.totalCost();
 }
 
-std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json &obj)
+std::unique_ptr<Reservation> ReservationSerializer::fromJson(const json& obj)
 {
     RequestType requestType = obj[JsonKeys::requestType].get<RequestType>();
     std::string catStr = obj[JsonKeys::category].get<std::string>();

@@ -10,12 +10,12 @@ class IInput;
 
 class HotelSearchPresenter
 {
-    IView &m_view;
-    IInput &m_input;
-    SearchHotelsUseCase &m_useCase;
+    IView& m_view;
+    IInput& m_input;
+    SearchHotelsUseCase& m_useCase;
 
-public:
-    HotelSearchPresenter(IView &view, IInput &input, SearchHotelsUseCase &useCase);
+  public:
+    HotelSearchPresenter(IView& view, IInput& input, SearchHotelsUseCase& useCase);
 
     std::optional<SelectedHotelOffer> searchAndSelect();
 };

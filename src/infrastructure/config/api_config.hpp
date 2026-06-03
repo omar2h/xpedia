@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdlib>
-#include <string>
 #include <map>
+#include <string>
 
 // API Configuration
 // This file contains configuration for real API endpoints
@@ -32,9 +32,9 @@ struct ApiConfig
     static inline const std::string PAYPAL_API_KEY = ""; // Set via environment variable
 
     // Helper to get API key from environment
-    static std::string getEnvVar(const std::string &name)
+    static std::string getEnvVar(const std::string& name)
     {
-        if (const char *value = std::getenv(name.c_str()))
+        if (const char* value = std::getenv(name.c_str()))
         {
             return std::string(value);
         }

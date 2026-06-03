@@ -18,4 +18,4 @@ struct HotelModule
     std::unique_ptr<HotelSearchPresenter> presenter;
 };
 
-HotelModule createHotelModule(IView &view, IInput &input);
+HotelModule createHotelModule(IView& view, IInput& input);

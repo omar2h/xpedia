@@ -9,9 +9,8 @@ using json = nlohmann::json;
 // MockBookingAPI — hardcoded offers per route
 // ---------------------------------------------------------------------------
 
-std::vector<FlightOffer> MockBookingAPI::searchOffers(
-    const std::string &from, const std::string &to,
-    const std::string &date, int /*adults*/, int /*children*/)
+std::vector<FlightOffer> MockBookingAPI::searchOffers(const std::string& from, const std::string& to,
+                                                      const std::string& date, int /*adults*/, int /*children*/)
 {
     // Deterministic mock data keyed by route so the same route always
     // returns the same offers (no network call, no randomness needed).
@@ -153,7 +152,7 @@ std::vector<FlightOffer> MockBookingAPI::searchOffers(
     return offers;
 }
 
-bool MockBookingAPI::reserve(const std::string & /*offerId*/)
+bool MockBookingAPI::reserve(const std::string& /*offerId*/)
 {
     // Mock reservation always succeeds.
     return true;

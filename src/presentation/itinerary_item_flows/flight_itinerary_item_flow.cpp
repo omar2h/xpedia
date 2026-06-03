@@ -3,10 +3,11 @@
 #include "../presenters/flight_search_presenter.hpp"
 #include "application/use_cases/add_flight_to_itinerary_use_case.hpp"
 
-FlightItineraryItemFlow::FlightItineraryItemFlow(
-    FlightSearchPresenter& presenter,
-    AddFlightToItineraryUseCase& addFlightUseCase)
-    : m_presenter(presenter), m_addFlightUseCase(addFlightUseCase) {}
+FlightItineraryItemFlow::FlightItineraryItemFlow(FlightSearchPresenter& presenter,
+                                                 AddFlightToItineraryUseCase& addFlightUseCase)
+    : m_presenter(presenter), m_addFlightUseCase(addFlightUseCase)
+{
+}
 
 std::string FlightItineraryItemFlow::label() const
 {

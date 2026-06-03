@@ -6,7 +6,7 @@ class Itinerary;
 
 class ItineraryItemFlow
 {
-public:
+  public:
     virtual ~ItineraryItemFlow() = default;
 
     virtual std::string label() const = 0;

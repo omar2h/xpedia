@@ -8,7 +8,7 @@
 #include "presentation/input.hpp"
 #include "presentation/view/view_interface.hpp"
 
-FlightModule createFlightModule(IView &view, IInput &input)
+FlightModule createFlightModule(IView& view, IInput& input)
 {
     std::string apiKey = ApiConfig::getEnvVar("DUFFEL_API_KEY");
 

@@ -4,7 +4,7 @@
 using json = nlohmann::json;
 
 // HiltonHotelsAPI implementation
-std::string HiltonHotelsAPI::buildUrl(const std::string &endpoint, const std::map<std::string, std::string> &params)
+std::string HiltonHotelsAPI::buildUrl(const std::string& endpoint, const std::map<std::string, std::string>& params)
 {
     std::string url = m_baseUrl + endpoint;
 
@@ -12,7 +12,7 @@ std::string HiltonHotelsAPI::buildUrl(const std::string &endpoint, const std::ma
     {
         url += "?";
         bool first = true;
-        for (const auto &[key, value] : params)
+        for (const auto& [key, value] : params)
         {
             if (!first)
                 url += "&";
@@ -26,9 +26,7 @@ std::string HiltonHotelsAPI::buildUrl(const std::string &endpoint, const std::ma
 
 std::map<std::string, std::string> HiltonHotelsAPI::buildHeaders()
 {
-    std::map<std::string, std::string> headers{
-        {"Accept", "application/json"},
-        {"Content-Type", "application/json"}};
+    std::map<std::string, std::string> headers{{"Accept", "application/json"}, {"Content-Type", "application/json"}};
 
     if (!m_apiKey.empty())
     {
@@ -38,17 +36,16 @@ std::map<std::string, std::string> HiltonHotelsAPI::buildHeaders()
     return headers;
 }
 
-std::vector<HotelRoomResult> HiltonHotelsAPI::searchRooms(const HotelSearchParams &params)
+std::vector<HotelRoomResult> HiltonHotelsAPI::searchRooms(const HotelSearchParams& params)
 {
     std::vector<HotelRoomResult> results;
 
-    std::map<std::string, std::string> queryParams{
-        {"city", params.city},
-        {"fromDate", params.fromDate},
-        {"toDate", params.toDate},
-        {"adults", std::to_string(params.adults)},
-        {"children", std::to_string(params.children)},
-        {"rooms", std::to_string(params.rooms)}};
+    std::map<std::string, std::string> queryParams{{"city", params.city},
+                                                   {"fromDate", params.fromDate},
+                                                   {"toDate", params.toDate},
+                                                   {"adults", std::to_string(params.adults)},
+                                                   {"children", std::to_string(params.children)},
+                                                   {"rooms", std::to_string(params.rooms)}};
 
     std::string url = buildUrl("/hotels/search", queryParams);
     std::string response = m_httpClient->get(url, buildHeaders());
@@ -56,7 +53,7 @@ std::vector<HotelRoomResult> HiltonHotelsAPI::searchRooms(const HotelSearchParam
     try
     {
         auto j = json::parse(response);
-        for (const auto &item : j["rooms"])
+        for (const auto& item : j["rooms"])
         {
             HotelRoomResult result;
             result.roomType = item["roomType"].get<std::string>();
@@ -69,7 +66,7 @@ std::vector<HotelRoomResult> HiltonHotelsAPI::searchRooms(const HotelSearchParam
             results.push_back(result);
         }
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << "Error parsing hotel response: " << e.what() << std::endl;
     }
@@ -77,13 +74,12 @@ std::vector<HotelRoomResult> HiltonHotelsAPI::searchRooms(const HotelSearchParam
     return results;
 }
 
-std::optional<std::string> HiltonHotelsAPI::reserveRoom(const HotelReservationParams &params)
+std::optional<std::string> HiltonHotelsAPI::reserveRoom(const HotelReservationParams& params)
 {
-    json body{
-        {"roomId", params.roomId},
-        {"guestName", params.guestName},
-        {"guestEmail", params.guestEmail},
-        {"guestPhone", params.guestPhone}};
+    json body{{"roomId", params.roomId},
+              {"guestName", params.guestName},
+              {"guestEmail", params.guestEmail},
+              {"guestPhone", params.guestPhone}};
 
     std::string url = buildUrl("/hotels/reserve", {});
     std::string response = m_httpClient->post(url, body.dump(), buildHeaders());
@@ -93,7 +89,7 @@ std::optional<std::string> HiltonHotelsAPI::reserveRoom(const HotelReservationPa
         auto j = json::parse(response);
         return j["reservationId"].get<std::string>();
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << "Error parsing reservation response: " << e.what() << std::endl;
     }
@@ -102,13 +98,13 @@ std::optional<std::string> HiltonHotelsAPI::reserveRoom(const HotelReservationPa
 }
 
 // MarriottHttpAPI implementation
-std::vector<HotelRoomResult> MarriottHttpAPI::searchRooms(const HotelSearchParams &params)
+std::vector<HotelRoomResult> MarriottHttpAPI::searchRooms(const HotelSearchParams& params)
 {
     HiltonHotelsAPI api("https://api.marriott.com");
     return api.searchRooms(params);
 }
 
-std::optional<std::string> MarriottHttpAPI::reserveRoom(const HotelReservationParams &params)
+std::optional<std::string> MarriottHttpAPI::reserveRoom(const HotelReservationParams& params)
 {
     HiltonHotelsAPI api("https://api.marriott.com");
     return api.reserveRoom(params);

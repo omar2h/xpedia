@@ -7,10 +7,10 @@ class ReservationFactory;
 
 class AddHotelToItineraryUseCase
 {
-    ReservationFactory &m_reservationFactory;
+    ReservationFactory& m_reservationFactory;
 
-public:
-    explicit AddHotelToItineraryUseCase(ReservationFactory &reservationFactory);
+  public:
+    explicit AddHotelToItineraryUseCase(ReservationFactory& reservationFactory);
 
-    bool execute(Itinerary &itinerary, const SelectedHotelOffer &selectedOffer);
+    bool execute(Itinerary& itinerary, const SelectedHotelOffer& selectedOffer);
 };

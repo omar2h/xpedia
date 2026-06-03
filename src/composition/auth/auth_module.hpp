@@ -17,4 +17,4 @@ struct AuthModule
     std::unique_ptr<AuthPresenter> presenter;
 };
 
-AuthModule createAuthModule(IView &view, IInput &input, IUserRepository &userRepo);
+AuthModule createAuthModule(IView& view, IInput& input, IUserRepository& userRepo);

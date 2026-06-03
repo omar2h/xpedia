@@ -8,10 +8,8 @@
 #include "../mappers/hotel_offer_selection_mapper.hpp"
 #include "../presenter_helpers.hpp"
 
-HotelSearchPresenter::HotelSearchPresenter(IView &view, IInput &input, SearchHotelsUseCase &useCase)
-    : m_view(view),
-      m_input(input),
-      m_useCase(useCase)
+HotelSearchPresenter::HotelSearchPresenter(IView& view, IInput& input, SearchHotelsUseCase& useCase)
+    : m_view(view), m_input(input), m_useCase(useCase)
 {
 }
 
@@ -27,7 +25,7 @@ std::optional<SelectedHotelOffer> HotelSearchPresenter::searchAndSelect()
         return std::nullopt;
     }
 
-    const auto &offers = result.value();
+    const auto& offers = result.value();
     if (offers.empty())
     {
         m_view.showMessage("No hotels found");
@@ -38,7 +36,8 @@ std::optional<SelectedHotelOffer> HotelSearchPresenter::searchAndSelect()
 
     m_view.displayHotelOffers(selectionList.viewModel);
 
-    int sel = readChoice(m_view, m_input, "Enter choice(-1 to cancel): ", 1, static_cast<int>(selectionList.viewModel.offers.size()), true);
+    int sel = readChoice(m_view, m_input, "Enter choice(-1 to cancel): ", 1,
+                         static_cast<int>(selectionList.viewModel.offers.size()), true);
     if (sel == -1)
         return std::nullopt;
 

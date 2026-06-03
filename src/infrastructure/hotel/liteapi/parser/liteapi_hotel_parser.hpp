@@ -7,10 +7,10 @@
 namespace liteapi
 {
 
-    class LiteApiHotelParser
-    {
-    public:
-        Result<LiteApiHotelResponse> parse(const std::string &rawJson);
-    };
+class LiteApiHotelParser
+{
+  public:
+    Result<LiteApiHotelResponse> parse(const std::string& rawJson);
+};
 
 } // namespace liteapi

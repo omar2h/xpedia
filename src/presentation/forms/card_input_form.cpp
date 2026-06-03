@@ -1,8 +1,8 @@
 #include "card_input_form.hpp"
-#include "../view/view_interface.hpp"
 #include "../input.hpp"
+#include "../view/view_interface.hpp"
 
-CardInput CardInputForm::collect(IView &view, IInput &input)
+CardInput CardInputForm::collect(IView& view, IInput& input)
 {
     CardInput result;
     view.showPrompt("Enter Card Number: ");

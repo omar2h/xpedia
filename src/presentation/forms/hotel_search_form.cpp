@@ -1,8 +1,8 @@
 #include "hotel_search_form.hpp"
-#include "../view/view_interface.hpp"
 #include "../input.hpp"
+#include "../view/view_interface.hpp"
 
-HotelSearchInput HotelSearchForm::collect(IView &view, IInput &input)
+HotelSearchInput HotelSearchForm::collect(IView& view, IInput& input)
 {
     HotelSearchInput result;
     view.showPrompt("Enter City: ");

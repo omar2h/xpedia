@@ -1,25 +1,25 @@
-#include <gtest/gtest.h>
 #include <filesystem>
 #include <fstream>
+#include <gtest/gtest.h>
 #include <string>
 #include <vector>
 
-#include "infrastructure/persistence/sql/sql_database.hpp"
-#include "infrastructure/serialization/reservation_serializer.hpp"
-#include "domain/entities/user.hpp"
 #include "domain/entities/customer.hpp"
 #include "domain/entities/flight_reservation.hpp"
 #include "domain/entities/hotel_reservation.hpp"
 #include "domain/entities/itinerary.hpp"
-#include "domain/request_type.hpp"
 #include "domain/entities/reservation_category.hpp"
+#include "domain/entities/user.hpp"
+#include "domain/request_type.hpp"
 #include "exception.hpp"
+#include "infrastructure/persistence/sql/sql_database.hpp"
+#include "infrastructure/serialization/reservation_serializer.hpp"
 
 namespace fs = std::filesystem;
 
 class SqlIntegrationTest : public ::testing::Test
 {
-protected:
+  protected:
     fs::path tempDir;
     std::unique_ptr<SqlDatabase> db;
 
@@ -116,7 +116,7 @@ TEST_F(SqlIntegrationTest, ItineraryWithReservations)
     EXPECT_EQ(results[0].getId(), "itin_sql_001");
     ASSERT_EQ(results[0].getReservations().size(), 1);
 
-    auto *flight = dynamic_cast<FlightReservation *>(results[0].getReservations()[0].get());
+    auto* flight = dynamic_cast<FlightReservation*>(results[0].getReservations()[0].get());
     ASSERT_NE(flight, nullptr);
     EXPECT_EQ(flight->getAirline(), "TestAir");
     EXPECT_DOUBLE_EQ(flight->totalCost(), 800.0);
@@ -128,8 +128,8 @@ TEST_F(SqlIntegrationTest, MultipleCustomersWithCards)
 
     for (int i = 0; i < 3; i++)
     {
-        User user("", "User" + std::to_string(i), "Last",
-                  "user" + std::to_string(i) + "@test.com", "555-0" + std::to_string(i), "pass");
+        User user("", "User" + std::to_string(i), "Last", "user" + std::to_string(i) + "@test.com",
+                  "555-0" + std::to_string(i), "pass");
         db->createUser(user);
         userIds.push_back(user.getId());
 
@@ -192,7 +192,7 @@ TEST(SerializerTest, RoundTripFlightReservation)
     auto restored = ReservationSerializer::fromJson(j);
     ASSERT_NE(restored, nullptr);
 
-    auto *restoredFlight = dynamic_cast<FlightReservation *>(restored.get());
+    auto* restoredFlight = dynamic_cast<FlightReservation*>(restored.get());
     ASSERT_NE(restoredFlight, nullptr);
     EXPECT_EQ(restoredFlight->getAirline(), "TestAir");
     EXPECT_EQ(restoredFlight->getFrom(), "JFK");
@@ -222,7 +222,7 @@ TEST(SerializerTest, RoundTripHotelReservation)
     auto restored = ReservationSerializer::fromJson(j);
     ASSERT_NE(restored, nullptr);
 
-    auto *restoredHotel = dynamic_cast<HotelReservation *>(restored.get());
+    auto* restoredHotel = dynamic_cast<HotelReservation*>(restored.get());
     ASSERT_NE(restoredHotel, nullptr);
     EXPECT_EQ(restoredHotel->getHotelName(), "TestHotel");
     EXPECT_EQ(restoredHotel->getCity(), "Paris");

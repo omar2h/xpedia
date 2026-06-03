@@ -1,7 +1,7 @@
 #include "password_validator.hpp"
 #include <cctype>
 
-bool PasswordValidator::isValid(const std::string &password)
+bool PasswordValidator::isValid(const std::string& password)
 {
     if (password.size() < 8)
         return false;
@@ -23,7 +23,7 @@ bool PasswordValidator::isValid(const std::string &password)
     return hasDigit && hasUpper && hasLower;
 }
 
-std::string PasswordValidator::getError(const std::string &password)
+std::string PasswordValidator::getError(const std::string& password)
 {
     if (password.size() < 8)
         return "Password must be at least 8 characters.";

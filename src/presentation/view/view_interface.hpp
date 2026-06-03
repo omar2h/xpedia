@@ -7,7 +7,7 @@
 
 class IView
 {
-public:
+  public:
     virtual ~IView() = default;
 
     virtual void showMessage(const std::string&) = 0;

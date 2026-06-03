@@ -4,10 +4,10 @@
 
 CprHttpClient::CprHttpClient() = default;
 
-std::string CprHttpClient::get(const std::string &url, const std::map<std::string, std::string> &headers)
+std::string CprHttpClient::get(const std::string& url, const std::map<std::string, std::string>& headers)
 {
     cpr::Header cprHeaders;
-    for (const auto &[key, value] : headers)
+    for (const auto& [key, value] : headers)
     {
         cprHeaders[key] = value;
     }
@@ -23,10 +23,11 @@ std::string CprHttpClient::get(const std::string &url, const std::map<std::strin
     return response.text;
 }
 
-std::string CprHttpClient::post(const std::string &url, const std::string &body, const std::map<std::string, std::string> &headers)
+std::string CprHttpClient::post(const std::string& url, const std::string& body,
+                                const std::map<std::string, std::string>& headers)
 {
     cpr::Header cprHeaders;
-    for (const auto &[key, value] : headers)
+    for (const auto& [key, value] : headers)
     {
         cprHeaders[key] = value;
     }

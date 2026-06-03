@@ -7,6 +7,6 @@ class IInput;
 
 class FlightSearchForm
 {
-public:
-    static FlightSearchInput collect(IView &view, IInput &input);
+  public:
+    static FlightSearchInput collect(IView& view, IInput& input);
 };

@@ -7,7 +7,7 @@
 #include "presentation/input.hpp"
 #include "presentation/view/view_interface.hpp"
 
-HotelModule createHotelModule(IView &view, IInput &input)
+HotelModule createHotelModule(IView& view, IInput& input)
 {
     std::string apiKey = ApiConfig::getEnvVar("LITEAPI_KEY");
 

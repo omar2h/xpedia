@@ -1,17 +1,16 @@
 #include "auth_service.hpp"
-#include "../../exception.hpp"
-#include "../repositories/i_user_repository.hpp"
-#include "../../util/password_utils.hpp"
 #include "../../domain/validators/email_validator.hpp"
 #include "../../domain/validators/password_validator.hpp"
+#include "../../exception.hpp"
+#include "../../util/password_utils.hpp"
+#include "../repositories/i_user_repository.hpp"
 
-AuthService::AuthService(IUserRepository &userRepo)
-    : m_userRepo(userRepo) {}
+AuthService::AuthService(IUserRepository& userRepo) : m_userRepo(userRepo) {}
 
-void AuthService::signup(User &user)
+void AuthService::signup(User& user)
 {
-    const auto &email = user.getEmail();
-    const auto &password = user.getPassword();
+    const auto& email = user.getEmail();
+    const auto& password = user.getPassword();
 
     if (!EmailValidator::isValid(email))
         throw ValidationException(EmailValidator::getError(email));
@@ -25,7 +24,7 @@ void AuthService::signup(User &user)
     m_userRepo.saveUser(user);
 }
 
-User AuthService::login(const std::string &email, const std::string &password)
+User AuthService::login(const std::string& email, const std::string& password)
 {
     if (email.empty() || password.empty())
         throw AuthException("Email and password are required");

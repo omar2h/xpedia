@@ -6,7 +6,7 @@
 
 class ReservationFactory
 {
-public:
+  public:
     virtual ~ReservationFactory() = default;
     [[nodiscard]] virtual std::unique_ptr<Reservation> getReservation(RequestType);
 };

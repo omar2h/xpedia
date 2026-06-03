@@ -12,8 +12,8 @@ struct DuffelHotelSearchResponseDTO;
 
 class DuffelHotelMapper
 {
-public:
-    std::vector<HotelOffer> map(const DuffelHotelSearchResponseDTO &response);
+  public:
+    std::vector<HotelOffer> map(const DuffelHotelSearchResponseDTO& response);
 };
 
 } // namespace duffel

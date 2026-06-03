@@ -15,14 +15,14 @@ struct BookingProviderDescriptor
 
 class BookingProviderFactory
 {
-public:
+  public:
     using Creator = std::function<std::unique_ptr<BookingProvider>()>;
 
     void registerProvider(std::string id, std::string displayName, Creator creator);
 
-    [[nodiscard]] std::unique_ptr<BookingProvider> create(const std::string &id) const;
+    [[nodiscard]] std::unique_ptr<BookingProvider> create(const std::string& id) const;
 
-private:
+  private:
     struct Entry
     {
         BookingProviderDescriptor descriptor;

@@ -12,8 +12,8 @@ class DuffelFlightService : public IFlightSearchService
     duffel::DuffelParser m_parser;
     duffel::DuffelMapper m_mapper;
 
-public:
-    explicit DuffelFlightService(const std::string &apiKey);
+  public:
+    explicit DuffelFlightService(const std::string& apiKey);
 
-    Result<std::vector<FlightOffer>> searchFlights(const FlightSearchRequest &request) override;
+    Result<std::vector<FlightOffer>> searchFlights(const FlightSearchRequest& request) override;
 };

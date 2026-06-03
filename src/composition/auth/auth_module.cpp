@@ -6,12 +6,12 @@
 
 #include "presentation/presenters/auth_presenter.hpp"
 
-#include "presentation/view/view_interface.hpp"
 #include "presentation/input.hpp"
+#include "presentation/view/view_interface.hpp"
 
 #include "application/repositories/i_user_repository.hpp"
 
-AuthModule createAuthModule(IView &view, IInput &input, IUserRepository &userRepo)
+AuthModule createAuthModule(IView& view, IInput& input, IUserRepository& userRepo)
 {
     AuthModule module;
     module.authService = std::make_unique<AuthService>(userRepo);

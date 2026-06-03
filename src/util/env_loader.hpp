@@ -2,4 +2,4 @@
 
 #include <string>
 
-bool loadEnvFile(const std::string &path = ".env");
+bool loadEnvFile(const std::string& path = ".env");

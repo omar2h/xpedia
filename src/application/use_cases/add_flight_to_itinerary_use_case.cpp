@@ -6,10 +6,12 @@
 
 #include <utility>
 
-AddFlightToItineraryUseCase::AddFlightToItineraryUseCase(ReservationFactory &reservationFactory)
-    : m_reservationFactory(reservationFactory) {}
+AddFlightToItineraryUseCase::AddFlightToItineraryUseCase(ReservationFactory& reservationFactory)
+    : m_reservationFactory(reservationFactory)
+{
+}
 
-bool AddFlightToItineraryUseCase::execute(Itinerary &itinerary, const SelectedFlightOffer &selectedOffer)
+bool AddFlightToItineraryUseCase::execute(Itinerary& itinerary, const SelectedFlightOffer& selectedOffer)
 {
     auto reservation = SelectedFlightOfferReservationMapper::map(m_reservationFactory, selectedOffer);
     if (!reservation)

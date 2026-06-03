@@ -1,11 +1,8 @@
 #include "duffel_flight_service.hpp"
 
-DuffelFlightService::DuffelFlightService(const std::string &apiKey)
-    : m_client(apiKey)
-{
-}
+DuffelFlightService::DuffelFlightService(const std::string& apiKey) : m_client(apiKey) {}
 
-Result<std::vector<FlightOffer>> DuffelFlightService::searchFlights(const FlightSearchRequest &request)
+Result<std::vector<FlightOffer>> DuffelFlightService::searchFlights(const FlightSearchRequest& request)
 {
     auto response = m_client.searchFlights(request);
 

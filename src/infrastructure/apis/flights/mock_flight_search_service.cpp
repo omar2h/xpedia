@@ -1,7 +1,6 @@
 #include "mock_flight_search_service.hpp"
 
-FlightSearchResult
-MockFlightSearchService::searchFlights(const FlightSearchRequest &request)
+FlightSearchResult MockFlightSearchService::searchFlights(const FlightSearchRequest& request)
 {
     FlightSearchResult result;
     FlightOffer offer;

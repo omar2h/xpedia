@@ -1,18 +1,13 @@
 #include "flight_search_presenter.hpp"
 
 #include "../forms/flight_search_form.hpp"
-#include "../view/view_interface.hpp"
 #include "../input.hpp"
 #include "../mappers/flight_offer_mapper.hpp"
 #include "../presenter_helpers.hpp"
+#include "../view/view_interface.hpp"
 
-FlightSearchPresenter::FlightSearchPresenter(
-    IView &view,
-    IInput &input,
-    SearchFlightsUseCase &useCase)
-    : m_view(view),
-      m_input(input),
-      m_useCase(useCase)
+FlightSearchPresenter::FlightSearchPresenter(IView& view, IInput& input, SearchFlightsUseCase& useCase)
+    : m_view(view), m_input(input), m_useCase(useCase)
 {
 }
 
@@ -27,7 +22,7 @@ std::optional<SelectedFlightOffer> FlightSearchPresenter::searchAndSelect()
         return std::nullopt;
     }
 
-    const auto &offers = result.value();
+    const auto& offers = result.value();
     if (offers.empty())
     {
         m_view.showMessage("No flights found");
@@ -37,7 +32,7 @@ std::optional<SelectedFlightOffer> FlightSearchPresenter::searchAndSelect()
     FlightOfferListView viewModel;
     int index = 1;
 
-    for (const auto &offer : offers)
+    for (const auto& offer : offers)
     {
         viewModel.offers.push_back(FlightOfferMapper::map(offer, index++));
     }

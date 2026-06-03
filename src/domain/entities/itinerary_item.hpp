@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 
 #include "../request_type.hpp"
 #include "reservation_category.hpp"
@@ -15,19 +15,31 @@ class ItineraryItem
     std::string providerId;
     RequestType requestType;
 
-public:
+  public:
     [[nodiscard]] virtual std::unique_ptr<ItineraryItem> clone() const = 0;
     virtual ~ItineraryItem() = default;
 
-    [[nodiscard]] ReservationCategory getCategory() const { return category; }
-    void setCategory(const ReservationCategory &c) { category = c; }
+    [[nodiscard]] ReservationCategory getCategory() const
+    {
+        return category;
+    }
+    void setCategory(const ReservationCategory& c)
+    {
+        category = c;
+    }
 
-    [[nodiscard]] const std::string &getProviderId() const { return providerId; }
-    void setProviderId(const std::string &id) { providerId = id; }
+    [[nodiscard]] const std::string& getProviderId() const
+    {
+        return providerId;
+    }
+    void setProviderId(const std::string& id)
+    {
+        providerId = id;
+    }
 
     [[nodiscard]] RequestType getRequestType() const;
-    void setRequestType(const RequestType &requestType_);
+    void setRequestType(const RequestType& requestType_);
 
     // Accept method for visitor pattern
-    virtual void accept(ItineraryItemVisitor &visitor) const = 0;
+    virtual void accept(ItineraryItemVisitor& visitor) const = 0;
 };

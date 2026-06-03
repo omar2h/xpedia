@@ -2,19 +2,20 @@
 
 #include "../view_models/view_models.hpp"
 #include "domain/value_objects/hotel_offer.hpp"
-#include <sstream>
 #include <iomanip>
+#include <sstream>
 
 class HotelOfferMapper
 {
-public:
-    static HotelOfferViewModel map(const HotelOffer &offer, const HotelRoomOffer &room, int number)
+  public:
+    static HotelOfferViewModel map(const HotelOffer& offer, const HotelRoomOffer& room, int number)
     {
         HotelOfferViewModel item;
 
         item.number = number;
         item.title = room.roomName.empty() ? offer.accommodationName
-                                           : room.roomName + " | " + room.boardType + " | " + (room.refundable ? "Refundable" : "Non-refundable");
+                                           : room.roomName + " | " + room.boardType + " | " +
+                                                 (room.refundable ? "Refundable" : "Non-refundable");
         item.subtitle = offer.accommodationName;
         item.hotelName = offer.accommodationName;
 

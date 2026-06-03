@@ -6,11 +6,10 @@
 
 class ICustomerRepository
 {
-public:
+  public:
     virtual ~ICustomerRepository() = default;
 
-    [[nodiscard]] virtual std::optional<Customer>
-    findById(const std::string &userId) const = 0;
+    [[nodiscard]] virtual std::optional<Customer> findById(const std::string& userId) const = 0;
 
-    virtual void update(const Customer &) = 0;
+    virtual void update(const Customer&) = 0;
 };

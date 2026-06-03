@@ -1,44 +1,54 @@
-#include <gtest/gtest.h>
-#include "application/services/payment_service.hpp"
-#include "application/repositories/i_customer_repository.hpp"
 #include "application/payments/payment_strategy.hpp"
-#include "domain/entities/payment_card.hpp"
+#include "application/repositories/i_customer_repository.hpp"
+#include "application/services/payment_service.hpp"
 #include "domain/entities/customer.hpp"
-#include "domain/entities/user.hpp"
 #include "domain/entities/itinerary.hpp"
+#include "domain/entities/payment_card.hpp"
+#include "domain/entities/user.hpp"
+#include <gtest/gtest.h>
 
 namespace
 {
-    class StubCustomerRepo : public ICustomerRepository
-    {
-    public:
-        bool customerUpdated = false;
+class StubCustomerRepo : public ICustomerRepository
+{
+  public:
+    bool customerUpdated = false;
 
-        std::optional<Customer> findById(const std::string &) const override { return std::nullopt; }
-        void update(const Customer &) override { customerUpdated = true; }
-    };
-
-    class AlwaysPayStrategy : public PaymentStrategy
+    std::optional<Customer> findById(const std::string&) const override
     {
-    public:
-        bool pay(const PaymentCard &, double) override { return true; }
-    };
-
-    class NeverPayStrategy : public PaymentStrategy
+        return std::nullopt;
+    }
+    void update(const Customer&) override
     {
-    public:
-        bool pay(const PaymentCard &, double) override { return false; }
-    };
-}
+        customerUpdated = true;
+    }
+};
+
+class AlwaysPayStrategy : public PaymentStrategy
+{
+  public:
+    bool pay(const PaymentCard&, double) override
+    {
+        return true;
+    }
+};
+
+class NeverPayStrategy : public PaymentStrategy
+{
+  public:
+    bool pay(const PaymentCard&, double) override
+    {
+        return false;
+    }
+};
+} // namespace
 
 TEST(PaymentProcessorTest, AddCardUpdatesDatabase)
 {
     StubCustomerRepo customerRepo;
     auto getPayment = [](PaymentService) -> std::unique_ptr<PaymentStrategy>
-    {
-        return std::make_unique<AlwaysPayStrategy>();
-    };
-    auto confirm = [](const Itinerary &) { return true; };
+    { return std::make_unique<AlwaysPayStrategy>(); };
+    auto confirm = [](const Itinerary&) { return true; };
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
     Customer customer;
@@ -55,10 +65,8 @@ TEST(PaymentProcessorTest, WithdrawMoneyReturnsTrueOnSuccess)
 {
     StubCustomerRepo customerRepo;
     auto getPayment = [](PaymentService) -> std::unique_ptr<PaymentStrategy>
-    {
-        return std::make_unique<AlwaysPayStrategy>();
-    };
-    auto confirm = [](const Itinerary &) { return true; };
+    { return std::make_unique<AlwaysPayStrategy>(); };
+    auto confirm = [](const Itinerary&) { return true; };
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
     PaymentCard card("1234", "Test", "12/26", "123");
@@ -74,10 +82,8 @@ TEST(PaymentProcessorTest, WithdrawMoneyReturnsFalseOnFailure)
 {
     StubCustomerRepo customerRepo;
     auto getPayment = [](PaymentService) -> std::unique_ptr<PaymentStrategy>
-    {
-        return std::make_unique<NeverPayStrategy>();
-    };
-    auto confirm = [](const Itinerary &) { return true; };
+    { return std::make_unique<NeverPayStrategy>(); };
+    auto confirm = [](const Itinerary&) { return true; };
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
     PaymentCard card("1234", "Test", "12/26", "123");
@@ -93,10 +99,8 @@ TEST(PaymentProcessorTest, MakeReservationsReturnsMinusOneOnPaymentFailure)
 {
     StubCustomerRepo customerRepo;
     auto getPayment = [](PaymentService) -> std::unique_ptr<PaymentStrategy>
-    {
-        return std::make_unique<NeverPayStrategy>();
-    };
-    auto confirm = [](const Itinerary &) { return true; };
+    { return std::make_unique<NeverPayStrategy>(); };
+    auto confirm = [](const Itinerary&) { return true; };
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
     PaymentCard card("1234", "Test", "12/26", "123");
@@ -112,10 +116,8 @@ TEST(PaymentProcessorTest, MakeReservationsReturnsOneOnSuccess)
 {
     StubCustomerRepo customerRepo;
     auto getPayment = [](PaymentService) -> std::unique_ptr<PaymentStrategy>
-    {
-        return std::make_unique<AlwaysPayStrategy>();
-    };
-    auto confirm = [](const Itinerary &) { return true; };
+    { return std::make_unique<AlwaysPayStrategy>(); };
+    auto confirm = [](const Itinerary&) { return true; };
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
     PaymentCard card("1234", "Test", "12/26", "123");
@@ -131,10 +133,8 @@ TEST(PaymentProcessorTest, MakeReservationsReturnsZeroWhenConfirmationFails)
 {
     StubCustomerRepo customerRepo;
     auto getPayment = [](PaymentService) -> std::unique_ptr<PaymentStrategy>
-    {
-        return std::make_unique<AlwaysPayStrategy>();
-    };
-    auto confirm = [](const Itinerary &) { return false; };
+    { return std::make_unique<AlwaysPayStrategy>(); };
+    auto confirm = [](const Itinerary&) { return false; };
 
     PaymentProcessor processor(customerRepo, getPayment, confirm);
     PaymentCard card("1234", "Test", "12/26", "123");

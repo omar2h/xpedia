@@ -7,6 +7,6 @@ class IInput;
 
 class HotelSearchForm
 {
-public:
+  public:
     static HotelSearchInput collect(IView& view, IInput& input);
 };

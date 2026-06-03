@@ -2,9 +2,9 @@
 
 #include "auth_presenter.hpp"
 
-#include "../view/view_interface.hpp"
 #include "../input.hpp"
 #include "../presenter_helpers.hpp"
+#include "../view/view_interface.hpp"
 
 #include "../../application/services/auth_service.hpp"
 
@@ -15,16 +15,17 @@
 
 #include "../../exception.hpp"
 
-AuthPresenter::AuthPresenter(IView &view, IInput &input, AuthService &authService)
-    : m_view(view), m_input(input), m_authService(authService) {}
+AuthPresenter::AuthPresenter(IView& view, IInput& input, AuthService& authService)
+    : m_view(view), m_input(input), m_authService(authService)
+{
+}
 
 AuthResult AuthPresenter::run()
 {
     while (true)
     {
         m_view.showStartMenu();
-        int choice = retryOnError(m_view, [&]
-                                  { return m_input.readInt(); });
+        int choice = retryOnError(m_view, [&] { return m_input.readInt(); });
 
         if (choice < 1 || choice > 3)
         {
@@ -41,7 +42,7 @@ AuthResult AuthPresenter::run()
                 m_view.displayWelcomeMessage(user.getFirstName(), user.getLastName());
                 return {AppState::MainMenu, std::move(user)};
             }
-            catch (const AppException &e)
+            catch (const AppException& e)
             {
                 m_view.showError(e.what());
             }
@@ -54,7 +55,7 @@ AuthResult AuthPresenter::run()
                 signup();
                 m_view.showMessage("Account created successfully");
             }
-            catch (const AppException &e)
+            catch (const AppException& e)
             {
                 m_view.showError(e.what());
             }

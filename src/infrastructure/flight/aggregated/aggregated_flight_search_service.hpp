@@ -7,12 +7,10 @@
 
 class AggregatedFlightSearchService : public IFlightSearchService
 {
-    std::vector<
-        std::unique_ptr<IFlightSearchService>>
-        m_services;
+    std::vector<std::unique_ptr<IFlightSearchService>> m_services;
 
-public:
+  public:
     explicit AggregatedFlightSearchService(std::vector<std::unique_ptr<IFlightSearchService>> services);
 
-    Result<std::vector<FlightOffer>> searchFlights(const FlightSearchRequest &request) override;
+    Result<std::vector<FlightOffer>> searchFlights(const FlightSearchRequest& request) override;
 };

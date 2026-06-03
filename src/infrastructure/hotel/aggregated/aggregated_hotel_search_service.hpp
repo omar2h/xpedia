@@ -7,12 +7,10 @@
 
 class AggregatedHotelSearchService : public IHotelSearchService
 {
-    std::vector<
-        std::unique_ptr<IHotelSearchService>>
-        m_services;
+    std::vector<std::unique_ptr<IHotelSearchService>> m_services;
 
-public:
+  public:
     explicit AggregatedHotelSearchService(std::vector<std::unique_ptr<IHotelSearchService>> services);
 
-    Result<std::vector<HotelOffer>> searchHotels(const HotelSearchRequest &request) override;
+    Result<std::vector<HotelOffer>> searchHotels(const HotelSearchRequest& request) override;
 };

@@ -7,11 +7,11 @@ class IUserRepository;
 
 class AuthService
 {
-    IUserRepository &m_userRepo;
+    IUserRepository& m_userRepo;
 
-public:
-    AuthService(IUserRepository &userRepo);
+  public:
+    AuthService(IUserRepository& userRepo);
 
-    void signup(User &user);
-    [[nodiscard]] User login(const std::string &email, const std::string &password);
+    void signup(User& user);
+    [[nodiscard]] User login(const std::string& email, const std::string& password);
 };

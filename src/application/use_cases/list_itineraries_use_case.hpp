@@ -8,12 +8,11 @@ class IItineraryRepository;
 
 class ListItinerariesUseCase
 {
-    ICustomerRepository &m_customerRepo;
-    IItineraryRepository &m_itineraryRepo;
+    ICustomerRepository& m_customerRepo;
+    IItineraryRepository& m_itineraryRepo;
 
-public:
-    ListItinerariesUseCase(ICustomerRepository &customerRepo,
-                           IItineraryRepository &itineraryRepo);
+  public:
+    ListItinerariesUseCase(ICustomerRepository& customerRepo, IItineraryRepository& itineraryRepo);
 
-    [[nodiscard]] ListItinerariesResult execute(const User &user);
+    [[nodiscard]] ListItinerariesResult execute(const User& user);
 };

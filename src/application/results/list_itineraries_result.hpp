@@ -1,8 +1,8 @@
 #pragma once
 
+#include "../../domain/entities/itinerary.hpp"
 #include <string>
 #include <vector>
-#include "../../domain/entities/itinerary.hpp"
 
 struct ListItinerariesResult
 {

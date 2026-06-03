@@ -1,8 +1,8 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
-#include <optional>
 
 // Hotel search parameters
 struct HotelSearchParams

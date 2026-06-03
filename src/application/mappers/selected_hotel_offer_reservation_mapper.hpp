@@ -1,24 +1,23 @@
 #pragma once
 
-#include "../dto/selected_hotel_offer.hpp"
 #include "../../domain/entities/hotel_reservation.hpp"
 #include "../../domain/entities/hotel_room.hpp"
 #include "../../domain/entities/reservation.hpp"
 #include "../../domain/entities/reservation_category.hpp"
 #include "../../domain/factories/reservation_factory.hpp"
 #include "../../domain/request_type.hpp"
+#include "../dto/selected_hotel_offer.hpp"
 
 #include <memory>
 
 class SelectedHotelOfferReservationMapper
 {
-public:
-    static std::unique_ptr<Reservation> map(
-        ReservationFactory &reservationFactory,
-        const SelectedHotelOffer &selectedOffer)
+  public:
+    static std::unique_ptr<Reservation> map(ReservationFactory& reservationFactory,
+                                            const SelectedHotelOffer& selectedOffer)
     {
-        const auto &offer = selectedOffer.offer;
-        const auto &input = selectedOffer.input;
+        const auto& offer = selectedOffer.offer;
+        const auto& input = selectedOffer.input;
 
         auto room = std::make_unique<HotelRoom>();
         room->setHotelName(offer.accommodationName);
@@ -45,7 +44,7 @@ public:
 
         reservation->setItem(*room);
 
-        auto *hotelReservation = dynamic_cast<HotelReservation *>(reservation.get());
+        auto* hotelReservation = dynamic_cast<HotelReservation*>(reservation.get());
         if (hotelReservation)
         {
             hotelReservation->setCity(offer.cityName);

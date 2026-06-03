@@ -1,11 +1,8 @@
 #include "search_hotels_use_case.hpp"
 
-SearchHotelsUseCase::SearchHotelsUseCase(IHotelSearchService &hotelService)
-    : m_hotelService(hotelService)
-{
-}
+SearchHotelsUseCase::SearchHotelsUseCase(IHotelSearchService& hotelService) : m_hotelService(hotelService) {}
 
-Result<std::vector<HotelOffer>> SearchHotelsUseCase::execute(const HotelSearchInput &input)
+Result<std::vector<HotelOffer>> SearchHotelsUseCase::execute(const HotelSearchInput& input)
 {
     HotelSearchRequest request;
 

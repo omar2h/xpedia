@@ -1,13 +1,10 @@
 #include "liteapi_hotel_service.hpp"
-#include <unordered_map>
 #include <iostream>
+#include <unordered_map>
 
-LiteApiHotelService::LiteApiHotelService(const std::string &apiKey)
-    : m_client(apiKey)
-{
-}
+LiteApiHotelService::LiteApiHotelService(const std::string& apiKey) : m_client(apiKey) {}
 
-Result<std::vector<HotelOffer>> LiteApiHotelService::searchHotels(const HotelSearchRequest &request)
+Result<std::vector<HotelOffer>> LiteApiHotelService::searchHotels(const HotelSearchRequest& request)
 {
     auto response = m_client.searchHotels(request);
 
@@ -26,7 +23,7 @@ Result<std::vector<HotelOffer>> LiteApiHotelService::searchHotels(const HotelSea
     std::unordered_map<std::string, HotelOffer> hotelMap;
     std::vector<std::string> hotelOrder;
 
-    for (const auto &hotel : parsed.value().hotels)
+    for (const auto& hotel : parsed.value().hotels)
     {
         auto it = hotelMap.find(hotel.hotelId);
 
@@ -58,9 +55,9 @@ Result<std::vector<HotelOffer>> LiteApiHotelService::searchHotels(const HotelSea
 
     std::vector<HotelOffer> offers;
 
-    for (const auto &id : hotelOrder)
+    for (const auto& id : hotelOrder)
     {
-        auto &offer = hotelMap[id];
+        auto& offer = hotelMap[id];
 
         if (!offer.roomOffers.empty())
         {

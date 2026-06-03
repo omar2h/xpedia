@@ -14,7 +14,7 @@ class PaymentPresenter
     PayItineraryUseCase& m_payItineraryUseCase;
     ICustomerRepository& m_customerRepo;
 
-public:
+  public:
     PaymentPresenter(IView& view, IInput& input, PayItineraryUseCase& useCase, ICustomerRepository& customerRepo);
     bool run(User& user, Itinerary& itinerary);
 };

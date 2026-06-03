@@ -15,29 +15,18 @@ struct HotelSearchProviderDescriptor
 
 class HotelSearchProviderFactory
 {
-public:
-    using Creator =
-        std::function<
-            std::unique_ptr<HotelSearchProvider>()>;
+  public:
+    using Creator = std::function<std::unique_ptr<HotelSearchProvider>()>;
 
-    void registerProvider(
-        std::string id,
-        std::string displayName,
-        Creator creator);
+    void registerProvider(std::string id, std::string displayName, Creator creator);
 
-    [[nodiscard]]
-    std::unique_ptr<HotelSearchProvider>
-    create(const std::string &id) const;
+    [[nodiscard]] std::unique_ptr<HotelSearchProvider> create(const std::string& id) const;
 
-    [[nodiscard]]
-    std::vector<std::unique_ptr<HotelSearchProvider>>
-    createAll() const;
+    [[nodiscard]] std::vector<std::unique_ptr<HotelSearchProvider>> createAll() const;
 
-    [[nodiscard]]
-    std::vector<HotelSearchProviderDescriptor>
-    getAvailableProviders() const;
+    [[nodiscard]] std::vector<HotelSearchProviderDescriptor> getAvailableProviders() const;
 
-private:
+  private:
     struct Entry
     {
         HotelSearchProviderDescriptor descriptor;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 class IView;
 class IInput;
@@ -19,12 +19,8 @@ class ItineraryPresenter
     PaymentPresenter& m_paymentPresenter;
     std::vector<std::unique_ptr<ItineraryItemFlow>> m_itemFlows;
 
-public:
-    ItineraryPresenter(
-        IView& view,
-        IInput& input,
-        CreateEmptyItineraryUseCase& createItineraryUseCase,
-        std::vector<std::unique_ptr<ItineraryItemFlow>> itemFlows,
-        PaymentPresenter& paymentPresenter);
+  public:
+    ItineraryPresenter(IView& view, IInput& input, CreateEmptyItineraryUseCase& createItineraryUseCase,
+                       std::vector<std::unique_ptr<ItineraryItemFlow>> itemFlows, PaymentPresenter& paymentPresenter);
     void run(User& user);
 };

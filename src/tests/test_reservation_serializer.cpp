@@ -1,10 +1,10 @@
-#include <gtest/gtest.h>
-#include "infrastructure/serialization/reservation_serializer.hpp"
 #include "domain/entities/flight_reservation.hpp"
 #include "domain/entities/hotel_reservation.hpp"
 #include "domain/entities/reservation_category.hpp"
 #include "domain/request_type.hpp"
 #include "exception.hpp"
+#include "infrastructure/serialization/reservation_serializer.hpp"
+#include <gtest/gtest.h>
 
 TEST(ReservationSerializerTest, FlightRoundTrip)
 {
@@ -25,7 +25,7 @@ TEST(ReservationSerializerTest, FlightRoundTrip)
     auto restored = ReservationSerializer::fromJson(j);
 
     ASSERT_NE(restored, nullptr);
-    auto *flight = dynamic_cast<FlightReservation *>(restored.get());
+    auto* flight = dynamic_cast<FlightReservation*>(restored.get());
     ASSERT_NE(flight, nullptr);
     EXPECT_EQ(flight->getAirline(), "TestAir");
     EXPECT_EQ(flight->getFrom(), "NYC");
@@ -59,7 +59,7 @@ TEST(ReservationSerializerTest, HotelRoundTrip)
     auto restored = ReservationSerializer::fromJson(j);
 
     ASSERT_NE(restored, nullptr);
-    auto *hotel = dynamic_cast<HotelReservation *>(restored.get());
+    auto* hotel = dynamic_cast<HotelReservation*>(restored.get());
     ASSERT_NE(hotel, nullptr);
     EXPECT_EQ(hotel->getHotelName(), "TestHotel");
     EXPECT_EQ(hotel->getFromDate(), "2026-07-01");

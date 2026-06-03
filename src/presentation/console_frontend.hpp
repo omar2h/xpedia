@@ -8,7 +8,7 @@ class ConsoleFrontend : public IView
 {
     IOutput& m_output;
 
-public:
+  public:
     ConsoleFrontend(IOutput& output);
 
     void showMessage(const std::string&) override;

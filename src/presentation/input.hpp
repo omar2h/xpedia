@@ -4,7 +4,7 @@
 
 class IInput
 {
-public:
+  public:
     virtual ~IInput() = default;
 
     [[nodiscard]] virtual int readInt() = 0;
@@ -14,7 +14,7 @@ public:
 
 class ConsoleInput : public IInput
 {
-public:
+  public:
     [[nodiscard]] int readInt() override;
     [[nodiscard]] double readDouble() override;
     [[nodiscard]] std::string readLine() override;

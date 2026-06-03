@@ -18,4 +18,4 @@ struct FlightModule
     std::unique_ptr<FlightSearchPresenter> presenter;
 };
 
-FlightModule createFlightModule(IView &view, IInput &input);
+FlightModule createFlightModule(IView& view, IInput& input);

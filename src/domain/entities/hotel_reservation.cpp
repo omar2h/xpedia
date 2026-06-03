@@ -8,9 +8,7 @@
 #include <iomanip>
 #include <sstream>
 
-static void parseDate(
-    const std::string &s,
-    std::tm &tm)
+static void parseDate(const std::string& s, std::tm& tm)
 {
     std::istringstream ss(s);
 
@@ -25,14 +23,11 @@ static void parseDate(
 
     if (ss.fail())
     {
-        throw BusinessException(
-            "Invalid hotel reservation dates");
+        throw BusinessException("Invalid hotel reservation dates");
     }
 }
 
-static int getNights(
-    const std::string &from,
-    const std::string &to)
+static int getNights(const std::string& from, const std::string& to)
 {
     std::tm fromTm = {};
     std::tm toTm = {};
@@ -48,33 +43,27 @@ static int getNights(
 
     if (fromTime == -1 || toTime == -1)
     {
-        throw BusinessException(
-            "Invalid hotel reservation dates");
+        throw BusinessException("Invalid hotel reservation dates");
     }
 
-    double diff =
-        std::difftime(toTime, fromTime);
+    double diff = std::difftime(toTime, fromTime);
 
-    int nights =
-        static_cast<int>(diff / (60 * 60 * 24));
+    int nights = static_cast<int>(diff / (60 * 60 * 24));
 
     if (nights <= 0)
     {
-        throw BusinessException(
-            "Invalid hotel reservation dates");
+        throw BusinessException("Invalid hotel reservation dates");
     }
 
     return nights;
 }
 
-std::unique_ptr<Reservation>
-HotelReservation::clone() const
+std::unique_ptr<Reservation> HotelReservation::clone() const
 {
     return std::make_unique<HotelReservation>(*this);
 }
 
-void HotelReservation::accept(
-    ReservationVisitor &visitor) const
+void HotelReservation::accept(ReservationVisitor& visitor) const
 {
     visitor.visit(*this);
 }
@@ -84,15 +73,13 @@ double HotelReservation::totalCost() const
     return cost;
 }
 
-void HotelReservation::setItem(const ItineraryItem &item)
+void HotelReservation::setItem(const ItineraryItem& item)
 {
-    const auto *room =
-        dynamic_cast<const HotelRoom *>(&item);
+    const auto* room = dynamic_cast<const HotelRoom*>(&item);
 
     if (!room)
     {
-        throw BusinessException(
-            "Expected HotelRoom");
+        throw BusinessException("Expected HotelRoom");
     }
 
     this->room = *room;
@@ -110,26 +97,18 @@ void HotelReservation::recalculateCost()
 {
     if (!hasRoom)
     {
-        throw BusinessException(
-            "HotelReservation: room not set");
+        throw BusinessException("HotelReservation: room not set");
     }
 
     if (rooms == 0)
     {
-        throw BusinessException(
-            "HotelReservation: no rooms requested");
+        throw BusinessException("HotelReservation: no rooms requested");
     }
 
-    cost =
-        room.totalCost() *
-        rooms *
-        getNights(
-            room.getDateFrom(),
-            room.getDateTo());
+    cost = room.totalCost() * rooms * getNights(room.getDateFrom(), room.getDateTo());
 }
 
-void HotelReservation::applySearchRequest(
-    const HotelSearchRequest &request)
+void HotelReservation::applySearchRequest(const HotelSearchRequest& request)
 {
     city = request.city;
 

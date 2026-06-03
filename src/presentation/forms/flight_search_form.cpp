@@ -1,36 +1,26 @@
 #include "flight_search_form.hpp"
-#include "../view/view_interface.hpp"
 #include "../input.hpp"
+#include "../view/view_interface.hpp"
 
-FlightSearchInput FlightSearchForm::collect(
-    IView &view,
-    IInput &input)
+FlightSearchInput FlightSearchForm::collect(IView& view, IInput& input)
 {
     FlightSearchInput result;
 
-    view.showPrompt(
-        "Origin (IATA code): ");
+    view.showPrompt("Origin (IATA code): ");
 
-    result.origin =
-        input.readLine();
+    result.origin = input.readLine();
 
-    view.showPrompt(
-        "Destination (IATA code): ");
+    view.showPrompt("Destination (IATA code): ");
 
-    result.destination =
-        input.readLine();
+    result.destination = input.readLine();
 
-    view.showPrompt(
-        "Departure date (YYYY-MM-DD): ");
+    view.showPrompt("Departure date (YYYY-MM-DD): ");
 
-    result.departureDate =
-        input.readLine();
+    result.departureDate = input.readLine();
 
-    view.showPrompt(
-        "Adults: ");
+    view.showPrompt("Adults: ");
 
-    result.adults =
-        input.readInt();
+    result.adults = input.readInt();
 
     return result;
 }

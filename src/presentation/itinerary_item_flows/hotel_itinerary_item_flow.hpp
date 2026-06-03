@@ -5,19 +5,16 @@
 class HotelSearchPresenter;
 class AddHotelToItineraryUseCase;
 
-class HotelItineraryItemFlow
-    : public ItineraryItemFlow
+class HotelItineraryItemFlow : public ItineraryItemFlow
 {
-public:
-    HotelItineraryItemFlow(
-        HotelSearchPresenter& presenter,
-        AddHotelToItineraryUseCase& addHotelUseCase);
+  public:
+    HotelItineraryItemFlow(HotelSearchPresenter& presenter, AddHotelToItineraryUseCase& addHotelUseCase);
 
     std::string label() const override;
 
     bool execute(Itinerary& itinerary) override;
 
-private:
+  private:
     HotelSearchPresenter& m_presenter;
     AddHotelToItineraryUseCase& m_addHotelUseCase;
 };

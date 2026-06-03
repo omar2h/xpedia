@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "reservation.hpp"
 
@@ -12,22 +12,37 @@ class Itinerary
     double cost{};
     std::vector<std::unique_ptr<Reservation>> reservations{};
 
-public:
+  public:
     Itinerary() = default;
-    Itinerary(const Itinerary &);
-    Itinerary &operator=(const Itinerary &);
-    Itinerary(Itinerary &&) noexcept = default;
-    Itinerary &operator=(Itinerary &&) noexcept = default;
+    Itinerary(const Itinerary&);
+    Itinerary& operator=(const Itinerary&);
+    Itinerary(Itinerary&&) noexcept = default;
+    Itinerary& operator=(Itinerary&&) noexcept = default;
 
-    [[nodiscard]] const std::string &getId() const { return id; }
-    void setId(std::string id_) { id = id_; }
+    [[nodiscard]] const std::string& getId() const
+    {
+        return id;
+    }
+    void setId(std::string id_)
+    {
+        id = id_;
+    }
     void addItem(std::unique_ptr<Reservation>);
     void clear();
     [[nodiscard]] double totalCost() const;
-    [[nodiscard]] const std::vector<std::unique_ptr<Reservation>> &getReservations() const;
+    [[nodiscard]] const std::vector<std::unique_ptr<Reservation>>& getReservations() const;
     void setReservations(std::vector<std::unique_ptr<Reservation>> reservations_);
 
-    [[nodiscard]] double getCost() const { return cost; }
-    void recalculateCost() { cost = totalCost(); }
-    void setCost(double cost_) { cost = cost_; }
+    [[nodiscard]] double getCost() const
+    {
+        return cost;
+    }
+    void recalculateCost()
+    {
+        cost = totalCost();
+    }
+    void setCost(double cost_)
+    {
+        cost = cost_;
+    }
 };

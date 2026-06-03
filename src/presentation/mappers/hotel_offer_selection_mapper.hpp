@@ -14,8 +14,8 @@ struct HotelOfferSelectionList
 
 class HotelOfferSelectionMapper
 {
-public:
-    static HotelOfferSelectionList map(const std::vector<HotelOffer> &offers)
+  public:
+    static HotelOfferSelectionList map(const std::vector<HotelOffer>& offers)
     {
         HotelOfferSelectionList result;
 
@@ -24,7 +24,7 @@ public:
 
         for (int oi = 0; oi < static_cast<int>(offers.size()) && hotelCount < 5; oi++)
         {
-            const auto &offer = offers[oi];
+            const auto& offer = offers[oi];
             hotelCount++;
             bool firstRoom = true;
 

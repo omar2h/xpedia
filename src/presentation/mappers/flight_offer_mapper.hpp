@@ -7,8 +7,8 @@
 
 class FlightOfferMapper
 {
-public:
-    static FlightOfferViewModel map(const FlightOffer &offer, int number)
+  public:
+    static FlightOfferViewModel map(const FlightOffer& offer, int number)
     {
         FlightOfferViewModel item;
 
@@ -19,8 +19,8 @@ public:
 
         if (!offer.segments.empty())
         {
-            const auto &first = offer.segments.front();
-            const auto &last = offer.segments.back();
+            const auto& first = offer.segments.front();
+            const auto& last = offer.segments.back();
 
             item.airline = first.airline.name;
             item.flightNumber = first.flightNumber;

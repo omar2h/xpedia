@@ -9,10 +9,10 @@
 namespace duffel
 {
 
-    class DuffelParser
-    {
-    public:
-        Result<DuffelResponseDTO> parse(const std::string &rawJson);
-    };
+class DuffelParser
+{
+  public:
+    Result<DuffelResponseDTO> parse(const std::string& rawJson);
+};
 
-}
+} // namespace duffel

@@ -6,11 +6,10 @@
 
 class IUserRepository
 {
-public:
+  public:
     virtual ~IUserRepository() = default;
 
-    virtual void saveUser(const User &) = 0;
+    virtual void saveUser(const User&) = 0;
 
-    [[nodiscard]] virtual std::optional<User>
-    findByUsername(const std::string &username) const = 0;
+    [[nodiscard]] virtual std::optional<User> findByUsername(const std::string& username) const = 0;
 };

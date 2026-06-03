@@ -10,14 +10,13 @@ AggregatedFlightSearchService::AggregatedFlightSearchService(
 {
 }
 
-Result<std::vector<FlightOffer>> AggregatedFlightSearchService::
-    searchFlights(const FlightSearchRequest &request)
+Result<std::vector<FlightOffer>> AggregatedFlightSearchService::searchFlights(const FlightSearchRequest& request)
 {
     std::vector<FlightOffer> allOffers;
     std::string errors;
     bool anySucceeded = false;
 
-    for (auto &service : m_services)
+    for (auto& service : m_services)
     {
         auto result = service->searchFlights(request);
 
@@ -32,7 +31,7 @@ Result<std::vector<FlightOffer>> AggregatedFlightSearchService::
         }
 
         anySucceeded = true;
-        auto &offers = result.value();
+        auto& offers = result.value();
 
         allOffers.insert(allOffers.end(), std::make_move_iterator(offers.begin()),
                          std::make_move_iterator(offers.end()));
@@ -40,8 +39,8 @@ Result<std::vector<FlightOffer>> AggregatedFlightSearchService::
 
     if (!anySucceeded)
     {
-        return Result<std::vector<FlightOffer>>::failure(
-            errors.empty() ? "All flight search providers failed" : errors);
+        return Result<std::vector<FlightOffer>>::failure(errors.empty() ? "All flight search providers failed"
+                                                                        : errors);
     }
 
     return Result<std::vector<FlightOffer>>::success(std::move(allOffers));

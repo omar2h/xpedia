@@ -9,9 +9,9 @@
 
 class SearchFlightsUseCase
 {
-    IFlightSearchService &m_flightService;
+    IFlightSearchService& m_flightService;
 
-public:
-    explicit SearchFlightsUseCase(IFlightSearchService &flightService);
-    Result<std::vector<FlightOffer>> execute(const FlightSearchInput &input);
+  public:
+    explicit SearchFlightsUseCase(IFlightSearchService& flightService);
+    Result<std::vector<FlightOffer>> execute(const FlightSearchInput& input);
 };

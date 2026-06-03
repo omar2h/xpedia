@@ -1,7 +1,7 @@
 #pragma once
 
-#include <optional>
 #include "../domain/entities/user.hpp"
+#include <optional>
 
 enum class AppState
 {
