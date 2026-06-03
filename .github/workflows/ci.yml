@@ -22,6 +22,9 @@ jobs:
           sudo apt update
           sudo apt install -y clang-format
 
+      - name: Show clang-format version
+        run: clang-format --version
+
       - name: Install Ninja
         run: |
           sudo apt update
@@ -42,4 +45,4 @@ jobs:
       - name: Check Formatting
         run: |
           find src -type f \( -name "*.cpp" -o -name "*.hpp" \) \
-            | xargs clang-format --dry-run --Werror
+          -exec sh -c 'echo "Checking: $1"; clang-format --dry-run --Werror "$1"' _ {} \;
