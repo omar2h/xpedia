@@ -15,7 +15,7 @@ public:
 
     virtual bool reserve(Reservation *reservation) = 0;
 
-    virtual std::string getName() const = 0;
+    virtual std::string getProviderId() const = 0;
 
     virtual ~HotelSearchProvider() = default;
 };

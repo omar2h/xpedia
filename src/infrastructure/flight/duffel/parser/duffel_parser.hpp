@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../../../domain/result.hpp"
+#include "result.hpp"
 
 #include "../dto/duffel_dtos.hpp"
 
@@ -15,4 +15,4 @@ namespace duffel
         Result<DuffelResponseDTO> parse(const std::string &rawJson);
     };
 
-} // namespace duffel
+}
